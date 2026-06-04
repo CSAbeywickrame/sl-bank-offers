@@ -1,0 +1,37 @@
+[
+  {
+    "id": "hnb-dining-seed",
+    "bankId": "hnb",
+    "bankName": "Hatton National Bank",
+    "title": "Dining offer sample",
+    "category": "dining",
+    "description": "Sample dining offer used while the automated refresh is being configured.",
+    "merchant": "Selected restaurants",
+    "location": "Sri Lanka",
+    "cardType": "Credit cards",
+    "validUntil": "2026-12-31",
+    "sourceUrl": "https://www.hnb.net",
+    "firstSeenAt": "2026-06-04T00:00:00.000Z",
+    "lastSeenAt": "2026-06-04T00:00:00.000Z",
+    "lastCheckedAt": "2026-06-04T00:00:00.000Z",
+    "status": "auto_published",
+    "rawSourceHash": "seed-hnb-dining"
+  },
+  {
+    "id": "dfcc-hotels-seed",
+    "bankId": "dfcc",
+    "bankName": "DFCC Bank",
+    "title": "Hotel offer sample",
+    "category": "hotels",
+    "description": "Sample hotel offer used to verify category filtering.",
+    "merchant": "Selected hotels",
+    "location": "Sri Lanka",
+    "cardType": "Credit cards",
+    "sourceUrl": "https://www.dfcc.lk",
+    "firstSeenAt": "2026-06-04T00:00:00.000Z",
+    "lastSeenAt": "2026-06-04T00:00:00.000Z",
+    "lastCheckedAt": "2026-06-04T00:00:00.000Z",
+    "status": "auto_published",
+    "rawSourceHash": "seed-dfcc-hotels"
+  }
+]
