@@ -18,7 +18,15 @@ export function writeStoredOffers(offers: Offer[], filePath = defaultDataPath): 
 }
 
 function isExpired(offer: Offer, nowIso: string): boolean {
-  return Boolean(offer.validUntil && new Date(offer.validUntil).getTime() < new Date(nowIso).getTime());
+  if (!offer.validUntil) {
+    return false;
+  }
+
+  const expiryValue = offer.validUntil.includes("T") ? offer.validUntil : `${offer.validUntil}T23:59:59.999Z`;
+  const expiry = new Date(expiryValue);
+  const now = new Date(nowIso);
+
+  return Number.isFinite(expiry.getTime()) && expiry < now;
 }
 
 export function mergeOffers(existing: Offer[], incoming: Offer[], nowIso: string): Offer[] {

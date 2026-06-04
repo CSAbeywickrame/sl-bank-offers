@@ -79,6 +79,15 @@ describe("mergeOffers", () => {
     });
   });
 
+  it("keeps offers active through the end of a date-only validUntil value", () => {
+    const result = mergeOffers([], [baseOffer({ validUntil: "2026-06-04" })], "2026-06-04T12:00:00.000Z");
+
+    expect(result[0]).toMatchObject({
+      status: "auto_published",
+      validUntil: "2026-06-04"
+    });
+  });
+
   it("supports default read and write signatures without touching the repo data file", () => {
     tempRoot = mkdtempSync(join(tmpdir(), "bank-offers-ingest-"));
     mkdirSync(join(tempRoot, "data"), { recursive: true });
