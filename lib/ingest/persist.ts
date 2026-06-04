@@ -3,14 +3,16 @@ import { dirname } from "node:path";
 import { mkdirSync } from "node:fs";
 import type { Offer, OfferStatus } from "@/lib/offers/types";
 
-export function readStoredOffers(filePath: string): Offer[] {
+const defaultDataPath = "data/offers.json";
+
+export function readStoredOffers(filePath = defaultDataPath): Offer[] {
   if (!existsSync(filePath)) return [];
   const raw = readFileSync(filePath, "utf8");
   if (!raw.trim()) return [];
   return JSON.parse(raw) as Offer[];
 }
 
-export function writeStoredOffers(filePath: string, offers: Offer[]): void {
+export function writeStoredOffers(offers: Offer[], filePath = defaultDataPath): void {
   mkdirSync(dirname(filePath), { recursive: true });
   writeFileSync(filePath, `${JSON.stringify(offers, null, 2)}\n`, "utf8");
 }

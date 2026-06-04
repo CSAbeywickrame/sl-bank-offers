@@ -1,5 +1,8 @@
-import { describe, expect, it } from "vitest";
-import { mergeOffers } from "@/lib/ingest/persist";
+import { afterEach, describe, expect, it } from "vitest";
+import { mkdtempSync, mkdirSync, readFileSync, rmSync } from "node:fs";
+import { join } from "node:path";
+import { tmpdir } from "node:os";
+import { mergeOffers, readStoredOffers, writeStoredOffers } from "@/lib/ingest/persist";
 import type { Offer } from "@/lib/offers/types";
 
 const baseOffer = (overrides: Partial<Offer> = {}): Offer => ({
@@ -16,6 +19,15 @@ const baseOffer = (overrides: Partial<Offer> = {}): Offer => ({
   status: "auto_published",
   rawSourceHash: "hash-1",
   ...overrides
+});
+
+let tempRoot = "";
+
+afterEach(() => {
+  if (tempRoot) {
+    rmSync(tempRoot, { recursive: true, force: true });
+    tempRoot = "";
+  }
 });
 
 describe("mergeOffers", () => {
@@ -65,5 +77,22 @@ describe("mergeOffers", () => {
       status: "expired",
       validUntil: "2026-06-01T00:00:00.000Z"
     });
+  });
+
+  it("supports default read and write signatures without touching the repo data file", () => {
+    tempRoot = mkdtempSync(join(tmpdir(), "bank-offers-ingest-"));
+    mkdirSync(join(tempRoot, "data"), { recursive: true });
+
+    const previousCwd = process.cwd();
+    process.chdir(tempRoot);
+    try {
+      const offers = [baseOffer({ id: "offer-default", rawSourceHash: "hash-default" })];
+      writeStoredOffers(offers);
+
+      expect(readFileSync(join(tempRoot, "data", "offers.json"), "utf8")).toContain("offer-default");
+      expect(readStoredOffers()).toEqual(offers);
+    } finally {
+      process.chdir(previousCwd);
+    }
   });
 });
