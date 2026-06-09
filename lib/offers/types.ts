@@ -1,17 +1,8 @@
-export type OfferCategory =
-  | "dining"
-  | "travel"
-  | "hotels"
-  | "shopping"
-  | "supermarkets"
-  | "fuel"
-  | "health"
-  | "education"
-  | "online"
-  | "entertainment"
-  | "other";
+export const offerCategories = ["dining", "fuel", "supermarket", "travel", "online", "installment", "cashback", "bogo", "other"] as const;
 
-export type OfferStatus = "auto_published" | "inactive" | "expired" | "needs_review";
+export type OfferCategory = (typeof offerCategories)[number];
+
+export type OfferStatus = "active" | "inactive" | "expired" | "needs_review";
 
 export type SourceType = "static_html" | "dynamic_page" | "feed" | "pdf_or_image" | "unknown";
 
@@ -22,16 +13,48 @@ export interface Bank {
   websiteUrl: string;
 }
 
-export interface Offer {
+export interface Card {
   id: string;
   bankId: string;
-  bankName: string;
+  name: string;
+  network?: string;
+  tier?: string;
+}
+
+export interface CatalogOffer {
+  id: string;
+  cardId: string;
   title: string;
   category: OfferCategory;
   description: string;
   merchant?: string;
   location?: string;
-  cardType?: string;
+  validFrom?: string;
+  validUntil?: string;
+  termsLink: string;
+  sourceUrl: string;
+  lastReviewedAt: string;
+  status: OfferStatus;
+}
+
+export interface SeedData {
+  banks: Bank[];
+  cards: Card[];
+  offers: CatalogOffer[];
+}
+
+export interface Offer {
+  id: string;
+  bankId: string;
+  bankName: string;
+  bankShortName?: string;
+  cardId?: string;
+  cardName?: string;
+  title: string;
+  category: OfferCategory;
+  description: string;
+  merchant?: string;
+  location?: string;
   validFrom?: string;
   validUntil?: string;
   terms?: string;
@@ -46,6 +69,7 @@ export interface Offer {
 
 export interface OfferFilters {
   bankId?: string;
+  cardId?: string;
   category?: OfferCategory;
   search?: string;
 }

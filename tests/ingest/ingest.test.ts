@@ -9,6 +9,9 @@ const baseOffer = (overrides: Partial<Offer> = {}): Offer => ({
   id: "offer-1",
   bankId: "hnb",
   bankName: "Hatton National Bank",
+  bankShortName: "HNB",
+  cardId: "hnb-visa-signature",
+  cardName: "Visa Signature Credit Card",
   title: "Dining offer",
   category: "dining",
   description: "Discounts at selected restaurants",
@@ -16,7 +19,7 @@ const baseOffer = (overrides: Partial<Offer> = {}): Offer => ({
   firstSeenAt: "2026-06-04T00:00:00.000Z",
   lastSeenAt: "2026-06-04T00:00:00.000Z",
   lastCheckedAt: "2026-06-04T00:00:00.000Z",
-  status: "auto_published",
+  status: "active",
   rawSourceHash: "hash-1",
   ...overrides
 });
@@ -35,7 +38,7 @@ describe("mergeOffers", () => {
     const existing = [baseOffer({ firstSeenAt: "2026-06-01T00:00:00.000Z", lastSeenAt: "2026-06-01T00:00:00.000Z" })];
     const incoming = [
       baseOffer({ description: "Updated discounts", rawSourceHash: "hash-1b", lastCheckedAt: "2026-06-05T00:00:00.000Z" }),
-      baseOffer({ id: "offer-2", title: "Hotel offer", category: "hotels", description: "Rooms", rawSourceHash: "hash-2" })
+      baseOffer({ id: "offer-2", title: "Fuel offer", category: "fuel", description: "Cashback at fuel stations", rawSourceHash: "hash-2" })
     ];
 
     const result = mergeOffers(existing, incoming, "2026-06-05T00:00:00.000Z");
@@ -47,12 +50,12 @@ describe("mergeOffers", () => {
       firstSeenAt: "2026-06-01T00:00:00.000Z",
       lastSeenAt: "2026-06-05T00:00:00.000Z",
       lastCheckedAt: "2026-06-05T00:00:00.000Z",
-      status: "auto_published"
+      status: "active"
     });
     expect(result.find((offer) => offer.id === "offer-2")).toMatchObject({
       firstSeenAt: "2026-06-05T00:00:00.000Z",
       lastSeenAt: "2026-06-05T00:00:00.000Z",
-      status: "auto_published"
+      status: "active"
     });
   });
 
@@ -83,7 +86,7 @@ describe("mergeOffers", () => {
     const result = mergeOffers([], [baseOffer({ validUntil: "2026-06-04" })], "2026-06-04T12:00:00.000Z");
 
     expect(result[0]).toMatchObject({
-      status: "auto_published",
+      status: "active",
       validUntil: "2026-06-04"
     });
   });

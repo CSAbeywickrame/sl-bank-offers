@@ -6,8 +6,8 @@ describe("categorizeOfferText", () => {
     expect(categorizeOfferText("Enjoy dining discounts at restaurants and cafes")).toBe("dining");
   });
 
-  it("detects hotel offers", () => {
-    expect(categorizeOfferText("Save on hotel stays and resort bookings")).toBe("hotels");
+  it("detects travel offers from hotel copy", () => {
+    expect(categorizeOfferText("Save on hotel stays and resort bookings")).toBe("travel");
   });
 
   it("detects travel offers", () => {
@@ -15,13 +15,15 @@ describe("categorizeOfferText", () => {
   });
 
   it("detects supermarket and fuel offers", () => {
-    expect(categorizeOfferText("Special savings at supermarkets and grocery stores")).toBe("supermarkets");
+    expect(categorizeOfferText("Special savings at supermarkets and grocery stores")).toBe("supermarket");
     expect(categorizeOfferText("Fuel discounts at petrol stations and diesel pumps")).toBe("fuel");
   });
 
-  it("detects health and entertainment offers", () => {
-    expect(categorizeOfferText("Save on pharmacy purchases and clinic visits")).toBe("health");
-    expect(categorizeOfferText("Movie tickets, concerts, and cinema nights")).toBe("entertainment");
+  it("detects installment, cashback, bogo, and online offers", () => {
+    expect(categorizeOfferText("0% interest installment plans for large purchases")).toBe("installment");
+    expect(categorizeOfferText("Cash back on utility bill payments")).toBe("cashback");
+    expect(categorizeOfferText("Buy one get one free on selected meals")).toBe("bogo");
+    expect(categorizeOfferText("Exclusive online app and ecommerce savings")).toBe("online");
   });
 
   it("falls back to other when no category matches", () => {

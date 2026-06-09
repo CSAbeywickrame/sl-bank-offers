@@ -9,6 +9,8 @@ function searchableText(offer: Offer): string {
   return [
     offer.title,
     offer.bankName,
+    offer.bankShortName,
+    offer.cardName,
     offer.merchant,
     offer.description,
     offer.category,
@@ -21,11 +23,16 @@ function searchableText(offer: Offer): string {
 
 export function filterOffers(offers: Offer[], filters: OfferFilters): Offer[] {
   const bankId = normalize(filters.bankId);
+  const cardId = normalize(filters.cardId);
   const search = normalize(filters.search);
   const category = filters.category;
 
   return offers.filter((offer) => {
     if (bankId && offer.bankId !== bankId) {
+      return false;
+    }
+
+    if (cardId && offer.cardId !== cardId) {
       return false;
     }
 

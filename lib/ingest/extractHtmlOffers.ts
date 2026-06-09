@@ -112,7 +112,7 @@ export function extractHtmlOffers(html: string, source: BankSource, sourceUrl: s
       firstSeenAt: nowIso,
       lastSeenAt: nowIso,
       lastCheckedAt: nowIso,
-      status: "auto_published",
+      status: "active",
       rawSourceHash: hashText(candidate.text)
     });
   }

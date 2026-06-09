@@ -17,10 +17,11 @@ function firstParam(value: string | string[] | undefined): string {
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const bankId = firstParam(params.bank);
+  const cardId = firstParam(params.card);
   const categoryParam = firstParam(params.category);
   const search = firstParam(params.search);
   const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
-  const offers = filterOffers(await getActiveOffers(), { bankId, category, search });
+  const offers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
 
   return (
     <main>
@@ -40,7 +41,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </div>
       </section>
 
-      <FilterPanel selectedBankId={bankId} selectedCategory={category} search={search} />
+      <FilterPanel selectedBankId={bankId} selectedCardId={cardId} selectedCategory={category} search={search} />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
         <BankCategoryNav />

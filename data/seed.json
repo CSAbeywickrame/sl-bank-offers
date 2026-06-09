@@ -1,0 +1,245 @@
+{
+  "banks": [
+    {
+      "id": "commercial-bank",
+      "name": "Commercial Bank of Ceylon",
+      "shortName": "Commercial Bank",
+      "websiteUrl": "https://www.combank.lk"
+    },
+    {
+      "id": "ndb",
+      "name": "National Development Bank",
+      "shortName": "NDB",
+      "websiteUrl": "https://www.ndbbank.com"
+    },
+    {
+      "id": "boc",
+      "name": "Bank of Ceylon",
+      "shortName": "BOC",
+      "websiteUrl": "https://www.boc.lk"
+    },
+    {
+      "id": "peoples-bank",
+      "name": "People's Bank",
+      "shortName": "People's Bank",
+      "websiteUrl": "https://www.peoplesbank.lk"
+    },
+    {
+      "id": "ntb",
+      "name": "Nations Trust Bank",
+      "shortName": "NTB",
+      "websiteUrl": "https://www.nationstrust.com"
+    }
+  ],
+  "cards": [
+    {
+      "id": "commercial-bank-credit-cards",
+      "bankId": "commercial-bank",
+      "name": "Commercial Bank Credit Cards",
+      "network": "Visa / Mastercard"
+    },
+    {
+      "id": "ndb-credit-cards",
+      "bankId": "ndb",
+      "name": "NDB Credit Cards",
+      "network": "Visa / Mastercard"
+    },
+    {
+      "id": "ndb-premium-credit-cards",
+      "bankId": "ndb",
+      "name": "NDB Platinum, Signature and Infinite Credit Cards",
+      "network": "Visa / Mastercard",
+      "tier": "Premium"
+    },
+    {
+      "id": "boc-credit-cards",
+      "bankId": "boc",
+      "name": "BOC Credit Cards",
+      "network": "Visa / Mastercard"
+    },
+    {
+      "id": "peoples-bank-credit-cards",
+      "bankId": "peoples-bank",
+      "name": "People's Bank Credit Cards",
+      "network": "Visa / Mastercard"
+    },
+    {
+      "id": "ntb-mastercard-credit-cards",
+      "bankId": "ntb",
+      "name": "Nations Trust Bank Mastercard Credit Cards",
+      "network": "Mastercard"
+    }
+  ],
+  "offers": [
+    {
+      "id": "commercial-bank-cargills-online-june-2026",
+      "cardId": "commercial-bank-credit-cards",
+      "title": "Up to 10% off at Cargills Online",
+      "category": "online",
+      "description": "Unlock great deals on online purchases via Cargills Online with ComBank Credit Cards. Offer valid on every Wednesday till 24th June 2026.",
+      "merchant": "Cargills Online",
+      "location": "Sri Lanka",
+      "validUntil": "2026-06-24",
+      "termsLink": "https://www.combank.lk/rewards-promotion/online-shopping/unlock-great-deals-on-online-purchases-via-cargills-online-with-combank-credit-cards",
+      "sourceUrl": "https://www.combank.lk/rewards-promotion/online-shopping/unlock-great-deals-on-online-purchases-via-cargills-online-with-combank-credit-cards",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "commercial-bank-srilankan-airlines-july-2026",
+      "cardId": "commercial-bank-credit-cards",
+      "title": "Travel offers with Sri Lankan Airlines",
+      "category": "travel",
+      "description": "Travel to your favourite destination with Sri Lankan Airlines using ComBank Credit Cards. Offer valid till 31st July 2026.",
+      "merchant": "Sri Lankan Airlines",
+      "location": "Sri Lanka",
+      "validUntil": "2026-07-31",
+      "termsLink": "https://www.combank.lk/rewards-promotion/travel/travel-to-your-favourite-destination-with-sri-lankan-airlines-using-combank-credit-cards",
+      "sourceUrl": "https://www.combank.lk/rewards-promotion/travel/travel-to-your-favourite-destination-with-sri-lankan-airlines-using-combank-credit-cards",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "ndb-findmyfare-june-2026",
+      "cardId": "ndb-credit-cards",
+      "title": "Flat 20% savings at findmyfare.com with 0% installment plans",
+      "category": "travel",
+      "description": "Flat 20% savings on any destination on any airline base fare with up to 36 months 0% installment plans for NDB Credit Cards. Booking period runs until 30th June 2026.",
+      "merchant": "findmyfare.com",
+      "location": "Sri Lanka",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.ndbbank.com/cards/card-offers",
+      "sourceUrl": "https://www.ndbbank.com/cards/card-offers",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "ndb-education-ipp-june-2026",
+      "cardId": "ndb-premium-credit-cards",
+      "title": "Up to 36 months 0% installment plans on education payments",
+      "category": "installment",
+      "description": "Up to 36 months 0% installment plans on any educational payments for NDB Platinum, Signature and Infinite Credit Cards. Offer valid until 30th June 2026.",
+      "merchant": "Education IPP promotion",
+      "location": "Sri Lanka",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.ndbbank.com/cards/card-offers",
+      "sourceUrl": "https://www.ndbbank.com/cards/card-offers",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "boc-keells-june-2026",
+      "cardId": "boc-credit-cards",
+      "title": "25% off at Keells on fresh produce",
+      "category": "supermarket",
+      "description": "Get 25% off on fresh vegetables, fruits, seafood and meat for BOC Credit Cardholders on Thursdays from 04th to 25th June 2026.",
+      "merchant": "Keells",
+      "location": "Sri Lanka",
+      "validFrom": "2026-06-04",
+      "validUntil": "2026-06-25",
+      "termsLink": "https://www.boc.lk/personal-banking/card-offers/supermarkets/keells/product",
+      "sourceUrl": "https://www.boc.lk/personal-banking/card-offers/supermarkets/keells/product",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "boc-air-tickets-august-2026",
+      "cardId": "boc-credit-cards",
+      "title": "0% installment plans on air ticket payments",
+      "category": "installment",
+      "description": "BOC Credit Cardholders can convert any air ticket payment into a 0% interest installment plan for up to 24 months. Offer valid until 31st August 2026.",
+      "merchant": "Air Tickets",
+      "location": "Sri Lanka",
+      "validUntil": "2026-08-31",
+      "termsLink": "https://www.boc.lk/personal-banking/card-offers/zero-plans/air-tickets/product",
+      "sourceUrl": "https://www.boc.lk/personal-banking/card-offers/zero-plans/air-tickets/product",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "peoples-bank-keells-june-2026",
+      "cardId": "peoples-bank-credit-cards",
+      "title": "25% off at Keells on fresh vegetables, fruit and seafood",
+      "category": "supermarket",
+      "description": "People's Bank Credit Cards get 25% off on fresh vegetables, fruit, seafood and fresh meat at Keells, with a maximum discount of LKR 1,000 and one transaction per card per day. Valid every Monday and Wednesday till 30th June 2026.",
+      "merchant": "Keells",
+      "location": "Sri Lanka",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.peoplesbank.lk/promotion/keells-25-off-credit/",
+      "sourceUrl": "https://www.peoplesbank.lk/promotion/keells-25-off-credit/",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "peoples-bank-plates-june-2026",
+      "cardId": "peoples-bank-credit-cards",
+      "title": "30% off at Plates, Cinnamon Grand Colombo",
+      "category": "dining",
+      "description": "Get 30% off at Plates at Cinnamon Grand Colombo for lunch and dinner with People's Bank Credit Cards. Offer excludes liquor and tobacco, has a maximum bill value of LKR 50,000, and runs until 30th June 2026.",
+      "merchant": "Plates at Cinnamon Grand Colombo",
+      "location": "Colombo",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.peoplesbank.lk/promotion/plates-at-cinnamon-grand-colombo-30-off-credit/",
+      "sourceUrl": "https://www.peoplesbank.lk/promotion/plates-at-cinnamon-grand-colombo-30-off-credit/",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "peoples-bank-installments-december-2026",
+      "cardId": "peoples-bank-credit-cards",
+      "title": "No-fee installment plans up to 36 months",
+      "category": "installment",
+      "description": "People's Bank Credit Cards can convert transactions from LKR 25,000 to LKR 2,000,000 into no-handling-fee installment plans with tenors from 3 to 36 months. Promotion period runs till 31st December 2026.",
+      "merchant": "Any eligible merchant",
+      "location": "Sri Lanka",
+      "validUntil": "2026-12-31",
+      "termsLink": "https://www.peoplesbank.lk/installments/?cardType=credit_card",
+      "sourceUrl": "https://www.peoplesbank.lk/installments/?cardType=credit_card",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "ntb-butlers-june-2026",
+      "cardId": "ntb-mastercard-credit-cards",
+      "title": "20% off at Butlers",
+      "category": "dining",
+      "description": "Enjoy 20% off at Butlers with Nations Trust Bank Mastercard Credit Cards. Offer is valid for dine-in on the a la carte menu until 30th June 2026.",
+      "merchant": "Butlers",
+      "location": "Colombo",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.nationstrust.com/promotions/enjoy-exclusive-savings-on-dining",
+      "sourceUrl": "https://www.nationstrust.com/promotions/enjoy-exclusive-savings-on-dining",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "ntb-cargills-online-july-2026",
+      "cardId": "ntb-mastercard-credit-cards",
+      "title": "15% off online at Cargills Online",
+      "category": "online",
+      "description": "Get 15% off at Cargills Online with Nations Trust Bank Mastercard Credit Cards on bills above LKR 2,500, with maximum savings of LKR 2,000 and up to two transactions per card per month. Offer is valid every Thursday from 1st May to 31st July 2026.",
+      "merchant": "Cargills Online",
+      "location": "Sri Lanka",
+      "validFrom": "2026-05-01",
+      "validUntil": "2026-07-31",
+      "termsLink": "https://www.nationstrust.com/promotions/enjoy-exclusive-savings-when-you-shop-online-with-nations-trust-bank-mastercard-cards",
+      "sourceUrl": "https://www.nationstrust.com/promotions/enjoy-exclusive-savings-when-you-shop-online-with-nations-trust-bank-mastercard-cards",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "id": "ntb-installments-june-2026",
+      "cardId": "ntb-mastercard-credit-cards",
+      "title": "Up to 12-month 0% extended settlement plans",
+      "category": "installment",
+      "description": "Nations Trust Bank Mastercard Credit Cards can access 6- and 12-month 0% extended settlement plans on transactions of LKR 50,000 and above. Promotion is valid until 30th June 2026.",
+      "merchant": "Anywhere",
+      "location": "Sri Lanka",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.nationstrust.com/promotions/enjoy-installment-plans-at-a-range-of-merchant-partners",
+      "sourceUrl": "https://www.nationstrust.com/promotions/enjoy-installment-plans-at-a-range-of-merchant-partners",
+      "lastReviewedAt": "2026-06-09T00:00:00.000Z",
+      "status": "active"
+    }
+  ]
+}

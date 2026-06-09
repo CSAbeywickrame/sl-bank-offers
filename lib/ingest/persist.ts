@@ -44,7 +44,7 @@ export function mergeOffers(existing: Offer[], incoming: Offer[], nowIso: string
       continue;
     }
 
-    const status: OfferStatus = isExpired(fresh, nowIso) ? "expired" : "auto_published";
+    const status: OfferStatus = isExpired(fresh, nowIso) ? "expired" : "active";
     merged.push({
       ...prior,
       ...fresh,
@@ -62,7 +62,7 @@ export function mergeOffers(existing: Offer[], incoming: Offer[], nowIso: string
       firstSeenAt: nowIso,
       lastSeenAt: nowIso,
       lastCheckedAt: nowIso,
-      status: isExpired(fresh, nowIso) ? "expired" : "auto_published"
+      status: isExpired(fresh, nowIso) ? "expired" : "active"
     });
   }
 

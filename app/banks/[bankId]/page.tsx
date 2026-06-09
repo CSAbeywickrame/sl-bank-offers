@@ -25,10 +25,11 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   }
 
   const query = await searchParams;
+  const cardId = firstParam(query.card);
   const categoryParam = firstParam(query.category);
   const search = firstParam(query.search);
   const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
-  const offers = filterOffers(await getActiveOffers(), { bankId, category, search });
+  const offers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
 
   return (
     <main>
@@ -39,7 +40,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
         </p>
       </section>
 
-      <FilterPanel selectedBankId={bankId} selectedCategory={category} search={search} actionPath={`/banks/${bankId}`} />
+      <FilterPanel selectedBankId={bankId} selectedCardId={cardId} selectedCategory={category} search={search} actionPath={`/banks/${bankId}`} />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
         <p className="text-sm font-medium text-slate-600">{offers.length} active offers found</p>

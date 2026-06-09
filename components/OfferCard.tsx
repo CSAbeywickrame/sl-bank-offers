@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import type { Offer } from "@/lib/offers/types";
 
@@ -44,14 +45,23 @@ export function OfferCard({ offer }: { offer: Offer }) {
         </div>
       </dl>
 
-      <a
-        className="mt-auto inline-flex h-10 items-center justify-center rounded-md border border-teal-700 px-4 text-sm font-semibold text-teal-800 hover:bg-teal-50"
-        href={offer.sourceUrl}
-        target="_blank"
-        rel="noreferrer"
-      >
-        View at bank
-      </a>
+      <div className="mt-auto flex flex-col gap-3 sm:flex-row">
+        <Link
+          className="inline-flex items-center justify-center rounded-md bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+          href={`/offers/${offer.id}`}
+        >
+          View More
+          {/* View details for {offer.title} */}
+        </Link>
+        <a
+          className="inline-flex items-center justify-center rounded-md border border-teal-700 px-4 py-3 text-sm font-semibold text-teal-800 hover:bg-teal-50"
+          href={offer.sourceUrl}
+          target="_blank"
+          rel="noreferrer"
+        >
+          View at bank
+        </a>
+      </div>
     </article>
   );
 }
