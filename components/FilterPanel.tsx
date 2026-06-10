@@ -1,6 +1,6 @@
 import { getBankById } from "@/lib/offers/banks";
 import { getCardsByBankId } from "@/lib/offers/cards";
-import { banks } from "@/lib/offers/banks";
+import { getBanks } from "@/lib/offers/banks";
 import { categories } from "@/lib/offers/categories";
 import type { OfferCategory } from "@/lib/offers/types";
 
@@ -13,6 +13,7 @@ interface FilterPanelProps {
 }
 
 export function FilterPanel({ selectedBankId = "", selectedCardId = "", selectedCategory, search = "", actionPath = "/" }: FilterPanelProps) {
+  const banks = getBanks();
   const availableCards = getCardsByBankId(selectedBankId);
 
   return (

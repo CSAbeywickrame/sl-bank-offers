@@ -46,8 +46,10 @@ function assertSeedData(value: unknown): asserts value is SeedData {
   }
 }
 
-const seedDataJson = JSON.parse(readFileSync(join(process.cwd(), "data", "seed.json"), "utf8")) as unknown;
+export function loadSeedData(): SeedData {
+  const seedDataJson = JSON.parse(readFileSync(join(process.cwd(), "data", "seed.json"), "utf8")) as unknown;
 
-assertSeedData(seedDataJson);
+  assertSeedData(seedDataJson);
 
-export const seedData: SeedData = seedDataJson;
+  return seedDataJson;
+}

@@ -1,9 +1,13 @@
-import { seedData } from "./seed";
+import { loadSeedData } from "./seed";
 import type { Card } from "./types";
 
-export const cards: Card[] = seedData.cards;
+export function getCards(): Card[] {
+  return loadSeedData().cards;
+}
 
 export function getCardsByBankId(bankId?: string): Card[] {
+  const cards = getCards();
+
   if (!bankId) {
     return cards;
   }
