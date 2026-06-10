@@ -43,6 +43,29 @@ export interface SeedData {
   offers: CatalogOffer[];
 }
 
+export interface ScannedOffer {
+  id: string;
+  bankId: string;
+  cardId: string;
+  title: string;
+  category: OfferCategory;
+  description: string;
+  merchant?: string;
+  location?: string;
+  validFrom?: string;
+  validUntil?: string;
+  termsLink: string;
+  sourceUrl: string;
+  lastReviewedAt: string;
+  status: OfferStatus;
+}
+
+export interface ScannedOfferCatalog {
+  version: number;
+  updatedAt: string;
+  offers: ScannedOffer[];
+}
+
 export interface Offer {
   id: string;
   bankId: string;

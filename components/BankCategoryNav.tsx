@@ -1,9 +1,11 @@
 import type { Route } from "next";
 import Link from "next/link";
-import { banks } from "@/lib/offers/banks";
+import { getBanks } from "@/lib/offers/banks";
 import { categories } from "@/lib/offers/categories";
 
 export function BankCategoryNav() {
+  const banks = getBanks();
+
   return (
     <nav className="grid gap-4 md:grid-cols-2" aria-label="Browse offers">
       <section>

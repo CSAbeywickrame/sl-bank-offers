@@ -1,15 +1,12 @@
 import crypto from "node:crypto";
-import { seedData } from "./seed";
+import { loadSeedData } from "./seed";
 import type { Bank, Card, CatalogOffer, Offer, SeedData } from "./types";
-
-const banksById = new Map(seedData.banks.map((bank) => [bank.id, bank]));
-const cardsById = new Map(seedData.cards.map((card) => [card.id, card]));
 
 function toOfferStatus(status: CatalogOffer["status"]): Offer["status"] {
   return status;
 }
 
-function getCard(cardId: string): Card {
+function getCard(cardId: string, cardsById: Map<string, Card>): Card {
   const card = cardsById.get(cardId);
   if (!card) {
     throw new Error(`Seed card not found for offer relationship: ${cardId}`);
@@ -17,7 +14,7 @@ function getCard(cardId: string): Card {
   return card;
 }
 
-function getBank(bankId: string): Bank {
+function getBank(bankId: string, banksById: Map<string, Bank>): Bank {
   const bank = banksById.get(bankId);
   if (!bank) {
     throw new Error(`Seed bank not found for card relationship: ${bankId}`);
@@ -25,9 +22,9 @@ function getBank(bankId: string): Bank {
   return bank;
 }
 
-function toOffer(catalogOffer: CatalogOffer): Offer {
-  const card = getCard(catalogOffer.cardId);
-  const bank = getBank(card.bankId);
+function toOffer(catalogOffer: CatalogOffer, cardsById: Map<string, Card>, banksById: Map<string, Bank>): Offer {
+  const card = getCard(catalogOffer.cardId, cardsById);
+  const bank = getBank(card.bankId, banksById);
   const rawSourceHash = crypto.createHash("sha1").update(`${catalogOffer.id}|${catalogOffer.lastReviewedAt}`).digest("hex");
 
   return {
@@ -55,11 +52,15 @@ function toOffer(catalogOffer: CatalogOffer): Offer {
 }
 
 export async function getSeedData(): Promise<SeedData> {
-  return seedData;
+  return loadSeedData();
 }
 
 export async function getAllOffers(): Promise<Offer[]> {
-  return seedData.offers.map(toOffer);
+  const seedData = loadSeedData();
+  const banksById = new Map(seedData.banks.map((bank) => [bank.id, bank]));
+  const cardsById = new Map(seedData.cards.map((card) => [card.id, card]));
+
+  return seedData.offers.map((offer) => toOffer(offer, cardsById, banksById));
 }
 
 export async function getActiveOffers(): Promise<Offer[]> {

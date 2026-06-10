@@ -11,7 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "refresh": "tsx scripts/refresh-offers.ts"
+    "refresh": "tsx scripts/refresh-offers.ts",
+    "sync:scanned": "tsx scripts/sync-scanned-offers.ts"
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.8",
