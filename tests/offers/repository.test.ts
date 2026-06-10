@@ -14,10 +14,10 @@ describe("seed repository", () => {
     );
 
     expect(bankIds).toEqual(new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb"]));
-    expect(seed.cards.length).toBeGreaterThanOrEqual(7);
-    expect(seed.offers.length).toBeGreaterThanOrEqual(41);
+    expect(seed.cards.length).toBeGreaterThanOrEqual(9);
+    expect(seed.offers.length).toBeGreaterThanOrEqual(181);
     expect(offerBankIds).toEqual(bankIds);
-    expect([...categories]).toEqual(expect.arrayContaining(["dining", "supermarket", "travel", "installment", "online"]));
+    expect([...categories]).toEqual(expect.arrayContaining(["dining", "supermarket", "travel", "installment", "online", "other"]));
 
     for (const offer of seed.offers) {
       expect(offer.status).toBe("active");
@@ -239,5 +239,29 @@ describe("seed repository", () => {
     expect(filterOffers(offers, { cardId: "commercial-bank-platinum-debit-cards" }).map((offer) => offer.id)).toEqual([
       "commercial-bank-platinum-debit-blue-orbit-citrus-june-2026"
     ]);
+  });
+
+  it("surfaces the active NTB June 10 scrape with private-banking offers on the right card", async () => {
+    const offers = await getActiveOffers();
+    const ntbOffers = offers.filter((offer) => offer.bankId === "ntb");
+
+    expect(ntbOffers).toHaveLength(143);
+    expect(filterOffers(offers, { cardId: "ntb-private-banking-mastercard-credit-cards" })).toHaveLength(10);
+    expect(filterOffers(offers, { cardId: "ntb-mastercard-credit-cards" })).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "ntb-butlers-june-2026",
+          merchant: "Butlers"
+        }),
+        expect.objectContaining({
+          id: "ntb-cargills-online-july-2026",
+          merchant: "Cargills Online"
+        }),
+        expect.objectContaining({
+          id: "ntb-installments-june-2026",
+          category: "installment"
+        })
+      ])
+    );
   });
 });

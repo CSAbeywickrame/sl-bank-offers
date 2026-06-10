@@ -1,4 +1,3 @@
-import { BankCategoryNav } from "@/components/BankCategoryNav";
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
 import { OfferGrid } from "@/components/OfferGrid";
@@ -77,7 +76,6 @@ export default async function HomePage({ searchParams }: HomePageProps) {
       <FilterPanel banks={banks} cards={cards} selectedBankId={bankId} selectedCardId={cardId} selectedCategory={category} search={search} />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
-        <BankCategoryNav />
         {offers.length > 0 ? <OfferGrid offers={offers} /> : <EmptyState />}
       </section>
     </main>
