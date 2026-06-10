@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
 import { OfferGrid } from "@/components/OfferGrid";
-import { getBankById } from "@/lib/offers/banks";
+import { getBankById, getBanks } from "@/lib/offers/banks";
+import { getCards } from "@/lib/offers/cards";
 import { isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
 import { getActiveOffers } from "@/lib/offers/repository";
@@ -12,10 +13,12 @@ interface BankPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
+// Extracts the first string value from a query parameter that may be an array
 function firstParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
+// Bank-scoped offers page — filter submissions stay on /banks/:bankId via actionPath
 export default async function BankPage({ params, searchParams }: BankPageProps) {
   const { bankId } = await params;
   const bank = getBankById(bankId);
@@ -30,20 +33,33 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   const search = firstParam(query.search);
   const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
   const offers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
+  const banks = getBanks();
+  const cards = getCards();
 
   return (
     <main>
-      <section className="mx-auto max-w-7xl px-4 py-8">
-        <h1 className="text-3xl font-semibold tracking-normal text-slate-950">{bank.shortName} credit card offers</h1>
-        <p className="mt-3 max-w-3xl text-sm leading-6 text-slate-600">
-          Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
-        </p>
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-7xl px-4 py-8">
+          <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">Bank</p>
+          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">{bank.shortName} credit card offers</h1>
+          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+            Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
+          </p>
+          <p className="mt-3 text-sm font-medium text-slate-600">{offers.length} active offer{offers.length !== 1 ? "s" : ""}</p>
+        </div>
       </section>
 
-      <FilterPanel selectedBankId={bankId} selectedCardId={cardId} selectedCategory={category} search={search} actionPath={`/banks/${bankId}`} />
+      <FilterPanel
+        banks={banks}
+        cards={cards}
+        selectedBankId={bankId}
+        selectedCardId={cardId}
+        selectedCategory={category}
+        search={search}
+        actionPath={`/banks/${bankId}`}
+      />
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-6">
-        <p className="text-sm font-medium text-slate-600">{offers.length} active offers found</p>
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
         {offers.length > 0 ? <OfferGrid offers={offers} /> : <EmptyState />}
       </section>
     </main>
