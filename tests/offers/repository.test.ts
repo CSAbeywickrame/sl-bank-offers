@@ -15,7 +15,7 @@ describe("seed repository", () => {
 
     expect(bankIds).toEqual(new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb"]));
     expect(seed.cards.length).toBeGreaterThanOrEqual(9);
-    expect(seed.offers.length).toBeGreaterThanOrEqual(181);
+    expect(seed.offers.length).toBeGreaterThanOrEqual(368);
     expect(offerBankIds).toEqual(bankIds);
     expect([...categories]).toEqual(expect.arrayContaining(["dining", "supermarket", "travel", "installment", "online", "other"]));
 
@@ -239,6 +239,34 @@ describe("seed repository", () => {
     expect(filterOffers(offers, { cardId: "commercial-bank-platinum-debit-cards" }).map((offer) => offer.id)).toEqual([
       "commercial-bank-platinum-debit-blue-orbit-citrus-june-2026"
     ]);
+  });
+
+  it("surfaces the full People's Bank June 10 scrape without keeping the older hand-written duplicates", async () => {
+    const offers = await getActiveOffers();
+    const peoplesBankOffers = offers.filter((offer) => offer.bankId === "peoples-bank");
+
+    expect(peoplesBankOffers).toHaveLength(190);
+    expect(filterOffers(offers, { cardId: "peoples-bank-credit-cards" })).toHaveLength(190);
+    expect(peoplesBankOffers.map((offer) => offer.id)).not.toContain("peoples-bank-installments-december-2026");
+    expect(peoplesBankOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "peoples-bank-keells-june-2026",
+          category: "supermarket",
+          merchant: "Keells"
+        }),
+        expect.objectContaining({
+          id: "peoples-bank-plates-june-2026",
+          category: "dining",
+          merchant: "Plates at Cinnamon Grand Colombo"
+        }),
+        expect.objectContaining({
+          id: "peoples-bank-travel-installments-june-2026",
+          category: "installment",
+          merchant: "Travel"
+        })
+      ])
+    );
   });
 
   it("surfaces the active NTB June 10 scrape with private-banking offers on the right card", async () => {

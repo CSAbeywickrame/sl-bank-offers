@@ -52,6 +52,16 @@ function getCard(cardId: string, cardsById: Map<string, Card>): Card {
   return card;
 }
 
+function normalizeSourceUrl(sourceUrl: string): string {
+  try {
+    const url = new URL(sourceUrl);
+    url.hash = "";
+    return url.toString();
+  } catch {
+    return sourceUrl.replace(/#.*$/, "");
+  }
+}
+
 export function loadScannedOfferCatalog(): ScannedOfferCatalog {
   const catalogJson = JSON.parse(readFileSync(join(process.cwd(), "data", "scanned-offers.json"), "utf8")) as unknown;
 
@@ -74,7 +84,10 @@ export function syncScannedOffers(seed: SeedData, catalog: ScannedOfferCatalog):
   }
 
   const scannedIds = new Set(catalog.offers.map((offer) => offer.id));
-  const preservedOffers = seed.offers.filter((offer) => !scannedIds.has(offer.id));
+  const scannedSourceUrls = new Set(catalog.offers.map((offer) => normalizeSourceUrl(offer.sourceUrl)));
+  const preservedOffers = seed.offers.filter(
+    (offer) => !scannedIds.has(offer.id) && !scannedSourceUrls.has(normalizeSourceUrl(offer.sourceUrl))
+  );
   const syncedOffers = catalog.offers.map(({ bankId: _bankId, ...offer }) => offer);
 
   return {

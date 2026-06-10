@@ -10,8 +10,9 @@ describe("scanned offer catalog", () => {
     const seedOffersById = new Map(seed.offers.map((offer) => [offer.id, offer]));
 
     expect(scanned.version).toBe(1);
-    expect(scanned.offers).toHaveLength(172);
+    expect(scanned.offers).toHaveLength(362);
     expect(scanned.offers.filter((offer) => offer.bankId === "ntb")).toHaveLength(143);
+    expect(scanned.offers.filter((offer) => offer.bankId === "peoples-bank")).toHaveLength(190);
 
     for (const scannedOffer of scanned.offers) {
       const seedOffer = seedOffersById.get(scannedOffer.id);
@@ -120,5 +121,66 @@ describe("scanned offer catalog", () => {
       ])
     );
     expect(nextSeed.offers).toHaveLength(2);
+  });
+
+  it("replaces a legacy seed offer when scanned rows point at the same page via hash-fragment URLs", () => {
+    const seed: SeedData = {
+      banks: [
+        {
+          id: "peoples-bank",
+          name: "People's Bank",
+          shortName: "People's Bank",
+          websiteUrl: "https://www.peoplesbank.lk"
+        }
+      ],
+      cards: [
+        {
+          id: "peoples-bank-credit-cards",
+          bankId: "peoples-bank",
+          name: "People's Bank Credit Cards"
+        }
+      ],
+      offers: [
+        {
+          id: "peoples-bank-installments-december-2026",
+          cardId: "peoples-bank-credit-cards",
+          title: "No-fee installment plans up to 36 months",
+          category: "installment",
+          description: "Legacy aggregate installment record",
+          termsLink: "https://www.peoplesbank.lk/installments/?cardType=credit_card",
+          sourceUrl: "https://www.peoplesbank.lk/installments/?cardType=credit_card",
+          lastReviewedAt: "2026-06-09T00:00:00.000Z",
+          status: "active"
+        }
+      ]
+    };
+
+    const nextSeed = syncScannedOffers(seed, {
+      version: 1,
+      updatedAt: "2026-06-10T00:00:00.000Z",
+      offers: [
+        {
+          id: "peoples-bank-travel-installments-june-2026",
+          bankId: "peoples-bank",
+          cardId: "peoples-bank-credit-cards",
+          title: "Travel installment plans",
+          category: "installment",
+          description: "Travel installment plan",
+          merchant: "Travel",
+          validUntil: "2026-06-30",
+          termsLink: "https://www.peoplesbank.lk/installments/?cardType=credit_card#travel",
+          sourceUrl: "https://www.peoplesbank.lk/installments/?cardType=credit_card#travel",
+          lastReviewedAt: "2026-06-10T00:00:00.000Z",
+          status: "active"
+        }
+      ]
+    });
+
+    expect(nextSeed.offers).toEqual([
+      expect.objectContaining({
+        id: "peoples-bank-travel-installments-june-2026",
+        sourceUrl: "https://www.peoplesbank.lk/installments/?cardType=credit_card#travel"
+      })
+    ]);
   });
 });

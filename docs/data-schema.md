@@ -1,7 +1,10 @@
 # Data schema
 
 CardCompass stores its MVP catalog as a file-backed seed dataset at `data/seed.json`.
-Commercial Bank scrape handoffs are normalized separately at `data/scanned-offers.json` before they are synced into the seed.
+Tracked scrape handoffs are normalized separately at `data/scanned-offers.json` before they are synced into the seed.
+
+Raw scrape snapshots that must survive beyond a single working session belong in `data/` with a dated filename such as `data/peoplesbank-scrape-2026-06-10.json`.
+Scratch scrape inputs, HTML saves, and one-off parsing experiments belong in `tmp/` only while a scrape is in progress and must be deleted once the durable handoff files in `data/` are produced and verified.
 
 ## Entities
 
@@ -87,13 +90,20 @@ npm run sync:scanned
 
 That sync upserts the scanned offers by `id` and leaves unrelated seed records untouched.
 
+Handoff workflow:
+
+1. Save the durable raw scrape snapshot in `data/` with a bank/date-specific filename.
+2. Normalize the scrape into `data/scanned-offers.json`.
+3. Run `npm run sync:scanned` to update `data/seed.json`.
+4. Remove any temporary scrape working files under `tmp/` before closing the task.
+
 ## Current fixture
 
-`data/seed.json` now contains the initial curated MVP catalog:
+`data/seed.json` currently contains the tracked MVP catalog:
 
 - 5 Sri Lankan banks
-- 8 card records covering generic and premium offer eligibility
-- 41 active offers across dining, supermarket, travel, installment, and online categories
+- 9 card records covering generic, premium, and private-banking offer eligibility
+- 368 active offers across dining, supermarket, travel, installment, online, and other categories
 
 Every offer includes an official public `sourceUrl`, a `termsLink`, and a `lastReviewedAt`
 capture timestamp so the catalog can track freshness from the first seed onward.
