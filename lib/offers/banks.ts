@@ -1,8 +1,10 @@
-import { seedData } from "./seed";
+import { loadSeedData } from "./seed";
 import type { Bank } from "./types";
 
-export const banks: Bank[] = seedData.banks;
+export function getBanks(): Bank[] {
+  return loadSeedData().banks;
+}
 
 export function getBankById(bankId: string): Bank | undefined {
-  return banks.find((bank) => bank.id === bankId);
+  return getBanks().find((bank) => bank.id === bankId);
 }
