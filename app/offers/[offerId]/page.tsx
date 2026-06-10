@@ -7,6 +7,7 @@ interface OfferDetailPageProps {
   params: Promise<{ offerId: string }>;
 }
 
+// Formats an ISO date string into a human-readable medium date, or returns "Not specified"
 function formatDate(value: string | undefined): string {
   if (!value) {
     return "Not specified";
@@ -20,6 +21,7 @@ function formatDate(value: string | undefined): string {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
+// Individual offer detail page showing full metadata and official bank links
 export default async function OfferDetailPage({ params }: OfferDetailPageProps) {
   const { offerId } = await params;
   const offer = await getOfferById(offerId);
@@ -88,7 +90,9 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
         <aside className="grid gap-4 rounded-2xl border border-slate-200 bg-slate-50 p-6">
           <h2 className="text-lg font-semibold text-slate-950">Official links</h2>
-          <p className="text-sm leading-6 text-slate-600">Use the official bank source to confirm the latest eligibility, dates, and exclusions before using the offer.</p>
+          <p className="text-sm leading-6 text-slate-600">
+            Use the official bank source to confirm the latest eligibility, dates, and exclusions before using the offer.
+          </p>
           <a
             className="inline-flex h-11 items-center justify-center rounded-md bg-teal-700 px-4 text-sm font-semibold text-white hover:bg-teal-800"
             href={offer.sourceUrl}

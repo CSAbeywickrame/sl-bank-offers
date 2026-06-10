@@ -1,3 +1,4 @@
+// Skeleton placeholder shown while the home page data loads
 function LoadingCard() {
   return (
     <div className="grid min-h-[22rem] gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm">
@@ -18,6 +19,7 @@ function LoadingCard() {
   );
 }
 
+// Full-page loading skeleton matching the home page layout
 export default function Loading() {
   return (
     <main>
