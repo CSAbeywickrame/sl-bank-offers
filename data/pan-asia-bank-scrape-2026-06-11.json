@@ -1,0 +1,50 @@
+[
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Other",
+    "offer_amount_percent": null,
+    "offer_about": "Insurance premium payments - interest-free instalment plan with no added fees on transactions above Rs. 50,000 for Pan Asia Bank Black and World Credit Cards; no detail link listed on the offer page",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  },
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Jewellery",
+    "offer_amount_percent": 30,
+    "offer_about": "Aminra Jewellers - up to 30% off coloured stone jewellery and up to 15% off stone-studded jewellery, plus 12 and 24 month 0% instalment plans; no detail link listed on the offer page",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  },
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Supermarket",
+    "offer_amount_percent": 25,
+    "offer_about": "Softlogic Glomark - 25% off fresh vegetables, fruits, meat and seafood at outlets and online on selected June Thursdays; no detail link listed on the offer page",
+    "expiry_date": "2026-06-25",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  },
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Supermarket",
+    "offer_amount_percent": 25,
+    "offer_about": "Cargills - 25% off fresh vegetables, fruits and seafood at participating outlets on selected June Thursdays; no detail link listed on the offer page",
+    "expiry_date": "2026-06-25",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  },
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Supermarket",
+    "offer_amount_percent": 25,
+    "offer_about": "Keells Supermarket - 25% off fresh vegetables, fruits, seafood and meat on selected June Wednesdays; excludes selected packed and processed items; no detail link listed on the offer page",
+    "expiry_date": "2026-06-24",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  },
+  {
+    "bank": "Pan Asia Bank",
+    "category": "Other",
+    "offer_amount_percent": null,
+    "offer_about": "Lyceum Campus - 0% instalment plan for 12 or 24 months on transactions above Rs. 25,000 with a Rs. 2,500 processing fee; no detail link listed on the offer page",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.pabcbank.com/card-offers/"
+  }
+]

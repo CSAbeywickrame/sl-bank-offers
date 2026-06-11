@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-06-10T00:00:00.000Z",
+  "updatedAt": "2026-06-11T00:00:00.000Z",
   "offers": [
     {
       "bankId": "commercial-bank",
@@ -5092,6 +5092,90 @@
       "termsLink": "https://www.peoplesbank.lk/promotion/siddhalepa-clinics-25-off-credit/",
       "sourceUrl": "https://www.peoplesbank.lk/promotion/siddhalepa-clinics-25-off-credit/",
       "lastReviewedAt": "2026-06-10T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-insurance-premium-payments-december-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "Insurance premium payments installment plans",
+      "category": "installment",
+      "description": "Insurance premium payments - interest-free instalment plan with no added fees on transactions above Rs. 50,000 for Pan Asia Bank Black and World Credit Cards; no detail link listed on the offer page",
+      "merchant": "Insurance premium payments",
+      "validUntil": "2026-12-31",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-aminra-jewellers-june-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "Up to 30% off at Aminra Jewellers",
+      "category": "other",
+      "description": "Aminra Jewellers - up to 30% off coloured stone jewellery and up to 15% off stone-studded jewellery, plus 12 and 24 month 0% instalment plans; no detail link listed on the offer page",
+      "merchant": "Aminra Jewellers",
+      "validUntil": "2026-06-30",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-softlogic-glomark-june-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "25% off at Softlogic Glomark",
+      "category": "supermarket",
+      "description": "Softlogic Glomark - 25% off fresh vegetables, fruits, meat and seafood at outlets and online on selected June Thursdays; no detail link listed on the offer page",
+      "merchant": "Softlogic Glomark",
+      "validUntil": "2026-06-25",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-cargills-june-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "25% off at Cargills",
+      "category": "supermarket",
+      "description": "Cargills - 25% off fresh vegetables, fruits and seafood at participating outlets on selected June Thursdays; no detail link listed on the offer page",
+      "merchant": "Cargills",
+      "validUntil": "2026-06-25",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-keells-supermarket-june-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "25% off at Keells Supermarket",
+      "category": "supermarket",
+      "description": "Keells Supermarket - 25% off fresh vegetables, fruits, seafood and meat on selected June Wednesdays; excludes selected packed and processed items; no detail link listed on the offer page",
+      "merchant": "Keells Supermarket",
+      "validUntil": "2026-06-24",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
+      "status": "active"
+    },
+    {
+      "bankId": "pan-asia-bank",
+      "id": "pan-asia-bank-lyceum-campus-december-2026",
+      "cardId": "pan-asia-bank-credit-cards",
+      "title": "Lyceum Campus installment plans",
+      "category": "installment",
+      "description": "Lyceum Campus - 0% instalment plan for 12 or 24 months on transactions above Rs. 25,000 with a Rs. 2,500 processing fee; no detail link listed on the offer page",
+      "merchant": "Lyceum Campus",
+      "validUntil": "2026-12-31",
+      "termsLink": "https://www.pabcbank.com/card-offers/",
+      "sourceUrl": "https://www.pabcbank.com/card-offers/",
+      "lastReviewedAt": "2026-06-11T00:00:00.000Z",
       "status": "active"
     }
   ]

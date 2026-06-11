@@ -10,9 +10,10 @@ describe("scanned offer catalog", () => {
     const seedOffersById = new Map(seed.offers.map((offer) => [offer.id, offer]));
 
     expect(scanned.version).toBe(1);
-    expect(scanned.offers).toHaveLength(362);
+    expect(scanned.offers).toHaveLength(368);
     expect(scanned.offers.filter((offer) => offer.bankId === "ntb")).toHaveLength(143);
     expect(scanned.offers.filter((offer) => offer.bankId === "peoples-bank")).toHaveLength(190);
+    expect(scanned.offers.filter((offer) => offer.bankId === "pan-asia-bank")).toHaveLength(6);
 
     for (const scannedOffer of scanned.offers) {
       const seedOffer = seedOffersById.get(scannedOffer.id);
