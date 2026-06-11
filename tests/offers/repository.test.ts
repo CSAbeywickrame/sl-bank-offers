@@ -13,9 +13,9 @@ describe("seed repository", () => {
         .filter((bankId): bankId is string => Boolean(bankId))
     );
 
-    expect(bankIds).toEqual(new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb"]));
-    expect(seed.cards.length).toBeGreaterThanOrEqual(9);
-    expect(seed.offers.length).toBeGreaterThanOrEqual(181);
+    expect(bankIds).toEqual(new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb", "pan-asia-bank"]));
+    expect(seed.cards.length).toBeGreaterThanOrEqual(10);
+    expect(seed.offers.length).toBeGreaterThanOrEqual(374);
     expect(offerBankIds).toEqual(bankIds);
     expect([...categories]).toEqual(expect.arrayContaining(["dining", "supermarket", "travel", "installment", "online", "other"]));
 
@@ -23,7 +23,7 @@ describe("seed repository", () => {
       expect(offer.status).toBe("active");
       expect(offer.sourceUrl).toMatch(/^https:\/\//);
       expect(offer.termsLink).toMatch(/^https:\/\//);
-      expect(offer.lastReviewedAt).toMatch(/^2026-06-(09|10)T00:00:00\.000Z$/);
+      expect(offer.lastReviewedAt).toMatch(/^2026-06-(09|10|11)T00:00:00\.000Z$/);
     }
   });
 
@@ -185,6 +185,10 @@ describe("seed repository", () => {
         expect.objectContaining({
           bankId: "ntb",
           bankName: "Nations Trust Bank"
+        }),
+        expect.objectContaining({
+          bankId: "pan-asia-bank",
+          bankName: "Pan Asia Bank"
         })
       ])
     );
@@ -239,6 +243,61 @@ describe("seed repository", () => {
     expect(filterOffers(offers, { cardId: "commercial-bank-platinum-debit-cards" }).map((offer) => offer.id)).toEqual([
       "commercial-bank-platinum-debit-blue-orbit-citrus-june-2026"
     ]);
+  });
+
+  it("surfaces the full People's Bank June 10 scrape without keeping the older hand-written duplicates", async () => {
+    const offers = await getActiveOffers();
+    const peoplesBankOffers = offers.filter((offer) => offer.bankId === "peoples-bank");
+
+    expect(peoplesBankOffers).toHaveLength(190);
+    expect(filterOffers(offers, { cardId: "peoples-bank-credit-cards" })).toHaveLength(190);
+    expect(peoplesBankOffers.map((offer) => offer.id)).not.toContain("peoples-bank-installments-december-2026");
+    expect(peoplesBankOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "peoples-bank-keells-june-2026",
+          category: "supermarket",
+          merchant: "Keells"
+        }),
+        expect.objectContaining({
+          id: "peoples-bank-plates-june-2026",
+          category: "dining",
+          merchant: "Plates at Cinnamon Grand Colombo"
+        }),
+        expect.objectContaining({
+          id: "peoples-bank-travel-installments-june-2026",
+          category: "installment",
+          merchant: "Travel"
+        })
+      ])
+    );
+  });
+
+  it("surfaces the full Pan Asia Bank June 11 scrape as active offers", async () => {
+    const offers = await getActiveOffers();
+    const panAsiaOffers = offers.filter((offer) => offer.bankId === "pan-asia-bank");
+
+    expect(panAsiaOffers).toHaveLength(6);
+    expect(filterOffers(offers, { cardId: "pan-asia-bank-credit-cards" })).toHaveLength(6);
+    expect(panAsiaOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "pan-asia-bank-insurance-premium-payments-december-2026",
+          category: "installment",
+          merchant: "Insurance premium payments"
+        }),
+        expect.objectContaining({
+          id: "pan-asia-bank-aminra-jewellers-june-2026",
+          category: "other",
+          merchant: "Aminra Jewellers"
+        }),
+        expect.objectContaining({
+          id: "pan-asia-bank-softlogic-glomark-june-2026",
+          category: "supermarket",
+          merchant: "Softlogic Glomark"
+        })
+      ])
+    );
   });
 
   it("surfaces the active NTB June 10 scrape with private-banking offers on the right card", async () => {
