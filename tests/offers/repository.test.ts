@@ -13,9 +13,11 @@ describe("seed repository", () => {
         .filter((bankId): bankId is string => Boolean(bankId))
     );
 
-    expect(bankIds).toEqual(new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb", "pan-asia-bank"]));
-    expect(seed.cards.length).toBeGreaterThanOrEqual(10);
-    expect(seed.offers.length).toBeGreaterThanOrEqual(374);
+    expect(bankIds).toEqual(
+      new Set(["commercial-bank", "ndb", "boc", "peoples-bank", "ntb", "pan-asia-bank", "sampath", "standard-chartered", "union-bank", "cargills-bank", "dfcc", "seylan"])
+    );
+    expect(seed.cards.length).toBeGreaterThanOrEqual(15);
+    expect(seed.offers.length).toBeGreaterThanOrEqual(717);
     expect(offerBankIds).toEqual(bankIds);
     expect([...categories]).toEqual(expect.arrayContaining(["dining", "supermarket", "travel", "installment", "online", "other"]));
 
@@ -23,7 +25,7 @@ describe("seed repository", () => {
       expect(offer.status).toBe("active");
       expect(offer.sourceUrl).toMatch(/^https:\/\//);
       expect(offer.termsLink).toMatch(/^https:\/\//);
-      expect(offer.lastReviewedAt).toMatch(/^2026-06-(09|10|11)T00:00:00\.000Z$/);
+      expect(offer.lastReviewedAt).toMatch(/^2026-06-(09|10|11|12)T00:00:00\.000Z$/);
     }
   });
 
@@ -189,11 +191,29 @@ describe("seed repository", () => {
         expect.objectContaining({
           bankId: "pan-asia-bank",
           bankName: "Pan Asia Bank"
+        }),
+        expect.objectContaining({
+          bankId: "sampath",
+          bankName: "Sampath Bank"
+        }),
+        expect.objectContaining({
+          bankId: "standard-chartered",
+          bankName: "Standard Chartered Sri Lanka"
+        }),
+        expect.objectContaining({
+          bankId: "union-bank",
+          bankName: "Union Bank of Colombo"
+        }),
+        expect.objectContaining({
+          bankId: "cargills-bank",
+          bankName: "Cargills Bank"
         })
       ])
     );
     expect(filterOffers(offers, { category: "installment" }).length).toBeGreaterThanOrEqual(2);
     expect(filterOffers(offers, { category: "travel" }).length).toBeGreaterThanOrEqual(2);
+    expect(filterOffers(offers, { bankId: "sampath" })).toHaveLength(113);
+    expect(filterOffers(offers, { cardId: "sampath-premium-credit-cards" })).toHaveLength(9);
     expect(commercialDiningOfferIds).toEqual([
       "commercial-bank-blue-orbit-citrus-june-2026",
       "commercial-bank-ceylon-curry-club-june-2026",
@@ -221,9 +241,8 @@ describe("seed repository", () => {
       "commercial-bank-softlogic-restaurants-june-2026",
       "commercial-bank-visa-thursday-dining-july-2026"
     ]);
-    expect(filterOffers(offers, { cardId: "ndb-premium-credit-cards" }).map((offer) => offer.id)).toEqual([
-      "ndb-education-ipp-june-2026"
-    ]);
+    expect(filterOffers(offers, { cardId: "ndb-credit-cards" })).toHaveLength(89);
+    expect(filterOffers(offers, { cardId: "ndb-premium-credit-cards" })).toHaveLength(9);
     expect(filterOffers(offers, { cardId: "commercial-bank-premium-credit-cards" }).map((offer) => offer.id).sort()).toEqual([
       "commercial-bank-premium-blue-orbit-citrus-june-2026",
       "commercial-bank-premium-ceylon-curry-club-june-2026",
@@ -300,6 +319,38 @@ describe("seed repository", () => {
     );
   });
 
+  it("surfaces the full NDB June 12 scrape as active offers with detail-page sources", async () => {
+    const offers = await getActiveOffers();
+    const ndbOffers = offers.filter((offer) => offer.bankId === "ndb");
+
+    expect(ndbOffers).toHaveLength(98);
+    expect(filterOffers(offers, { cardId: "ndb-credit-cards" })).toHaveLength(89);
+    expect(filterOffers(offers, { cardId: "ndb-premium-credit-cards" })).toHaveLength(9);
+    expect(ndbOffers.map((offer) => offer.sourceUrl)).not.toContain("https://www.ndbbank.com/cards/card-offers");
+    expect(ndbOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "ndb-findmyfare-june-2026",
+          cardId: "ndb-credit-cards",
+          category: "travel",
+          merchant: "findmyfare.com"
+        }),
+        expect.objectContaining({
+          id: "ndb-education-ipp-june-2026",
+          cardId: "ndb-premium-credit-cards",
+          category: "installment",
+          merchant: "Education IPP promotion"
+        }),
+        expect.objectContaining({
+          id: "ndb-visa-365-december-2026",
+          cardId: "ndb-premium-credit-cards",
+          category: "travel",
+          merchant: "Visa"
+        })
+      ])
+    );
+  });
+
   it("surfaces the active NTB June 10 scrape with private-banking offers on the right card", async () => {
     const offers = await getActiveOffers();
     const ntbOffers = offers.filter((offer) => offer.bankId === "ntb");
@@ -319,6 +370,144 @@ describe("seed repository", () => {
         expect.objectContaining({
           id: "ntb-installments-june-2026",
           category: "installment"
+        })
+      ])
+    );
+  });
+
+  it("surfaces the full Standard Chartered June 11 scrape as active offers", async () => {
+    const offers = await getActiveOffers();
+    const standardCharteredOffers = offers.filter((offer) => offer.bankId === "standard-chartered");
+
+    expect(standardCharteredOffers).toHaveLength(26);
+    expect(filterOffers(offers, { cardId: "standard-chartered-credit-cards" })).toHaveLength(26);
+    expect(standardCharteredOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "standard-chartered-aarawild-kandalama-june-2026",
+          category: "travel",
+          merchant: "Aarawild Kandalama"
+        }),
+        expect.objectContaining({
+          id: "standard-chartered-aq2o-june-2026",
+          category: "installment",
+          merchant: "AQ2O"
+        }),
+        expect.objectContaining({
+          id: "standard-chartered-pearl-bay-june-2026",
+          category: "other",
+          merchant: "Pearl Bay"
+        }),
+        expect.objectContaining({
+          id: "standard-chartered-crazy-jets-june-2026",
+          category: "travel",
+          merchant: "Crazy Jets"
+        })
+      ])
+    );
+  });
+
+  it("surfaces the full BOC June 11 scrape as active offers", async () => {
+    const offers = await getActiveOffers();
+    const bocOffers = offers.filter((offer) => offer.bankId === "boc");
+
+    expect(bocOffers).toHaveLength(73);
+    expect(filterOffers(offers, { cardId: "boc-credit-cards" })).toHaveLength(73);
+    expect(bocOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "boc-keells-june-2026",
+          category: "supermarket",
+          merchant: "Keells"
+        }),
+        expect.objectContaining({
+          id: "boc-air-tickets-august-2026",
+          category: "installment",
+          merchant: "Air Tickets"
+        }),
+        expect.objectContaining({
+          id: "boc-crazy-jets-june-2026",
+          category: "travel",
+          merchant: "Crazy Jets"
+        }),
+        expect.objectContaining({
+          id: "boc-thursdays-taste-better-with-boc-visa-cards-july-2026",
+          category: "dining",
+          merchant: "Thursdays Taste Better with BOC Visa Cards"
+        })
+      ])
+    );
+  });
+
+  it("surfaces the full Union Bank June 12 scrape as active offers", async () => {
+    const offers = await getActiveOffers();
+    const unionBankOffers = offers.filter((offer) => offer.bankId === "union-bank");
+
+    expect(unionBankOffers).toHaveLength(14);
+    expect(filterOffers(offers, { cardId: "union-bank-credit-cards" })).toHaveLength(14);
+    expect(unionBankOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "union-bank-nh-bentota-ceysands-resort-august-2026",
+          category: "travel",
+          merchant: "NH Bentota Ceysands Resort"
+        }),
+        expect.objectContaining({
+          id: "union-bank-glomark-softlogic-supermarkets-june-2026",
+          category: "supermarket",
+          merchant: "Glomark - Softlogic Supermarkets"
+        }),
+        expect.objectContaining({
+          id: "union-bank-fuel-cashback-june-2026",
+          category: "cashback",
+          merchant: "Fuel Cashback"
+        }),
+        expect.objectContaining({
+          id: "union-bank-ub-24-june-2026",
+          category: "installment",
+          merchant: "UB 24"
+        }),
+        expect.objectContaining({
+          id: "union-bank-travel-leisure-june-2026",
+          category: "installment",
+          merchant: "Travel & Leisure"
+        })
+      ])
+    );
+  });
+
+  it("surfaces the live Cargills Bank June 12 scrape as active offers", async () => {
+    const offers = await getActiveOffers();
+    const cargillsOffers = offers.filter((offer) => offer.bankId === "cargills-bank");
+
+    expect(cargillsOffers).toHaveLength(23);
+    expect(filterOffers(offers, { cardId: "cargills-bank-mastercard-credit-cards" })).toHaveLength(23);
+    expect(cargillsOffers).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          id: "cargills-bank-banana-bunks-kandy-july-2026",
+          category: "travel",
+          merchant: "Banana Bunks - Kandy"
+        }),
+        expect.objectContaining({
+          id: "cargills-bank-atlas-june-2026",
+          category: "online",
+          merchant: "Atlas"
+        }),
+        expect.objectContaining({
+          id: "cargills-bank-crazy-jets-june-2026",
+          category: "travel",
+          merchant: "Crazy Jets"
+        }),
+        expect.objectContaining({
+          id: "cargills-bank-solar-0-instalment-plan-december-2026",
+          category: "installment",
+          merchant: "Solar 0% Instalment Plan"
+        }),
+        expect.objectContaining({
+          id: "cargills-bank-call-and-card-balance",
+          category: "other",
+          merchant: "Call and Card Balance"
         })
       ])
     );

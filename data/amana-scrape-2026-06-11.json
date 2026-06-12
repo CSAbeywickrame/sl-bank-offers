@@ -1,0 +1,17 @@
+{
+  "bank": "Amana Bank",
+  "scrapedAt": "2026-06-11T00:00:00.000Z",
+  "officialSite": "https://www.amanabank.lk/",
+  "status": "no_public_credit_card_offers_found",
+  "notes": [
+    "Reviewed the official homepage, promotions page, and card offers section on amanabank.lk.",
+    "The live public offers section is branded as Visa Debit Card Offers and no public Amana credit card product or credit-card offers page was found on the official domain during this scrape."
+  ],
+  "evidenceUrls": [
+    "https://www.amanabank.lk/",
+    "https://www.amanabank.lk/promotions/",
+    "https://www.amanabank.lk/personal/services/visa-debit-card/",
+    "https://www.amanabank.lk/personal/services/visa-debit-card/offers/"
+  ],
+  "offers": []
+}
