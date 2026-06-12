@@ -1,0 +1,586 @@
+[
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Automobile",
+    "offer_amount_percent": 40,
+    "offer_about": "CWORKS by Toyota Tsusho - Up to 40% off on Selected Services & Items for BOC Credit & Debit Cardholders10% for Vehicle Services (Labour, Parts & Lubricants)CWORKS Spare parts – 15% Off (Shock Absorbers, Brake Pads/Shoes, Spark Plugs, Drive Belts, Wiper Blades, Susp…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/automobile/cworks-by-toyota-tsusho/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Automobile",
+    "offer_amount_percent": 40,
+    "offer_about": "Toyota Lanka - Up to 40% off Accelera tires, 30% off Pirelli tires, 30% Yokohama tires & 30% off Otani tires for BOC Credit CardholdersFrom 01st June to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/automobile/toyota-lanka/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Dining",
+    "offer_amount_percent": 15,
+    "offer_about": "Petti Petti - 15% off on Food & Beverages for BOC Credit & Debit CardholdersFrom 01st April to 01st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-01",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/dining/petti-petti/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Education",
+    "offer_amount_percent": 20,
+    "offer_about": "Luminex Bookshop - 20% off on Total Bill for BOC Credit & Debit CardholdersOn Saturdays from 06th to 27th June 2026Outlets: Panadura, Moratuwa, Kalutara, Horana, Ambalangoda, Rathnapura, & Matara.*Conditions apply.",
+    "expiry_date": "2026-06-27",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/education/luminex-bookshop/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Health & Beauty",
+    "offer_amount_percent": 20,
+    "offer_about": "Siddhalepa Ayurveda Hospital - 20% discount on room rates for in-patients when paying with a BOC credit cardLocation : No 106A, Templers Road, Mt. Lavinia - Contact No : 077 371 0139 / 011 273 8622*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/health-beauty/siddhalepa-ayurveda-hospital/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Health & Beauty",
+    "offer_amount_percent": 15,
+    "offer_about": "Siddhalepa Clinics - 15% off on treatment bills over Rs.10,000/- when paid with a BOC credit card Locations: No 106.4, Horton Place, Colombo 07 - Contact No : 077 335 7450 / 011 208 2535 No 106A, Templers Road, Mt. Lavinia - Contact No : 077 371 0139 / 011 273…",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/health-beauty/siddhalepa-clinics/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Mastercard Offers",
+    "offer_amount_percent": 20,
+    "offer_about": "CHI, The Spa - Up to 20% off BOC Mastercard Credit & Debit Cardholders",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/mastercard-offers/chi-the-spa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Mastercard Offers",
+    "offer_amount_percent": 15,
+    "offer_about": "Clove Beach Wadduwa - Up to 15% off for BOC Mastercard Credit & Debit Cardholders",
+    "expiry_date": "2026-07-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/mastercard-offers/clove-beach-wadduwa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Mastercard Offers",
+    "offer_amount_percent": 15,
+    "offer_about": "GIVA - 15% off at GIVA with BOC Mastercard Credit & Debit Cardholders",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/mastercard-offers/giva/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Mastercard Offers",
+    "offer_amount_percent": null,
+    "offer_about": "Health Club - Enjoy a bonus month when you enroll for 3 months at the Health Club with BOC Credit & Debit Cardholders",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/mastercard-offers/health-club/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Mastercard Offers",
+    "offer_amount_percent": 10,
+    "offer_about": "Noeline's - 10% off any service at Noeline's Wellness for BOC Mastercard Credit & Debit Cardholders",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/mastercard-offers/noelines/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Online",
+    "offer_amount_percent": 12,
+    "offer_about": "Crazy Jets - Up to 12% off on base fare component of flight bookings for BOC Credit & Debit Cardholders*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/online/crazy-jets/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Supermarkets",
+    "offer_amount_percent": 25,
+    "offer_about": "Cargills Food City - 25% off on Fresh Vegetables, Fruits & Seafood for BOC Credit CardholdersOn Wednesdays & Sundays (03rd - 27th June 2026)Min. Bill Value : Rs.4,000/- | Max. Discount : Rs.1,000/-Max. Qty of 5kg / 5 Units Per ItemOne Transaction Per Card | Pe…",
+    "expiry_date": "2026-06-27",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/supermarkets/cargills-food-city/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Supermarkets",
+    "offer_amount_percent": 25,
+    "offer_about": "Keells - 25% off on Fresh Vegetables, Fruits, Seafood & Meat for BOC Credit CardholdersOn Thursdays from 04th to 25th June 2026Min. Bill Value : Rs.4,000/- | Max. Discount : Rs.1,000/-Max 3kg & 3 units allowed for promo eligibilityOne Transaction P…",
+    "expiry_date": "2026-06-25",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/supermarkets/keells/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Supermarkets",
+    "offer_amount_percent": 10,
+    "offer_about": "Laugfs Supermarket - 10% off the Total Bill for BOC Credit CardholdersOn Fridays from 05th to 26th June 2026Min. Bill Value : Rs.5,000/- | Max. Discount : Rs.1,500/-Maximum Quantity Per Item 3kg/ UnitsExcluded - Liquor, Tobacco, Pharmaceuticals, Gift Vouchers,…",
+    "expiry_date": "2026-06-26",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/supermarkets/laugfs-supermarket/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Supermarkets",
+    "offer_amount_percent": 25,
+    "offer_about": "Softlogic Glomark - 25% off the Total Bill for BOC Credit Cards and 15% off for Debit CardsOn 14th & 28th June 2026 | In-Stores & Online ( www.glomark.lk ) Min. Bill Value : Rs.7,500/-Maximum Discount : Rs.5,000/-(Credit Card) | Rs.3,000/-(Debit Card) Maximum…",
+    "expiry_date": "2026-06-28",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/supermarkets/softlogic-glomark/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Supermarkets",
+    "offer_amount_percent": 20,
+    "offer_about": "SPAR Supermarket - 20% off the Total Bill for BOC Credit CardholdersOn 25th June 2026Min. Bill : Rs.7,500/- | Max. Discount : Rs.2,500/-Excluding Items : Rice, Milk Powder, Tobacco, Pharmaceuticals, Liquor, Gift Vouchers, Utility bill payments, Online Purcha…",
+    "expiry_date": "2026-06-25",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/supermarkets/spar-supermarket/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 40,
+    "offer_about": "AARAWILD Luxury Villas - 40% off for BOC Credit CardholdersInquires: 076 654 2272The discount is only applicable to the ‘Wild Glamping’ villa category*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/aarawild-luxury-villas/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 50,
+    "offer_about": "Anantaya Resort & Spa - Up to Reservations : 011 724 7365Up to 50% off for BOC Credit & Debit Cardholders[ Weekdays(Sun-Thu) : 50% OFF on all room categories from the rack rate][Weekends(Fri-Sat) , Public & Bank Holidays, and Long Weekends : 40% OFF on all room…",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/anantaya-resort-spa-1/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 50,
+    "offer_about": "Anantaya Resort & Spa - Up to Reservations : 011 724 7365Up to 50% off for BOC Credit & Debit Cardholders[ Weekdays(Sun-Thu) : 50% OFF on all room categories from the rack rate][Weekends(Fri-Sat) , Public & Bank Holidays, and Long Weekends : 40% OFF on all room…",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/anantaya-resort-spa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Araliya Green City - Reservations : 070 361 2415 / 077 877 7114 / 052 222 500030% off for BOC Credit CardholdersFrom 01st May to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/araliya-green-city/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Araliya Green Hills Hotel - Reservations : 070 351 0402 / 052 222 415030% off for BOC Credit CardholdersFrom 01st May to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/araliya-green-hills-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Araliya Red Hotel - Reservations : 070 470 0825 / 052 222 600030% off for BOC Credit CardholdersFrom 01st May to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/araliya-red-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Banana Bunks - 25% off on Total Bill for BOC Credit & Debit CardholdersFrom 01st April to 01st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-01",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/banana-bunks-1/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Banana Bunks - 25% off on Total Bill for BOC Credit & Debit CardholdersFrom 01st April to 01st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-01",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/banana-bunks/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 15,
+    "offer_about": "Centauria Hill Resort - Reservations - 077 765 3402 / 047 222 270415% off for BOC Credit & Debit CardholdersFrom 12th January to 20th December 2026*Conditions apply.",
+    "expiry_date": "2026-12-20",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/centauria-hill-resort/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 15,
+    "offer_about": "Centauria Lake - Reservations - 077 765 3402 / 047 223 051415% off for BOC Credit & Debit CardholdersFrom 12th January to 20th December 2026*Conditions apply.",
+    "expiry_date": "2026-12-20",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/centauria-lake/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Centauria Wild Udawalawa - Reservations - 047 763 4630 / 076 360 096520% off for BOC Credit & Debit CardholdersFrom 12th January to 20th December 2026*Conditions apply.",
+    "expiry_date": "2026-12-20",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/centauria-wild-udawalawa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Earl's Regency - Inquires : 077 003 748830% off on full board & half board basis for BOC Credit CardholdersFrom 01st April - 31st July 2026 (Blackout Dates: 24th, 25th & 26th July 2026)*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/earls-regency/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Earl's Regent Kandy - Reservations : 077 003 751430% off for BOC Credit & Debit CardholdersFrom 01st June to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/earls-regent-kandy/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Earls's Regent Negombo - Reservations : 077 893 091025% off for BOC Credit & Debit CardholdersFrom 20th April to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/earlss-regent-negombo/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Elephant Reach Hotel - Reservations : 077 207 5712 / 075 158 737320% off for BOC Credit & Debit CardholdersFrom 01st March to 30th November 2026*Conditions apply.",
+    "expiry_date": "2026-11-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/elephant-reach-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Elysia Hotel - Reservations : 071 015 1616 / 077 450 858535% off on DBL FB & TPL FB for BOC Credit & Debit CardholdersFrom 01st May to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/elysia-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Era Beach Thalpe - Reservations : 011 258 1132 | 077 959 454520% off on full board, half board and bed & breakfast basis for BOC Credit & Debit CardholdersFrom 01st January to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/era-beach-thalpe/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Findmyfare.com - Flat 20% off on base fare to any destination on any airline for BOC Credit & Debit CardholdersBooking Period : 05th - 30th June 2026 | Travel Before : 31st December 2026Promo Code : BOC20Inquiries : 0117 247 365*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/findmyfarecom-1/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Fresco Water Villa - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/fresco-water-villa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Grand Udawalawe Safari Resort - Reservations : 070 390 2354 | 070 390 238630% off for BOC Credit & Debit Cards @ Grand Udawalawe Safari ResortFrom 01st May to 31st July 2026Full Board Basis Only*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/grand-udawalawe-safari-resort/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Hotel Sudu Araliya - Reservations : 076 531 5390 / 027 222 484935% off for BOC Credit & Debit CardholdersFrom 01st May to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/hotel-sudu-araliya/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Joe’s Resort Bentota - Reservations : 011 258 1132 | 077 959 454520% off on full board, half board and bed & breakfast basis for BOC Credit & Debit CardholdersFrom 01st January to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/joes-resort-bentota/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Joe’s Resort Unawatuna - Reservations : 011 258 1132 | 077 959 454520% off on full board, half board and bed & breakfast basis for BOC Credit & Debit CardholdersFrom 01st January to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/joes-resort-unawatuna/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Kent Cottage - 25% off on Total Bill for BOC Credit & Debit CardholdersFrom 01st April to 01st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-01",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/kent-cottage/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 30,
+    "offer_about": "Lavanga Resort & Spa - Reservations : 077 012 623030% off suite rooms & 25% off standard rooms for BOC Credit & Debit CardholdersFrom 01st June to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/lavanga-resort-spa/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Laya Beach - Up to Reservations : 076 828 2410 / 038 223 281535% off on weekdays & 30% off on weekends for BOC Credit & Debit CardholdersFrom 05th June to 31st August 2026*Conditions apply.",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/laya-beach/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Lotus Estate Colombo - Reservations : 011 258 1132 | 077 959 454520% off on full board, half board and bed & breakfast basis for BOC Credit & Debit CardholdersFrom 01st January to 31st December 2026*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/lotus-estate-colombo/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Elephant Lake - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-elephant-lake/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Ella Gap - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-ella-gap/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Regency - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-regency/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Serene Garden - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-serene-garden/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Summer Hill Breeze - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-summer-hill-breeze/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Tea Bush - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-tea-bush/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Oak Ray Wild Yala - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/oak-ray-wild-yala/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Pearl Bay - 25% off on Standard SPLASHBay Tickets for BOC Credit & Debit CardholdersFrom 07th January to 31st July 2026*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/pearl-bay/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Pelwehera Village Resort - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/pelwehera-village-resort/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 40,
+    "offer_about": "Rajarata Hotel - Reservations - 025 203 0000 / 077 203 000040% off for BOC Credit CardholdersFrom 01st March to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/rajarata-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 20,
+    "offer_about": "Randiya Sea View Hotel - 20% off on room bookings & restaurant bill for BOC Credit & Debit CardholdersReservations: 077 779 9840 / 041 225 1621From 10th April to 30th November 2026*Conditions apply.",
+    "expiry_date": "2026-11-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/randiya-sea-view-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 35,
+    "offer_about": "Senani Hotel - Up to Reservations : 077 220 869935% off on DBL FB & 30% off on TPL FB for BOC Credit CardholdersFrom 01st to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/senani-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 40,
+    "offer_about": "The Swiss Residence - Reservations - 081 220 4646 / 077 377 024640% off for BOC Credit & Debit CardholdersFrom 20th May to 30th December 2026*Conditions apply.",
+    "expiry_date": "2026-12-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/the-swiss-residence/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Uppuveli Beach By DSK - Reservations : 077 714 0488 / 074 411 082325% off for BOC Credit & Debit CardholdersFrom 01st April to 30th June 2026*Conditions apply.",
+    "expiry_date": "2026-06-30",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/uppuveli-beach-by-dsk/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Villa Labugolla - 25% off on entire villa bookings for BOC Credit & Debit CardholdersInquires : 070 778 7722 / 070 461 8355Valid only on Bed & Breakfast basis*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/villa-labugolla/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 25,
+    "offer_about": "Villa Victorini - 25% off for BOC Credit & Debit CardholdersInquires : 070 778 7722 / 070 461 8355Valid only on Bed & Breakfast basis*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/villa-victorini/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Travel and Leisure",
+    "offer_amount_percent": 15,
+    "offer_about": "Wildescape Hotel - Reservations - 0114 508 50815% off on entire villa for BOC Credit & Debit CardholdersFrom 01st May to 31st July 2026*Conditions apply",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/travel-and-leisure/wildescape-hotel/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "VISA Offers",
+    "offer_amount_percent": 20,
+    "offer_about": "Discover Singapore with Visa: Exclusive June Privileges Awaits - Up to 20% off for BOC Visa Cardholders*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/visa-offers/discover-singapore-with-visa-exclusive-june-privileges-awaits/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "VISA Offers",
+    "offer_amount_percent": 30,
+    "offer_about": "Experience Korea in style: Exclusive offers on iconic attractions - Up to 30% off for BOC Visa Cardholders *Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/visa-offers/experience-korea-in-style-exclusive-offers-on-iconic-attractions/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "VISA Offers",
+    "offer_amount_percent": 30,
+    "offer_about": "Experience Thailand: An Iconic Visa Destination - Up to 30% off for BOC Visa Cardholders*Conditions apply.",
+    "expiry_date": "2026-12-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/visa-offers/experience-thailand-an-iconic-visa-destination/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "VISA Offers",
+    "offer_amount_percent": 30,
+    "offer_about": "Tap into Thursday Deals with BOC Visa Cards - Up to 30% off for BOC Visa Credit & Debit Cardholders*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/visa-offers/tap-into-thursday-deals-with-boc-visa-cards/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "VISA Offers",
+    "offer_amount_percent": 25,
+    "offer_about": "Thursdays Taste Better with BOC Visa Cards - Up to 25% off for BOC Visa Credit & Debit Cardholders*Conditions apply.",
+    "expiry_date": "2026-07-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/visa-offers/thursdays-taste-better-with-boc-visa-cards/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Air Tickets - 0% interest installment plans available for up to 24 months on any air ticket payments for BOC Credit CardholdersTransaction amount should be over Rs.50,000/-Valid till 31st August 2026Please forward duly completed applications to paymentp…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/air-tickets/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Automobile - 0% interest installment plans available for up to 24 months on any automobile payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paymentp…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/automobile/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Education - 0% interest installment plans available for up to 24 months on any education payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paymentpl…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/education/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Home Appliances - 0% interest installment plans available for up to 24 months on any home appliance payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paym…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/home-appliances/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Hospitals - 0% interest installment plans available for up to 24 months on any hospital payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paymentpla…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/hospitals/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Insurance - 0% interest installment plans available for up to 24 months on any insurance payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paymentpl…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/insurance/product"
+  },
+  {
+    "bank": "Bank of Ceylon",
+    "category": "Zero Plans",
+    "offer_amount_percent": null,
+    "offer_about": "Solar - 0% interest installment plans available for up to 24 months on any solar payments for BOC Credit CardholdersValid till 31st August 2026Transaction amount should be over Rs.50,000/-Please forward duly completed applications to paymentplans@…",
+    "expiry_date": "2026-08-31",
+    "source_url": "https://www.boc.lk/personal-banking/card-offers/zero-plans/solar/product"
+  }
+]

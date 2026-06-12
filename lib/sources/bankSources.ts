@@ -75,6 +75,25 @@ export const bankSources: BankSource[] = [
     urls: ["https://www.nationstrust.com/promotions"]
   },
   {
+    bankId: "cargills-bank",
+    bankName: "Cargills Bank",
+    shortName: "Cargills Bank",
+    enabled: true,
+    sourceType: "static_html",
+    urls: [
+      "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
+      "https://www.cargillsbank.com/products/mastercard-promotions/"
+    ]
+  },
+  {
+    bankId: "standard-chartered",
+    bankName: "Standard Chartered Sri Lanka",
+    shortName: "Standard Chartered",
+    enabled: true,
+    sourceType: "feed",
+    urls: ["https://www.sc.com/lk/data/tgl/offers.json"]
+  },
+  {
     bankId: "sampath",
     bankName: "Sampath Bank",
     shortName: "Sampath",
@@ -89,5 +108,13 @@ export const bankSources: BankSource[] = [
     enabled: true,
     sourceType: "static_html",
     urls: ["https://www.dfcc.lk/cards/card-offers"]
+  },
+  {
+    bankId: "seylan",
+    bankName: "Seylan Bank",
+    shortName: "Seylan",
+    enabled: true,
+    sourceType: "static_html",
+    urls: ["https://www.seylan.lk/personal-banking/card-offers"]
   }
 ];
