@@ -76,7 +76,7 @@ export function FilterPanel({
           )}
         </div>
 
-        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_2fr]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_2fr]">
           <div className="grid gap-1">
             <label htmlFor="offer-bank-filter" className="text-xs font-semibold uppercase tracking-wide text-slate-500">
               Bank
@@ -86,7 +86,7 @@ export function FilterPanel({
               name="bank"
               value={selectedBankId}
               onChange={(e) => pushFilter({ bank: e.target.value, card: "" })}
-              className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
+              className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
             >
               <option value="">All banks</option>
               {banks.map((bank) => (
@@ -106,7 +106,7 @@ export function FilterPanel({
               name="card"
               value={selectedCardId}
               onChange={(e) => pushFilter({ card: e.target.value })}
-              className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
+              className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
             >
               <option value="">All cards</option>
               {availableCards.map((card) => {
@@ -130,7 +130,7 @@ export function FilterPanel({
               name="category"
               value={selectedCategory ?? ""}
               onChange={(e) => pushFilter({ category: e.target.value })}
-              className="h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
+              className="w-full h-10 rounded-lg border border-slate-300 bg-white px-3 text-sm text-slate-900 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
             >
               <option value="">All categories</option>
               {categories.map((category) => (
@@ -158,11 +158,11 @@ export function FilterPanel({
                 name="search"
                 defaultValue={search}
                 placeholder="Merchant, bank, offer…"
-                className="h-10 flex-1 rounded-lg border border-slate-300 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
+                className="min-w-0 h-10 flex-1 rounded-lg border border-slate-300 px-3 text-sm text-slate-900 placeholder:text-slate-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition-colors"
               />
               <button
                 type="submit"
-                className="h-10 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white hover:bg-teal-800 transition-colors"
+                className="shrink-0 whitespace-nowrap h-10 rounded-lg bg-teal-700 px-4 text-sm font-semibold text-white hover:bg-teal-800 transition-colors"
               >
                 Search
               </button>
