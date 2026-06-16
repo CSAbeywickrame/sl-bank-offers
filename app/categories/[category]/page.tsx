@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
+import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { getCategoryLabel, isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
 import { getActiveOffers } from "@/lib/offers/repository";
+import { siteUrl } from "@/lib/site-config";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
@@ -16,6 +19,22 @@ interface CategoryPageProps {
 // Extracts the first string value from a query parameter that may be an array
 function firstParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
+  const { category: categoryParam } = await params;
+  if (!isOfferCategory(categoryParam)) return {};
+
+  const label = getCategoryLabel(categoryParam);
+  const title = `${label} Credit Card Offers in Sri Lanka`;
+  const description = `Find the best ${label.toLowerCase()} credit card offers across Sri Lankan banks. Compare deals and save more.`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, url: `${siteUrl}/categories/${categoryParam}` },
+    alternates: { canonical: `${siteUrl}/categories/${categoryParam}` },
+  };
 }
 
 // Category-scoped offers page — filter submissions stay on /categories/:category via actionPath
@@ -34,8 +53,20 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   const banks = getBanks();
   const cards = getCards();
 
+  const label = getCategoryLabel(categoryParam);
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: `${label} Offers`, item: `${siteUrl}/categories/${categoryParam}` },
+    ],
+  };
+
   return (
     <main>
+      <JsonLd data={breadcrumbJsonLd} />
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8">
           <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">Category</p>

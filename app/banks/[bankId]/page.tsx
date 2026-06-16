@@ -1,12 +1,15 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
+import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
 import { getBankById, getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
 import { getActiveOffers } from "@/lib/offers/repository";
+import { siteUrl } from "@/lib/site-config";
 
 interface BankPageProps {
   params: Promise<{ bankId: string }>;
@@ -16,6 +19,22 @@ interface BankPageProps {
 // Extracts the first string value from a query parameter that may be an array
 function firstParam(value: string | string[] | undefined): string {
   return Array.isArray(value) ? value[0] ?? "" : value ?? "";
+}
+
+export async function generateMetadata({ params }: BankPageProps): Promise<Metadata> {
+  const { bankId } = await params;
+  const bank = getBankById(bankId);
+  if (!bank) return {};
+
+  const title = `${bank.name} Credit Card Offers`;
+  const description = `Browse active credit card offers from ${bank.name} in Sri Lanka. Find the best deals on dining, fuel, travel, supermarket, and more.`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, url: `${siteUrl}/banks/${bankId}` },
+    alternates: { canonical: `${siteUrl}/banks/${bankId}` },
+  };
 }
 
 // Bank-scoped offers page — filter submissions stay on /banks/:bankId via actionPath
@@ -36,8 +55,18 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   const banks = getBanks();
   const cards = getCards();
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: `${bank.name} Offers`, item: `${siteUrl}/banks/${bankId}` },
+    ],
+  };
+
   return (
     <main>
+      <JsonLd data={breadcrumbJsonLd} />
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto max-w-7xl px-4 py-8">
           <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">Bank</p>
