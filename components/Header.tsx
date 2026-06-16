@@ -21,7 +21,7 @@ export function Header() {
             All Offers
           </Link>
           <Link
-            href="/"
+            href="/banks"
             className="rounded-md px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 transition-colors"
           >
             Browse Banks

@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: `${siteName} — Sri Lankan Credit Card Deals`,
+    default: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
     template: `%s | ${siteName}`,
   },
   description: siteDescription,
@@ -17,13 +17,13 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_LK",
     siteName,
-    title: `${siteName} — Sri Lankan Credit Card Deals`,
+    title: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
     description: siteDescription,
     url: siteUrl,
   },
   twitter: {
     card: "summary",
-    title: `${siteName} — Sri Lankan Credit Card Deals`,
+    title: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
     description: siteDescription,
   },
   robots: {
