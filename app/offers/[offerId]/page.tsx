@@ -1,7 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/components/JsonLd";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import { getOfferById } from "@/lib/offers/repository";
+import { siteUrl } from "@/lib/site-config";
 
 interface OfferDetailPageProps {
   params: Promise<{ offerId: string }>;
@@ -21,6 +24,23 @@ function formatDate(value: string | undefined): string {
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
+export async function generateMetadata({ params }: OfferDetailPageProps): Promise<Metadata> {
+  const { offerId } = await params;
+  const offer = await getOfferById(offerId);
+  if (!offer) return {};
+
+  const validityNote = offer.validUntil ? ` Valid until ${formatDate(offer.validUntil)}.` : "";
+  const title = offer.title;
+  const description = `${offer.description} — ${offer.bankName} credit card offer.${validityNote}`;
+
+  return {
+    title,
+    description,
+    openGraph: { title, description, url: `${siteUrl}/offers/${offerId}` },
+    alternates: { canonical: `${siteUrl}/offers/${offerId}` },
+  };
+}
+
 // Individual offer detail page showing full metadata and official bank links
 export default async function OfferDetailPage({ params }: OfferDetailPageProps) {
   const { offerId } = await params;
@@ -30,8 +50,37 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
     notFound();
   }
 
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
+      { "@type": "ListItem", position: 2, name: offer.title, item: `${siteUrl}/offers/${offerId}` },
+    ],
+  };
+
+  const offerJsonLd: Record<string, unknown> = {
+    "@context": "https://schema.org",
+    "@type": "Offer",
+    name: offer.title,
+    description: offer.description,
+    url: `${siteUrl}/offers/${offerId}`,
+    category: getCategoryLabel(offer.category),
+    offeredBy: {
+      "@type": "BankOrCreditUnion",
+      name: offer.bankName,
+    },
+    ...(offer.validFrom && { validFrom: offer.validFrom }),
+    ...(offer.validUntil && { validThrough: offer.validUntil }),
+    ...(offer.merchant && { seller: { "@type": "Organization", name: offer.merchant } }),
+    dateModified: offer.lastCheckedAt,
+  };
+
   return (
     <main className="mx-auto grid max-w-5xl gap-8 px-4 py-8">
+      <JsonLd data={breadcrumbJsonLd} />
+      <JsonLd data={offerJsonLd} />
+
       <div className="grid gap-4">
         <Link className="text-sm font-medium text-teal-800 hover:text-teal-900" href="/">
           Back to all offers
