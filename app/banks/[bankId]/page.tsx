@@ -4,21 +4,18 @@ import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
 import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
+import { OfferPagination } from "@/components/OfferPagination";
 import { getBankById, getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
+import { firstQueryValue, paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteUrl } from "@/lib/site-config";
 
 interface BankPageProps {
   params: Promise<{ bankId: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
-
-// Extracts the first string value from a query parameter that may be an array
-function firstParam(value: string | string[] | undefined): string {
-  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
 export async function generateMetadata({ params }: BankPageProps): Promise<Metadata> {
@@ -47,11 +44,13 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   }
 
   const query = await searchParams;
-  const cardId = firstParam(query.card);
-  const categoryParam = firstParam(query.category);
-  const search = firstParam(query.search);
+  const cardId = firstQueryValue(query.card);
+  const categoryParam = firstQueryValue(query.category);
+  const search = firstQueryValue(query.search);
   const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
-  const offers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
+  const pagination = parsePaginationParams(query);
+  const filteredOffers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
+  const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
 
@@ -74,7 +73,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
           <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
             Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
           </p>
-          <p className="mt-3 text-sm font-medium text-slate-600">{offers.length} active offer{offers.length !== 1 ? "s" : ""}</p>
+          <p className="mt-3 text-sm font-medium text-slate-600">{filteredOffers.length} active offer{filteredOffers.length !== 1 ? "s" : ""}</p>
         </div>
       </section>
 
@@ -89,7 +88,32 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
       />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
-        {offers.length > 0 ? <OfferGrid offers={offers} /> : <EmptyState />}
+        {filteredOffers.length > 0 ? (
+          <>
+            {/* <OfferPagination
+              actionPath={`/banks/${bankId}`}
+              page={paginatedOffers.page}
+              pageSize={paginatedOffers.pageSize}
+              totalItems={paginatedOffers.totalItems}
+              totalPages={paginatedOffers.totalPages}
+              startIndex={paginatedOffers.startIndex}
+              endIndex={paginatedOffers.endIndex}
+            /> */}
+            <OfferGrid offers={paginatedOffers.items} />
+            <OfferPagination
+              navOnly
+              actionPath={`/banks/${bankId}`}
+              page={paginatedOffers.page}
+              pageSize={paginatedOffers.pageSize}
+              totalItems={paginatedOffers.totalItems}
+              totalPages={paginatedOffers.totalPages}
+              startIndex={paginatedOffers.startIndex}
+              endIndex={paginatedOffers.endIndex}
+            />
+          </>
+        ) : (
+          <EmptyState />
+        )}
       </section>
     </main>
   );

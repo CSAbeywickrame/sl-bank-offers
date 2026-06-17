@@ -1,0 +1,39 @@
+/* ============================================================
+   SL Card Offers — Spacing, radius, shadow & layout tokens
+   4px base grid (Tailwind spacing scale).
+   ============================================================ */
+
+:root {
+  /* Spacing scale (4px base) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius — soft, friendly, consistent with the production cards */
+  --radius-sm: 6px;     /* inputs, small chips (rounded-md) */
+  --radius-md: 8px;     /* buttons, selects (rounded-lg) */
+  --radius-lg: 12px;    /* cards (rounded-xl) */
+  --radius-xl: 16px;    /* feature panels (rounded-2xl) */
+  --radius-pill: 9999px;/* badges, status dots */
+
+  /* Shadows — subtle, lift on hover only */
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.10), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 12px 28px -6px rgb(15 23 42 / 0.16);
+
+  /* Layout */
+  --container-max: 1280px;   /* max-w-7xl */
+  --container-pad: 16px;     /* px-4 */
+  --header-h: 64px;          /* sticky header height */
+
+  /* Control heights */
+  --control-h: 40px;         /* inputs & selects (h-10) */
+  --control-h-lg: 44px;      /* primary CTAs (h-11), 44px min touch target */
+}

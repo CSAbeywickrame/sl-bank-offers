@@ -1,0 +1,8 @@
+/* ============================================================
+   SL Card Offers — Webfont
+   Inter variable, served from Google Fonts (same source the
+   production site uses). Replace with self-hosted woff2 files
+   for production if you want to avoid the third-party request.
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');

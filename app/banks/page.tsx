@@ -54,19 +54,23 @@ export default async function BanksPage() {
       <JsonLd data={breadcrumbJsonLd} />
       <JsonLd data={itemListJsonLd} />
 
-      <section className="border-b border-slate-200 bg-white">
+      <section style={{ borderBottom: "1px solid #dde7e1", background: "#fff" }}>
         <div className="mx-auto max-w-7xl px-4 py-8">
-          <nav aria-label="Breadcrumb" className="mb-4 text-xs text-slate-500">
+          <nav aria-label="Breadcrumb" className="mb-4 text-xs" style={{ color: "#6a7d73" }}>
             <ol className="flex items-center gap-1.5">
-              <li><Link href="/" className="hover:text-teal-700">Home</Link></li>
+              <li>
+                <Link href="/" className="hover:underline" style={{ color: "#047857" }}>
+                  Home
+                </Link>
+              </li>
               <li aria-hidden="true">/</li>
-              <li className="font-medium text-slate-700">Banks</li>
+              <li className="font-medium" style={{ color: "#16201b" }}>Banks</li>
             </ol>
           </nav>
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+          <h1 className="text-3xl font-bold tracking-tight" style={{ color: "#16201b" }}>
             Sri Lankan Banks with Credit Card Offers
           </h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
+          <p className="mt-2 max-w-2xl text-sm leading-6" style={{ color: "#6a7d73" }}>
             Browse active credit card promotions by bank. Select a bank to see all its current offers.
           </p>
         </div>
@@ -80,16 +84,25 @@ export default async function BanksPage() {
               <li key={bank.id}>
                 <Link
                   href={`/banks/${bank.id}`}
-                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-white px-5 py-4 shadow-sm transition-shadow hover:shadow-md hover:border-slate-300"
+                  className="group flex items-center justify-between rounded-xl bg-white transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
+                  style={{
+                    padding: "16px 20px",
+                    borderRadius: "12px",
+                    border: "1px solid #dde7e1",
+                    boxShadow: "0 1px 2px rgb(15 23 42 / 5%)",
+                    display: "flex",
+                  }}
                   aria-label={`${bank.name} — ${count} active offer${count !== 1 ? "s" : ""}`}
                 >
                   <div>
-                    <p className="font-semibold text-slate-900">{bank.name}</p>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="font-semibold" style={{ fontSize: "15px", color: "#16201b" }}>
+                      {bank.name}
+                    </p>
+                    <p className="mt-0.5 text-xs" style={{ color: "#6a7d73" }}>
                       {count} active offer{count !== 1 ? "s" : ""}
                     </p>
                   </div>
-                  <span className="ml-4 text-teal-600 text-sm font-medium" aria-hidden="true">
+                  <span className="ml-4 text-sm font-semibold" style={{ color: "#047857" }} aria-hidden="true">
                     View →
                   </span>
                 </Link>
