@@ -1,0 +1,205 @@
+/* ============================================================
+   SL Card Offers — Color tokens
+   Direction: "Emerald & Gold" (light default, dark-ready).
+
+   Emerald carries the brand's green DNA, matured into a deep,
+   trustworthy field. Gold is the rewards/premium accent (fills,
+   rules, large highlights — never small text on light).
+   Neutrals are a faintly green-tinted gray ramp so the whole
+   surface reads cohesive rather than clinical blue-gray.
+
+   Accessibility: every text/background and action pairing in the
+   SEMANTIC ALIASES below meets WCAG AA (≥4.5:1 body, ≥3:1 large
+   text & UI). Notes are inline. Gold is decorative/large only.
+   ============================================================ */
+
+:root {
+  /* ---- Emerald (brand / primary) ---- */
+  --emerald-50:  #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-200: #a7f3d0;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857;   /* primary interactive — white text = 5.5:1 AA */
+  --emerald-800: #065f46;
+  --emerald-900: #064e3b;
+  --emerald-950: #03281d;
+
+  /* ---- Gold (rewards / premium accent — decorative & large only) ---- */
+  --gold-50:  #fbf7ea;
+  --gold-100: #f6ecc9;
+  --gold-200: #edd99b;
+  --gold-300: #e1c46e;
+  --gold-400: #d4af5f;      /* hero highlight on dark forest = ~8:1 */
+  --gold-500: #c99a2e;      /* card top-rule, fills */
+  --gold-600: #a87d1f;
+  --gold-700: #856115;      /* gold text on gold-50 = AA */
+  --gold-800: #5f4510;
+
+  /* ---- Neutral (green-tinted gray) ---- */
+  --neutral-50:  #f4f9f6;
+  --neutral-100: #e9f1ec;
+  --neutral-200: #dde7e1;
+  --neutral-300: #c4d3cb;
+  --neutral-400: #95a89e;   /* placeholder / decorative — not for essential text */
+  --neutral-500: #6a7d73;   /* meta — 4.6:1 on white (AA normal) */
+  --neutral-600: #51635a;   /* secondary body — 6.6:1 */
+  --neutral-700: #3b4a43;   /* body — 9:1 */
+  --neutral-800: #25322c;
+  --neutral-900: #16201b;   /* strong text — 15:1 */
+  --neutral-950: #0c1410;
+  --white: #ffffff;
+
+  /* ---- Brand anchors ---- */
+  --brand-forest: #08271c;  /* hero / inverse surfaces */
+  --brand-emerald: var(--emerald-700);
+  --brand-gold: var(--gold-500);
+  --brand-ink: var(--neutral-900);  /* alias: text logo fallback */
+
+  /* ---- Amber (kept for "category" warmth) ---- */
+  --amber-50:  #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+
+  /* ---- Red (expiry / destructive) ---- */
+  --red-50:  #fef2f2;
+  --red-100: #fee2e2;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+
+  /* ---- Green (success — distinct from emerald-brand) ---- */
+  --green-50:  #f0fdf4;
+  --green-100: #dcfce7;
+  --green-700: #15803d;
+
+  /* ============================================================
+     SEMANTIC ALIASES — light theme (default).
+     Components reach for THESE; a theme swap only re-points them.
+     ============================================================ */
+
+  /* Surfaces */
+  --bg-page: var(--neutral-50);
+  --surface-card: var(--white);
+  --surface-muted: var(--neutral-100);
+  --surface-sunken: var(--neutral-200);
+  --surface-inverse: var(--brand-forest);   /* hero / footer */
+
+  /* Text */
+  --text-strong: var(--neutral-900);   /* 15:1 */
+  --text-body: var(--neutral-700);     /* 9:1 */
+  --text-muted: var(--neutral-500);    /* 4.6:1 */
+  --text-faint: var(--neutral-400);    /* decorative only */
+  --text-on-inverse: var(--white);
+  --text-on-inverse-muted: rgba(255,255,255,0.78);
+  --text-link: var(--emerald-700);     /* 5.5:1 */
+  --text-link-hover: var(--emerald-800);
+
+  /* Borders */
+  --border-subtle: var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong: var(--neutral-400);
+  --border-focus: var(--emerald-500);
+
+  /* Primary action — deep forest "View details" */
+  --action-primary-bg: var(--brand-forest);
+  --action-primary-bg-hover: #0d3a29;
+  --action-primary-fg: var(--white);
+
+  /* Accent action — emerald (search / confirm) */
+  --action-accent-bg: var(--emerald-700);
+  --action-accent-bg-hover: var(--emerald-800);
+  --action-accent-fg: var(--white);
+
+  /* Focus ring */
+  --ring-focus: color-mix(in srgb, var(--emerald-500) 32%, transparent);
+
+  /* Signature card top-rule */
+  --offer-rule: linear-gradient(90deg, var(--emerald-600), var(--gold-500));
+
+  /* Badge tones */
+  --badge-bank-bg: #e3f1ea;
+  --badge-bank-fg: var(--emerald-800);
+  --badge-bank-ring: var(--emerald-100);
+  --badge-category-bg: var(--amber-50);
+  --badge-category-fg: var(--amber-800);
+  --badge-category-ring: var(--amber-100);
+  --badge-expiry-bg: var(--red-50);
+  --badge-expiry-fg: var(--red-700);
+  --badge-expiry-ring: var(--red-100);
+  --badge-premium-bg: var(--gold-50);
+  --badge-premium-fg: var(--gold-800);
+  --badge-premium-ring: var(--gold-200);
+  --badge-neutral-bg: var(--neutral-100);
+  --badge-neutral-fg: var(--neutral-700);
+  --badge-neutral-ring: var(--neutral-200);
+
+  /* Hero accents (on dark forest) */
+  --hero-bg: var(--brand-forest);
+  --hero-highlight: var(--gold-400);
+  --hero-eyebrow-bg: rgba(212, 175, 95, 0.16);
+  --hero-eyebrow-fg: var(--gold-300);
+}
+
+/* ============================================================
+   DARK THEME — opt in with <html data-theme="dark"> (or any
+   ancestor). Light is the shipped default; this is the scaffold
+   for the planned dark mode. Raw scales above are shared; only
+   the semantic aliases flip.
+   ============================================================ */
+[data-theme="dark"] {
+  --bg-page: #07130d;
+  --surface-card: #0f1f17;
+  --surface-muted: #132a20;
+  --surface-sunken: #18352789;
+  --surface-inverse: #0a1f16;
+
+  --text-strong: #e9f4ee;
+  --text-body: #c3d4ca;
+  --text-muted: #8fa89a;
+  --text-faint: #6a7d73;
+  --text-on-inverse: #ffffff;
+  --text-on-inverse-muted: rgba(255,255,255,0.74);
+  --text-link: var(--emerald-300);
+  --text-link-hover: var(--emerald-200);
+
+  --border-subtle: #1f3329;
+  --border-default: #2a4438;
+  --border-strong: #3a5849;
+  --border-focus: var(--emerald-400);
+
+  --action-primary-bg: var(--emerald-500);
+  --action-primary-bg-hover: var(--emerald-400);
+  --action-primary-fg: #04130d;
+
+  --action-accent-bg: var(--emerald-500);
+  --action-accent-bg-hover: var(--emerald-400);
+  --action-accent-fg: #04130d;
+
+  --ring-focus: color-mix(in srgb, var(--emerald-400) 40%, transparent);
+
+  --offer-rule: linear-gradient(90deg, var(--emerald-500), var(--gold-400));
+
+  --badge-bank-bg: #123026;
+  --badge-bank-fg: #5fd6ad;
+  --badge-bank-ring: #1f4536;
+  --badge-category-bg: #3a2e12;
+  --badge-category-fg: #e2c074;
+  --badge-category-ring: #4d3d18;
+  --badge-expiry-bg: #3a1717;
+  --badge-expiry-fg: #f7a5a5;
+  --badge-expiry-ring: #4d2222;
+  --badge-premium-bg: #3a2f12;
+  --badge-premium-fg: #e2c074;
+  --badge-premium-ring: #4d3d18;
+  --badge-neutral-bg: #18352789;
+  --badge-neutral-fg: #c3d4ca;
+  --badge-neutral-ring: #2a4438;
+
+  --hero-bg: #0a1f16;
+  --hero-highlight: var(--gold-400);
+  --hero-eyebrow-bg: rgba(212, 175, 95, 0.18);
+  --hero-eyebrow-fg: var(--gold-300);
+}

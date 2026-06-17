@@ -4,21 +4,18 @@ import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
 import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
+import { OfferPagination } from "@/components/OfferPagination";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { getCategoryLabel, isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
+import { firstQueryValue, paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteUrl } from "@/lib/site-config";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
   searchParams: Promise<Record<string, string | string[] | undefined>>;
-}
-
-// Extracts the first string value from a query parameter that may be an array
-function firstParam(value: string | string[] | undefined): string {
-  return Array.isArray(value) ? value[0] ?? "" : value ?? "";
 }
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
@@ -46,10 +43,12 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   }
 
   const query = await searchParams;
-  const bankId = firstParam(query.bank);
-  const cardId = firstParam(query.card);
-  const search = firstParam(query.search);
-  const offers = filterOffers(await getActiveOffers(), { bankId, cardId, category: categoryParam, search });
+  const bankId = firstQueryValue(query.bank);
+  const cardId = firstQueryValue(query.card);
+  const search = firstQueryValue(query.search);
+  const pagination = parsePaginationParams(query);
+  const filteredOffers = filterOffers(await getActiveOffers(), { bankId, cardId, category: categoryParam, search });
+  const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
 
@@ -67,14 +66,63 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   return (
     <main>
       <JsonLd data={breadcrumbJsonLd} />
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">Category</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">{getCategoryLabel(categoryParam)} card offers</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-            Browse {getCategoryLabel(categoryParam).toLowerCase()} offers across Sri Lankan banks.
-          </p>
-          <p className="mt-3 text-sm font-medium text-slate-600">{offers.length} active offer{offers.length !== 1 ? "s" : ""}</p>
+      <section className="relative overflow-hidden" style={{ background: "#08271c", color: "#fff" }}>
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="hero-orb hero-orb-emerald" />
+          <div className="hero-orb hero-orb-gold" />
+          <div className="hero-orb hero-orb-accent" />
+          <div className="hero-dots" />
+          <div className="hero-shine" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 py-12">
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+            <div className="max-w-2xl">
+              <p
+                className="inline-flex items-center gap-2 text-xs font-semibold uppercase"
+                style={{
+                  background: "rgba(212, 175, 95, 0.16)",
+                  border: "1px solid rgba(212, 175, 95, 0.16)",
+                  color: "#e1c46e",
+                  borderRadius: "9999px",
+                  padding: "4px 12px",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                <span
+                  className="hero-dot-pulse"
+                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
+                />
+                Category
+              </p>
+              <h1
+                className="mt-4 font-bold"
+                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+              >
+                {getCategoryLabel(categoryParam)}{" "}
+                <span style={{ color: "#d4af5f" }}>Card Offers</span>
+              </h1>
+              <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+                Browse {getCategoryLabel(categoryParam).toLowerCase()} offers across Sri Lankan banks.
+              </p>
+            </div>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: "12px",
+                padding: "16px 20px",
+                minWidth: "180px",
+                textAlign: "center",
+              }}
+            >
+              <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
+                {filteredOffers.length}
+              </span>
+              <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
+                active offer{filteredOffers.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -89,7 +137,32 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
-        {offers.length > 0 ? <OfferGrid offers={offers} /> : <EmptyState />}
+        {filteredOffers.length > 0 ? (
+          <>
+            {/* <OfferPagination
+              actionPath={`/categories/${categoryParam}`}
+              page={paginatedOffers.page}
+              pageSize={paginatedOffers.pageSize}
+              totalItems={paginatedOffers.totalItems}
+              totalPages={paginatedOffers.totalPages}
+              startIndex={paginatedOffers.startIndex}
+              endIndex={paginatedOffers.endIndex}
+            /> */}
+            <OfferGrid offers={paginatedOffers.items} />
+            <OfferPagination
+              navOnly
+              actionPath={`/categories/${categoryParam}`}
+              page={paginatedOffers.page}
+              pageSize={paginatedOffers.pageSize}
+              totalItems={paginatedOffers.totalItems}
+              totalPages={paginatedOffers.totalPages}
+              startIndex={paginatedOffers.startIndex}
+              endIndex={paginatedOffers.endIndex}
+            />
+          </>
+        ) : (
+          <EmptyState />
+        )}
       </section>
     </main>
   );
