@@ -32,6 +32,13 @@ export function Header() {
           >
             Browse Banks
           </Link>
+          <Link
+            href="/categories"
+            className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900"
+            style={{ color: "#3b4a43" }}
+          >
+            View Categories
+          </Link>
         </nav>
       </div>
     </header>

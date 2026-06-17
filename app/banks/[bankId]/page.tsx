@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
@@ -66,14 +67,80 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   return (
     <main>
       <JsonLd data={breadcrumbJsonLd} />
-      <section className="border-b border-slate-200 bg-white">
-        <div className="mx-auto max-w-7xl px-4 py-8">
-          <p className="text-xs font-semibold uppercase tracking-wider text-teal-600">Bank</p>
-          <h1 className="mt-1 text-3xl font-bold tracking-tight text-slate-900">{bank.shortName} credit card offers</h1>
-          <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-500">
-            Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
-          </p>
-          <p className="mt-3 text-sm font-medium text-slate-600">{filteredOffers.length} active offer{filteredOffers.length !== 1 ? "s" : ""}</p>
+      <section className="relative overflow-hidden" style={{ background: "#08271c", color: "#fff" }}>
+        <div className="absolute inset-0" aria-hidden="true">
+          <div className="hero-orb hero-orb-emerald" />
+          <div className="hero-orb hero-orb-gold" />
+          <div className="hero-orb hero-orb-accent" />
+          <div className="hero-dots" />
+          <div className="hero-shine" />
+        </div>
+        <div className="relative mx-auto max-w-7xl px-4 py-12">
+          <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
+            <ol className="flex items-center gap-1.5">
+              <li>
+                <Link href="/" className="hover:underline" style={{ color: "rgba(255,255,255,0.65)" }}>
+                  Home
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li>
+                <Link href="/banks" className="hover:underline" style={{ color: "rgba(255,255,255,0.65)" }}>
+                  Banks
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li className="font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>{bank.shortName}</li>
+            </ol>
+          </nav>
+          <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
+            <div className="max-w-2xl">
+              <p
+                className="inline-flex items-center gap-2 text-xs font-semibold uppercase"
+                style={{
+                  background: "rgba(212, 175, 95, 0.16)",
+                  border: "1px solid rgba(212, 175, 95, 0.16)",
+                  color: "#e1c46e",
+                  borderRadius: "9999px",
+                  padding: "4px 12px",
+                  letterSpacing: "0.04em",
+                }}
+              >
+                <span
+                  className="hero-dot-pulse"
+                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
+                />
+                Bank
+              </p>
+              <h1
+                className="mt-4 font-bold"
+                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+              >
+                {bank.shortName}{" "}
+                <span style={{ color: "#d4af5f" }}>Credit Card Offers</span>
+              </h1>
+              <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+                Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
+              </p>
+            </div>
+            <div
+              style={{
+                background: "rgba(255,255,255,0.06)",
+                border: "1px solid rgba(255,255,255,0.12)",
+                borderRadius: "12px",
+                padding: "16px 20px",
+                minWidth: "180px",
+                textAlign: "center",
+              }}
+            >
+              <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
+                {filteredOffers.length}
+              </span>
+              <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
+                active offer{filteredOffers.length !== 1 ? "s" : ""}
+              </span>
+            </div>
+          </div>
         </div>
       </section>
 
