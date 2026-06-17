@@ -1,0 +1,9 @@
+/* ============================================================
+   SL Card Offers — Design System entry point
+   Consumers link THIS file. It only @imports token + font files.
+   ============================================================ */
+
+@import "./tokens/fonts.css";
+@import "./tokens/colors.css";
+@import "./tokens/typography.css";
+@import "./tokens/spacing.css";

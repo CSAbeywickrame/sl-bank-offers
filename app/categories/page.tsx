@@ -1,30 +1,41 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
-import { getBanks } from "@/lib/offers/banks";
+import { categories } from "@/lib/offers/categories";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteName, siteUrl } from "@/lib/site-config";
 
-export const metadata: Metadata = {
-  title: "Sri Lankan Banks with Credit Card Offers",
-  description:
-    "Browse credit card offers by bank. Compare active promotions from all major Sri Lankan banks including Commercial Bank, Sampath, BOC, NTB, Seylan, and more.",
-  openGraph: {
-    title: "Sri Lankan Banks with Credit Card Offers",
-    description:
-      "Browse credit card offers by bank. Compare active promotions from all major Sri Lankan banks.",
-    url: `${siteUrl}/banks`,
-  },
-  alternates: { canonical: `${siteUrl}/banks` },
+const categoryDescriptions: Record<string, string> = {
+  dining: "Restaurant, cafe, and food delivery discounts.",
+  fuel: "Savings on fuel station spend and transport-related deals.",
+  supermarket: "Grocery and supermarket discounts across major chains.",
+  travel: "Airline, hotel, and travel booking promotions.",
+  online: "E-commerce and digital shopping savings.",
+  installment: "Easy payment plans and 0% installment offers.",
+  cashback: "Statement credit and cashback-driven promotions.",
+  bogo: "Buy-one-get-one and companion-style offers.",
+  other: "Seasonal and general promotions outside the main categories.",
 };
 
-export default async function BanksPage() {
-  const banks = getBanks();
-  const allOffers = await getActiveOffers();
+export const metadata: Metadata = {
+  title: "All Offer Categories",
+  description:
+    "Browse every credit card offer category tracked by SL Card Offers, from dining and fuel to travel, cashback, installments, and more.",
+  openGraph: {
+    title: "All Offer Categories",
+    description:
+      "Browse every credit card offer category tracked by SL Card Offers.",
+    url: `${siteUrl}/categories`,
+  },
+  alternates: { canonical: `${siteUrl}/categories` },
+};
 
-  const offerCountByBank = new Map<string, number>();
-  for (const offer of allOffers) {
-    offerCountByBank.set(offer.bankId, (offerCountByBank.get(offer.bankId) ?? 0) + 1);
+export default async function CategoriesPage() {
+  const activeOffers = await getActiveOffers();
+
+  const offerCountByCategory = new Map<string, number>();
+  for (const offer of activeOffers) {
+    offerCountByCategory.set(offer.category, (offerCountByCategory.get(offer.category) ?? 0) + 1);
   }
 
   const breadcrumbJsonLd = {
@@ -32,20 +43,20 @@ export default async function BanksPage() {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Home", item: siteUrl },
-      { "@type": "ListItem", position: 2, name: "Banks", item: `${siteUrl}/banks` },
+      { "@type": "ListItem", position: 2, name: "Categories", item: `${siteUrl}/categories` },
     ],
   };
 
   const itemListJsonLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: `Sri Lankan Banks — ${siteName}`,
-    numberOfItems: banks.length,
-    itemListElement: banks.map((bank, i) => ({
+    name: `Offer categories — ${siteName}`,
+    numberOfItems: categories.length,
+    itemListElement: categories.map((category, index) => ({
       "@type": "ListItem",
-      position: i + 1,
-      name: bank.name,
-      url: `${siteUrl}/banks/${bank.id}`,
+      position: index + 1,
+      name: category.label,
+      url: `${siteUrl}/categories/${category.id}`,
     })),
   };
 
@@ -71,7 +82,9 @@ export default async function BanksPage() {
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li className="font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>Banks</li>
+              <li className="font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>
+                Categories
+              </li>
             </ol>
           </nav>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
@@ -91,17 +104,13 @@ export default async function BanksPage() {
                   className="hero-dot-pulse"
                   style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
                 />
-                Sri Lankan credit card offers
+                Browse offer types
               </p>
-              <h1
-                className="mt-4 font-bold"
-                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
-              >
-                Banks with{" "}
-                <span style={{ color: "#d4af5f" }}>Credit Card Offers</span>
+              <h1 className="mt-4 font-bold" style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+                All <span style={{ color: "#d4af5f" }}>Offer Categories</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
-                Browse active credit card promotions by bank. Select a bank to see all its current offers.
+                Jump into dining, fuel, travel, cashback, installments, and every other category tracked across Sri Lankan bank cards.
               </p>
             </div>
             <div
@@ -115,10 +124,10 @@ export default async function BanksPage() {
               }}
             >
               <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
-                {banks.length}
+                {categories.length}
               </span>
               <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
-                banks tracked
+                categories tracked
               </span>
             </div>
           </div>
@@ -127,33 +136,36 @@ export default async function BanksPage() {
 
       <section className="mx-auto max-w-7xl px-4 py-8">
         <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" role="list">
-          {banks.map((bank) => {
-            const count = offerCountByBank.get(bank.id) ?? 0;
+          {categories.map((category) => {
+            const count = offerCountByCategory.get(category.id) ?? 0;
             return (
-              <li key={bank.id}>
+              <li key={category.id}>
                 <Link
-                  href={`/banks/${bank.id}`}
-                  className="group flex items-center justify-between rounded-xl bg-white transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
+                  href={`/categories/${category.id}`}
+                  className="group flex h-full flex-col justify-between rounded-xl bg-white transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
                   style={{
-                    padding: "16px 20px",
-                    borderRadius: "12px",
+                    padding: "18px 20px",
                     border: "1px solid #dde7e1",
                     boxShadow: "0 1px 2px rgb(15 23 42 / 5%)",
-                    display: "flex",
                   }}
-                  aria-label={`${bank.name} — ${count} active offer${count !== 1 ? "s" : ""}`}
+                  aria-label={`${category.label} — ${count} active offer${count !== 1 ? "s" : ""}`}
                 >
                   <div>
-                    <p className="font-semibold" style={{ fontSize: "15px", color: "#16201b" }}>
-                      {bank.name}
+                    <p className="font-semibold" style={{ fontSize: "18px", color: "#16201b" }}>
+                      {category.label}
                     </p>
-                    <p className="mt-0.5 text-xs" style={{ color: "#6a7d73" }}>
-                      {count} active offer{count !== 1 ? "s" : ""}
+                    <p className="mt-2 text-sm" style={{ color: "#6a7d73", lineHeight: 1.6 }}>
+                      {categoryDescriptions[category.id]}
                     </p>
                   </div>
-                  <span className="ml-4 text-sm font-semibold" style={{ color: "#047857" }} aria-hidden="true">
-                    View →
-                  </span>
+                  <div className="mt-6 flex items-center justify-between">
+                    <span className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "#6a7d73" }}>
+                      {count} active offer{count !== 1 ? "s" : ""}
+                    </span>
+                    <span className="text-sm font-semibold" style={{ color: "#047857" }} aria-hidden="true">
+                      View →
+                    </span>
+                  </div>
                 </Link>
               </li>
             );

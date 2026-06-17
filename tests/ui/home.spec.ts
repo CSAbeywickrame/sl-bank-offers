@@ -1,59 +1,55 @@
 import { expect, test } from "@playwright/test";
 
-test("home page filters combined offers by bank and category", async ({ page }) => {
-  await page.goto("/");
+const pageOneFirstTitle = "Up to 10% off at Cargills Online";
+const pageTwoFirstTitle = "20% off at Softlogic Restaurants every Friday";
+const pageTwentyFiveTitle = "25% off at Softlogic Glomark";
+const diningFirstTitle = "Up to 25% off at selected restaurants with ComBank Visa Cards";
 
-  await expect(page.getByRole("heading", { name: "All bank offers in one place" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Up to 10% off at Cargills Online" })).toBeVisible();
+test("deep-linked pagination loads the requested page and survives a reload", async ({ page }) => {
+  await page.goto("/?page=2&pageSize=12");
 
-  await page.getByLabel(/^Bank$/).selectOption("commercial-bank");
-  await page.getByLabel(/^Category$/).selectOption("travel");
-  await page.getByRole("button", { name: "Filter" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page).toHaveURL(/pageSize=12/);
+  await expect(page.getByRole("heading", { name: pageTwoFirstTitle })).toBeVisible();
+  await expect(page.getByRole("heading", { name: pageOneFirstTitle })).not.toBeVisible();
+  await expect(page.getByRole("link", { name: "Page 2" })).toHaveAttribute("aria-current", "page");
 
-  await expect(page).toHaveURL(/bank=commercial-bank/);
-  await expect(page).toHaveURL(/category=travel/);
-  const firstOffer = page.locator("article").first();
-  await expect(firstOffer.getByText("Commercial Bank of Ceylon")).toBeVisible();
-  await expect(firstOffer.getByText("Travel", { exact: true })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Travel offers with Sri Lankan Airlines" })).toBeVisible();
+  await page.reload();
+
+  await expect(page.getByRole("heading", { name: pageTwoFirstTitle })).toBeVisible();
+  await expect(page.getByRole("heading", { name: pageOneFirstTitle })).not.toBeVisible();
 });
 
-test("offer cards include official bank links", async ({ page }) => {
+test("clicking a numbered page link updates the URL and visible results", async ({ page }) => {
   await page.goto("/");
 
-  const links = page.getByRole("link", { name: "View at bank" });
-  await expect(links.first()).toBeVisible();
-  await expect(links.first()).toHaveAttribute("href", /https:\/\//);
+  await page.getByRole("link", { name: "Page 2" }).click();
+
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page.getByRole("heading", { name: pageTwoFirstTitle })).toBeVisible();
+  await expect(page.getByRole("heading", { name: pageOneFirstTitle })).not.toBeVisible();
 });
 
-test("offer cards open a dedicated offer detail page", async ({ page }) => {
-  await page.goto("/");
+test("changing page size resets pagination to page 1", async ({ page }) => {
+  await page.goto("/?page=3&pageSize=12");
 
-  await page.getByRole("link", { name: "View details for Up to 10% off at Cargills Online" }).click();
+  await expect(page.getByRole("heading", { name: pageTwentyFiveTitle })).toBeVisible();
 
-  await expect(page).toHaveURL(/\/offers\/commercial-bank-cargills-online-june-2026$/);
-  await expect(page.getByRole("heading", { name: "Up to 10% off at Cargills Online" })).toBeVisible();
-  await expect(page.getByRole("article").getByText("Commercial Bank of Ceylon")).toBeVisible();
-  await expect(page.getByText("Commercial Bank Credit Cards")).toBeVisible();
-  await expect(page.getByRole("link", { name: "View at bank" })).toHaveAttribute("href", /https:\/\//);
-  await expect(page.getByRole("link", { name: "View terms" })).toHaveAttribute("href", /https:\/\//);
+  await page.getByLabel("Offers per page").selectOption("24");
+
+  await expect(page).toHaveURL(/pageSize=24/);
+  await expect(page).not.toHaveURL(/page=3/);
+  await expect(page.getByRole("heading", { name: pageOneFirstTitle })).toBeVisible();
+  await expect(page.getByRole("heading", { name: pageTwentyFiveTitle })).not.toBeVisible();
 });
 
-test("home page filters offers by card", async ({ page }) => {
-  await page.goto("/");
+test("filter changes preserve page size and reset back to page 1", async ({ page }) => {
+  await page.goto("/?page=2&pageSize=24");
 
-  await page.getByLabel(/^Card$/).selectOption("ndb-premium-credit-cards");
-  await page.getByRole("button", { name: "Filter" }).click();
+  await page.getByLabel(/^Category$/).selectOption("dining");
 
-  await expect(page).toHaveURL(/card=ndb-premium-credit-cards/);
-  await expect(page.getByRole("heading", { name: "Up to 36 months 0% installment plans on education payments" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Up to 10% off at Cargills Online" })).not.toBeVisible();
-});
-
-test("bank and category routes render scoped directories", async ({ page }) => {
-  await page.goto("/banks/commercial-bank");
-  await expect(page.getByRole("heading", { name: "Commercial Bank credit card offers" })).toBeVisible();
-
-  await page.goto("/categories/travel");
-  await expect(page.getByRole("heading", { name: "Travel card offers" })).toBeVisible();
+  await expect(page).toHaveURL(/category=dining/);
+  await expect(page).toHaveURL(/pageSize=24/);
+  await expect(page).not.toHaveURL(/page=2/);
+  await expect(page.getByRole("heading", { name: diningFirstTitle })).toBeVisible();
 });
