@@ -1,0 +1,63 @@
+name: Weekly fresh data
+
+# Scrapes each bank source, extracts changed banks with Claude, and commits the
+# updated data/*.json so Vercel auto-deploys. Run it manually first
+# (Actions tab -> "Weekly fresh data" -> Run workflow) and confirm the diff +
+# data/refresh-report.json before enabling the weekly schedule below.
+
+on:
+  workflow_dispatch:
+  # Uncomment to run automatically every Monday at 02:00 UTC once you've tested a manual run:
+  # schedule:
+  #   - cron: "0 2 * * 1"
+
+# Prevent overlapping runs from racing on the committed data files.
+concurrency:
+  group: refresh-data
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Browsers for the dynamic_page source type (only used if a bank is set to it).
+      - run: npx playwright install --with-deps chromium
+
+      - name: Refresh offers
+        id: refresh
+        continue-on-error: true
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: npm run refresh:fresh
+
+      - name: Commit updated data
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/
+          if git diff --cached --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "chore(data): weekly offer refresh"
+            git push
+          fi
+
+      # Fail the run (and notify via GitHub) if any bank failed, after the good data was committed.
+      - name: Surface failures
+        if: steps.refresh.outcome == 'failure'
+        run: |
+          echo "One or more banks failed — see data/refresh-report.json in the latest commit."
+          exit 1
