@@ -12,9 +12,11 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "refresh": "tsx scripts/refresh-offers.ts",
+    "refresh:fresh": "tsx scripts/refresh.ts",
     "sync:scanned": "tsx scripts/sync-scanned-offers.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.104.2",
     "@tailwindcss/postcss": "^4.1.8",
     "@vercel/analytics": "^1.6.1",
     "cheerio": "^1.0.0",
