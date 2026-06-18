@@ -3,6 +3,7 @@ import { DesktopNav } from "@/components/DesktopNav";
 import { MobileMenu } from "@/components/MobileMenu";
 import { siteName } from "@/lib/site-config";
 
+// Site-wide sticky header with logo and main navigation
 export function Header() {
   return (
     <header
