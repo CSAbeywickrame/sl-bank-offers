@@ -143,7 +143,7 @@ export const bankRegistry: BankRegistryEntry[] = [
   },
   {
     bankId: "union-bank",
-    enabled: true,
+    enabled: false,
     bank: {
       id: "union-bank",
       name: "Union Bank of Colombo",
@@ -233,7 +233,7 @@ export const bankRegistry: BankRegistryEntry[] = [
   // NOTE: NSB is a new bank not yet in seed.json
   {
     bankId: "nsb",
-    enabled: false,
+    enabled: true,
     bank: {
       id: "nsb",
       name: "National Savings Bank",
@@ -241,10 +241,15 @@ export const bankRegistry: BankRegistryEntry[] = [
       websiteUrl: "https://www.nsb.lk"
     },
     cards: [
-      { id: "nsb-mastercard-credit-cards", bankId: "nsb", name: "NSB Mastercard Credit Cards", network: "Mastercard" }
+      { id: "nsb-mastercard-debit-cards", bankId: "nsb", name: "NSB Mastercard Debit Cards", network: "Mastercard" }
     ],
-    defaultCardId: "nsb-mastercard-credit-cards",
-    sources: [{ url: "https://www.nsb.lk/wp-content/uploads/2018/05/NSB-Mastercard-Offers-International.pdf", type: "pdf" }]
+    defaultCardId: "nsb-mastercard-debit-cards",
+    // WordPress category, paginated (3 pages as of 2026-06). Add/remove page URLs as the list grows.
+    sources: [
+      { url: "https://www.nsb.lk/category/card-offers/", type: "static_html" },
+      { url: "https://www.nsb.lk/category/card-offers/page/2/", type: "static_html" },
+      { url: "https://www.nsb.lk/category/card-offers/page/3/", type: "static_html" }
+    ]
   }
 ];
 

@@ -1,7 +1,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
-import { bankRegistry } from "@/lib/sources/bankRegistry";
+import { bankRegistry, type BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import { fetchAndStrip, hashContent } from "@/lib/ingest/fetchAndStrip";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
@@ -9,13 +9,19 @@ import { feedMappers } from "@/lib/ingest/feedMappers";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 
 const MIN_CONTENT_CHARS = 200;
+// Sanity gate: reject a catalog replace only when a bank that HAD a real catalog collapses to near-zero
+// (the signature of a broken scrape, e.g. a page that failed to render). A ratio test is deliberately
+// NOT used: legitimate seasonal contraction (Christmas/New-Year offers expiring) produces a smaller but
+// realistic count, which must pass. Only a collapse to <= the floor fails. Override with SANITY_OVERRIDE=bankId.
+const SANITY_MIN_BASELINE = 10;
+const SANITY_COLLAPSE_FLOOR = 3;
 const dataDir = join(process.cwd(), "data");
 const seedPath = join(dataDir, "seed.json");
 const scannedPath = join(dataDir, "scanned-offers.json");
 const statePath = join(dataDir, "refresh-state.json");
 const reportPath = join(dataDir, "refresh-report.json");
 
-type BankStatus = "updated" | "unchanged" | "skipped-empty" | "fetch-failed" | "extract-failed" | "deferred" | "disabled";
+type BankStatus = "updated" | "unchanged" | "skipped-empty" | "fetch-failed" | "extract-failed" | "deferred" | "disabled" | "sanity-rejected";
 
 interface RefreshState {
   lastRunAt: string;
@@ -51,6 +57,11 @@ async function main(): Promise<void> {
   // Caps how many banks reach Claude this run. Note: a multi-source bank spends one call per
   // source, so a bank with N sources costs up to N calls against this single-bank budget unit.
   const maxBanks = Number(process.env.MAX_BANKS_PER_RUN ?? "") || Infinity;
+  // Bank ids allowed to bypass the sanity gate this run (accept a real drop in offer count).
+  const sanityOverride = new Set((process.env.SANITY_OVERRIDE ?? "").split(",").map(s => s.trim()).filter(Boolean));
+  for (const id of sanityOverride) {
+    if (!bankRegistry.some(e => e.bankId === id)) console.warn(`SANITY_OVERRIDE: unknown bankId "${id}" — no registry match (check the slug)`);
+  }
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const client = apiKey ? new Anthropic() : null;
 
@@ -152,9 +163,24 @@ async function main(): Promise<void> {
         continue;
       }
 
-      ({ seed, catalog } = importBankOffers(entry, dedupeById(activeOffers), reviewDateIso, seed, catalog));
+      // Sanity gate: refuse to overwrite an established catalog with a suspiciously small set
+      // (likely a broken scrape). Keep existing rows, do NOT advance the hash, and fail the run so
+      // the operator is alerted. Accept a real drop by re-running with SANITY_OVERRIDE=<bankId>.
+      const currentCount = countBankOffers(seed, entry);
+      const dedupedOffers = dedupeById(activeOffers);
+      const newCount = dedupedOffers.length;
+      if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
+        report.banks[entry.bankId] = {
+          status: "sanity-rejected",
+          sources: sourceUrls,
+          message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`
+        };
+        continue;
+      }
+
+      ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
       state.banks[entry.bankId] = { hash: combinedHash, lastUpdatedAt: reviewDateIso };
-      report.banks[entry.bankId] = { status: "updated", sources: sourceUrls, offersWritten: activeOffers.length };
+      report.banks[entry.bankId] = { status: "updated", sources: sourceUrls, offersWritten: newCount };
     } catch (error) {
       report.banks[entry.bankId] = {
         status: "extract-failed",
@@ -180,12 +206,26 @@ async function main(): Promise<void> {
   const counts = summarize(report);
   console.log(`Refresh complete. ${JSON.stringify(counts)} | expired swept: ${swept.dropped} | tokens: ${JSON.stringify(report.tokensUsed)}`);
 
-  // Surface failures so the CI run is marked failed (and the operator is notified).
-  const failures = (counts["fetch-failed"] ?? 0) + (counts["extract-failed"] ?? 0);
+  // Surface failures so the CI run is marked failed (and the operator is notified). A sanity-rejected
+  // bank counts as a failure on purpose, so a rejected update never passes silently.
+  const failures = (counts["fetch-failed"] ?? 0) + (counts["extract-failed"] ?? 0) + (counts["sanity-rejected"] ?? 0);
   if (failures > 0) {
     console.error(`${failures} bank(s) failed — see data/refresh-report.json`);
+    if (counts["sanity-rejected"]) {
+      console.error(`${counts["sanity-rejected"]} bank(s) sanity-rejected (big offer-count drop). Verify, then re-run with SANITY_OVERRIDE=<bankId> to accept.`);
+    }
     process.exitCode = 1;
   }
+}
+
+// Counts a bank's current offers in the seed. Includes both registry card ids and any seed cards
+// still attributed to the bank (so a card renamed/removed from the registry doesn't undercount the baseline).
+function countBankOffers(seed: SeedData, entry: BankRegistryEntry): number {
+  const cardIds = new Set([
+    ...entry.cards.map(c => c.id),
+    ...seed.cards.filter(c => c.bankId === entry.bankId).map(c => c.id)
+  ]);
+  return seed.offers.filter(o => cardIds.has(o.cardId)).length;
 }
 
 // Removes duplicate offers by id (last write wins).
