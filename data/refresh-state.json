@@ -1,0 +1,45 @@
+{
+  "lastRunAt": "2026-06-18T21:03:19.445Z",
+  "banks": {
+    "commercial-bank": {
+      "hash": "a374f1a5131f149fd441cc36ed12b1383800c116",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "ndb": {
+      "hash": "631ff274adb6ee8f0aeed4758f331cf89fe808bd",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "peoples-bank": {
+      "hash": "4025dfc667bd54dcf68ec2ab7f34cbaaa9f0c78c",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "pan-asia-bank": {
+      "hash": "ca17a8a78da8940e4c63dd7ba111eaf6fbeafd3c",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "standard-chartered": {
+      "hash": "e7c36f074d27afd1e148678e96c74e17fc5fc464",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "cargills-bank": {
+      "hash": "098b44cd56864cd4e50f56d466fac0c553f6bd79",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "sampath": {
+      "hash": "ce996a1ea5e0bc37a7f1945a06a6a945402c8df3",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "dfcc": {
+      "hash": "8a2554f5701c57070a0d5a77942e916156887687",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "seylan": {
+      "hash": "5207992f9c49809d84b3f5d5721e5b7b6d745cd6",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    },
+    "nsb": {
+      "hash": "8e59064f54a14bb8c3a882d0dd65ac127242888c",
+      "lastUpdatedAt": "2026-06-18T21:03:19.445Z"
+    }
+  }
+}
