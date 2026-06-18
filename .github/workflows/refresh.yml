@@ -8,8 +8,8 @@ name: Weekly fresh data
 on:
   workflow_dispatch:
   # Uncomment to run automatically every Monday at 02:00 UTC once you've tested a manual run:
-  # schedule:
-  #   - cron: "0 2 * * 1"
+  schedule:
+    - cron: "0 2 * * 1"
 
 # Prevent overlapping runs from racing on the committed data files.
 concurrency:
@@ -51,7 +51,11 @@ jobs:
           if git diff --cached --quiet; then
             echo "No data changes to commit."
           else
-            git commit -m "chore(data): weekly offer refresh"
+            MSG="chore(data): weekly offer refresh"
+            if [ "${{ steps.refresh.outcome }}" = "failure" ]; then
+              MSG="chore(data): weekly offer refresh [partial — some banks failed, see refresh-report.json]"
+            fi
+            git commit -m "$MSG"
             git push
           fi
 
