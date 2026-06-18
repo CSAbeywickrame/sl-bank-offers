@@ -80,18 +80,18 @@ export function OfferCard({ offer }: { offer: Offer }) {
         {/* CTA row */}
         <div className="flex flex-col gap-2 sm:flex-row">
           <Link
-            className="inline-flex flex-1 items-center justify-center rounded-lg text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#0d3a29]"
+            className="inline-flex flex-1 py-2 px-3 items-center justify-center rounded-lg text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#0d3a29]"
             href={`/offers/${offer.id}`}
-            style={{ height: "40px", background: "#08271c", padding: "0 16px" }}
+            style={{ background: "#08271c"}}
           >
             View details
           </Link>
           <a
-            className="inline-flex flex-1 items-center justify-center rounded-lg text-sm font-semibold transition-colors duration-150 hover:bg-emerald-50"
+            className="inline-flex flex-1 py-2 px-3  items-center justify-center rounded-lg text-sm font-semibold transition-colors duration-150 hover:bg-emerald-50"
             href={offer.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            style={{ height: "40px", border: "1px solid #047857", color: "#047857", padding: "0 16px" }}
+            style={{ border: "1px solid #047857", color: "#047857" }}
           >
             View at bank
           </a>
