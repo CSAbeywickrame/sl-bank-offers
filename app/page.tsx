@@ -77,7 +77,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const banks = getBanks();
   const cards = getCards();
 
-  const totalCount = allOffers.length;
+  const totalCount = Math.floor(allOffers.length / 100) * 100;;
   const bankCount = banks.length;
 
   return (
@@ -124,7 +124,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 className="mt-4 font-bold"
                 style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
-                Compare 1000+ Sri Lankan Credit Card Offers{" "}
+                Compare {totalCount}+ Sri Lankan Credit Card Offers{" "}
                 <span style={{ color: "#d4af5f" }}>from 10+ Banks</span>
               </h1>
               <p
