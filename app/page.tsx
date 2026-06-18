@@ -136,15 +136,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </p>
             </div>
 
-            <div className="flex gap-3 sm:flex-col sm:gap-2">
+            <div className="flex gap-3 md:flex-col sm:gap-2">
               <div
-                className="flex-1 text-center sm:text-left"
+                className="flex-1 text-center sm:text-left min-w-auto max-w-180px"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: "12px",
                   padding: "16px 20px",
-                  minWidth: "180px",
                 }}
               >
                 <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
@@ -155,13 +154,12 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 </span>
               </div>
               <div
-                className="flex-1 text-center sm:text-left"
+                className="flex-1 text-center sm:text-left min-w-auto max-w-180px"
                 style={{
                   background: "rgba(255,255,255,0.06)",
                   border: "1px solid rgba(255,255,255,0.12)",
                   borderRadius: "12px",
                   padding: "16px 20px",
-                  minWidth: "180px",
                 }}
               >
                 <span className="block font-bold text-white" style={{ fontSize: "30px" }}>

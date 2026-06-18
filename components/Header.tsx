@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { DesktopNav } from "@/components/DesktopNav";
+import { MobileMenu } from "@/components/MobileMenu";
 import { siteName } from "@/lib/site-config";
 
 // Site-wide sticky header with logo and main navigation
@@ -17,29 +19,9 @@ export function Header() {
           />
         </Link>
 
-        <nav className="flex items-center gap-1" aria-label="Main navigation">
-          <Link
-            href="/"
-            className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900"
-            style={{ color: "#3b4a43" }}
-          >
-            All Offers
-          </Link>
-          <Link
-            href="/banks"
-            className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900"
-            style={{ color: "#3b4a43" }}
-          >
-            Browse Banks
-          </Link>
-          <Link
-            href="/categories"
-            className="rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-neutral-100 hover:text-neutral-900"
-            style={{ color: "#3b4a43" }}
-          >
-            View Categories
-          </Link>
-        </nav>
+        <DesktopNav />
+
+        <MobileMenu />
       </div>
     </header>
   );
