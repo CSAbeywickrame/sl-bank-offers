@@ -1,0 +1,46 @@
+{
+  "runAt": "2026-06-19T06:59:02.926Z",
+  "tokensUsed": {
+    "input": 276104,
+    "output": 76524
+  },
+  "banks": {
+    "commercial-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.combank.lk/rewards-promotions"
+      ],
+      "offersWritten": 78
+    },
+    "boc": {
+      "status": "updated",
+      "sources": [
+        "https://www.boc.lk/personal-banking/card-offers"
+      ],
+      "offersWritten": 73
+    },
+    "ntb": {
+      "status": "updated",
+      "sources": [
+        "https://www.nationstrust.com/promotions"
+      ],
+      "offersWritten": 149
+    },
+    "seylan": {
+      "status": "updated",
+      "sources": [
+        "https://www.seylan.lk/promotions"
+      ],
+      "offersWritten": 63
+    },
+    "nsb": {
+      "status": "updated",
+      "sources": [
+        "https://www.nsb.lk/category/card-offers/",
+        "https://www.nsb.lk/category/card-offers/page/2/",
+        "https://www.nsb.lk/category/card-offers/page/3/"
+      ],
+      "offersWritten": 11
+    }
+  }
+}
