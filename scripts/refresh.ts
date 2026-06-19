@@ -2,7 +2,9 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { fetchAndStrip, hashContent } from "@/lib/ingest/fetchAndStrip";
+import { discoverDetailUrls } from "@/lib/ingest/crawlBank";
+import { fetchAndStrip, hashContent, fetchRawHtml } from "@/lib/ingest/fetchAndStrip";
+import { refreshCrawlBank } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
@@ -25,7 +27,7 @@ type BankStatus = "updated" | "unchanged" | "skipped-empty" | "fetch-failed" | "
 
 interface RefreshState {
   lastRunAt: string;
-  banks: Record<string, { hash: string; lastUpdatedAt: string }>;
+  banks: Record<string, { hash?: string; lastUpdatedAt: string; details?: Record<string, string> }>;
 }
 
 interface BankReport {
@@ -62,6 +64,8 @@ async function main(): Promise<void> {
   for (const id of sanityOverride) {
     if (!bankRegistry.some(e => e.bankId === id)) console.warn(`SANITY_OVERRIDE: unknown bankId "${id}" — no registry match (check the slug)`);
   }
+  const onlyBanks = new Set((process.env.ONLY_BANKS ?? "").split(",").map((s) => s.trim()).filter(Boolean));
+  const maxDetails = Number(process.env.MAX_DETAILS_PER_RUN ?? "") || Infinity;
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const client = apiKey ? new Anthropic() : null;
 
@@ -73,6 +77,7 @@ async function main(): Promise<void> {
   let extractedCount = 0;
 
   for (const entry of bankRegistry) {
+    if (onlyBanks.size > 0 && !onlyBanks.has(entry.bankId)) continue;
     const sourceUrls = entry.sources.map(s => s.url);
 
     // Retire disabled banks: remove their rows once, then skip.
@@ -83,6 +88,56 @@ async function main(): Promise<void> {
     }
 
     try {
+      // Crawl branch: a source with a `crawl` recipe is walked to its detail pages, each hash-gated
+      // so only new/changed pages reach Claude. Keeps existing rows on any discovery/fetch failure.
+      const crawlSource = entry.sources.find((s) => s.crawl);
+      if (crawlSource?.crawl) {
+        if (!client) {
+          report.banks[entry.bankId] = { status: "deferred", sources: sourceUrls, message: "ANTHROPIC_API_KEY not set" };
+          continue;
+        }
+        const recipe = crawlSource.crawl;
+        const seedUrls = entry.sources.filter((s) => s.crawl).map((s) => s.url);
+        const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
+        const prevHashes = state.banks[entry.bankId]?.details ?? {};
+        const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
+          discover: () => discoverDetailUrls(seedUrls, recipe, fetchRawHtml),
+          fetchDetail: (url) => fetchAndStrip({ url, type: "static_html" }),
+          extract: async (sourceUrl, strippedText) => {
+            const ex = await extractOffers({ entry, sourceUrl, strippedText }, client, reviewDateIso);
+            return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
+          },
+          throttleMs: 300,
+          maxExtractions: maxDetails,
+        });
+        report.tokensUsed.input += result.inputTokens;
+        report.tokensUsed.output += result.outputTokens;
+        if (!result.ok) {
+          report.banks[entry.bankId] = { status: "fetch-failed", sources: sourceUrls, message: result.error };
+          continue;
+        }
+        const activeOffers = result.offers.filter((o) => isActiveOffer(o.validUntil, reviewDateIso));
+        if (activeOffers.length === 0) {
+          report.banks[entry.bankId] = { status: "extract-failed", sources: sourceUrls, message: "crawl returned no active offers" };
+          continue;
+        }
+        const currentCount = countBankOffers(seed, entry);
+        const dedupedOffers = dedupeById(activeOffers);
+        const newCount = dedupedOffers.length;
+        if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
+          report.banks[entry.bankId] = {
+            status: "sanity-rejected",
+            sources: sourceUrls,
+            message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`,
+          };
+          continue;
+        }
+        ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
+        state.banks[entry.bankId] = { lastUpdatedAt: reviewDateIso, details: result.detailHashes };
+        report.banks[entry.bankId] = { status: "updated", sources: sourceUrls, offersWritten: newCount };
+        continue;
+      }
+
       // Gate 1: fetch + strip every source. Any failure keeps existing rows and flags the bank (no tokens).
       const fetched = [];
       let failed: string | undefined;

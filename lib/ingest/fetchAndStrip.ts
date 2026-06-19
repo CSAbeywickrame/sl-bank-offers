@@ -4,6 +4,7 @@ import type { RegistrySource } from "@/lib/sources/bankRegistry";
 import { normalizeText } from "@/lib/ingest/textUtils";
 
 const USER_AGENT = "SLBankOffersBot/0.1 (+https://github.com/CSAbeywickrame/sl-bank-offers)";
+const CRAWL_THROTTLE_MS = 300;
 
 export interface FetchResult {
   ok: boolean;
@@ -56,6 +57,13 @@ async function fetchWithTimeout(url: string, opts: RequestInit, timeoutMs = 2000
     }
     return retried;
   }
+}
+
+// Fetches a URL and returns the raw HTML (links intact) for crawling. Throttled for politeness; throws on failure.
+export async function fetchRawHtml(url: string): Promise<string> {
+  await sleep(CRAWL_THROTTLE_MS);
+  const res = await fetchWithTimeout(url, {});
+  return res.text();
 }
 
 // Strips HTML noise tags and returns normalized plain text from the body

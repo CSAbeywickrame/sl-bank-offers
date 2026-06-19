@@ -13,12 +13,14 @@
  */
 
 import type { Bank, Card } from "@/lib/offers/types";
+import type { CrawlRecipe } from "@/lib/ingest/crawlBank";
 
 export type RegistrySourceType = "static_html" | "feed" | "pdf" | "dynamic_page";
 
 export interface RegistrySource {
   url: string;
   type: RegistrySourceType;
+  crawl?: CrawlRecipe; // when set, the orchestrator crawls detail pages instead of extracting this page directly
 }
 
 export interface BankRegistryEntry {
@@ -46,7 +48,12 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "commercial-bank-platinum-debit-cards", bankId: "commercial-bank", name: "Commercial Bank Platinum Debit Cards", network: "Visa / Mastercard", tier: "Platinum" }
     ],
     defaultCardId: "commercial-bank-credit-cards",
-    sources: [{ url: "https://www.combank.lk/rewards-promotions", type: "static_html" }]
+    // Listing -> per-offer /rewards-promotion/<category>/<slug> detail pages (singular "promotion"; static + rich).
+    sources: [{
+      url: "https://www.combank.lk/rewards-promotions",
+      type: "static_html",
+      crawl: { hops: [], detailMatch: "/rewards-promotion/[^/]+/[^/]+" }
+    }]
   },
   {
     bankId: "ndb",
@@ -77,7 +84,12 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "boc-credit-cards", bankId: "boc", name: "BOC Credit Cards", network: "Visa / Mastercard" }
     ],
     defaultCardId: "boc-credit-cards",
-    sources: [{ url: "https://www.boc.lk/personal-banking/card-offers", type: "static_html" }]
+    // Listing lists every offer as /personal-banking/card-offers/<category>/<merchant>/product (static + rich).
+    sources: [{
+      url: "https://www.boc.lk/personal-banking/card-offers",
+      type: "static_html",
+      crawl: { hops: [], detailMatch: "/personal-banking/card-offers/.+/product" }
+    }]
   },
   {
     bankId: "peoples-bank",
@@ -92,7 +104,17 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "peoples-bank-credit-cards", bankId: "peoples-bank", name: "People's Bank Credit Cards", network: "Visa / Mastercard" }
     ],
     defaultCardId: "peoples-bank-credit-cards",
-    sources: [{ url: "https://www.peoplesbank.lk/special-offers/", type: "static_html" }]
+    sources: [
+      {
+        url: "https://www.peoplesbank.lk/special-offers/",
+        type: "static_html",
+        // Index -> credit-card category pages -> per-offer /promotion/<slug>/ detail pages (all static).
+        crawl: {
+          hops: ["/promotion-category/.*cardType=credit_card"],
+          detailMatch: "/promotion/[a-z0-9-]+/",
+        },
+      },
+    ]
   },
   {
     bankId: "ntb",
@@ -108,7 +130,12 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "ntb-private-banking-mastercard-credit-cards", bankId: "ntb", name: "Nations Trust Bank Private Banking Mastercard Credit Cards", network: "Mastercard", tier: "Private Banking" }
     ],
     defaultCardId: "ntb-mastercard-credit-cards",
-    sources: [{ url: "https://www.nationstrust.com/promotions", type: "static_html" }]
+    // Flat listing -> per-offer /promotions/<slug> detail pages (static + rich). A stray T&C page yields no offer.
+    sources: [{
+      url: "https://www.nationstrust.com/promotions",
+      type: "static_html",
+      crawl: { hops: [], detailMatch: "/promotions/[^/]+" }
+    }]
   },
   {
     bankId: "pan-asia-bank",
@@ -143,7 +170,7 @@ export const bankRegistry: BankRegistryEntry[] = [
   },
   {
     bankId: "union-bank",
-    enabled: false,
+    enabled: true,
     bank: {
       id: "union-bank",
       name: "Union Bank of Colombo",
@@ -228,7 +255,12 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "seylan-credit-cards", bankId: "seylan", name: "Seylan Credit Cards", network: "Visa / Mastercard" }
     ],
     defaultCardId: "seylan-credit-cards",
-    sources: [{ url: "https://www.seylan.lk/promotions", type: "static_html" }]
+    // Listing -> per-offer /promotions/cards/<category>/<merchant> detail pages (static + rich).
+    sources: [{
+      url: "https://www.seylan.lk/promotions",
+      type: "static_html",
+      crawl: { hops: [], detailMatch: "/promotions/cards/[^/]+/[^/]+" }
+    }]
   },
   // NOTE: NSB is a new bank not yet in seed.json
   {
@@ -244,11 +276,12 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "nsb-mastercard-debit-cards", bankId: "nsb", name: "NSB Mastercard Debit Cards", network: "Mastercard" }
     ],
     defaultCardId: "nsb-mastercard-debit-cards",
-    // WordPress category, paginated (3 pages as of 2026-06). Add/remove page URLs as the list grows.
+    // WordPress category, paginated (3 pages as of 2026-06). Each paginated page is a crawl seed; offer
+    // posts are /<slug>/ permalinks whose slug contains "nsb…card" (excludes nav links). Add/remove page URLs as the list grows.
     sources: [
-      { url: "https://www.nsb.lk/category/card-offers/", type: "static_html" },
-      { url: "https://www.nsb.lk/category/card-offers/page/2/", type: "static_html" },
-      { url: "https://www.nsb.lk/category/card-offers/page/3/", type: "static_html" }
+      { url: "https://www.nsb.lk/category/card-offers/", type: "static_html", crawl: { hops: [], detailMatch: "[a-z0-9-]*nsb[a-z0-9-]*card" } },
+      { url: "https://www.nsb.lk/category/card-offers/page/2/", type: "static_html", crawl: { hops: [], detailMatch: "[a-z0-9-]*nsb[a-z0-9-]*card" } },
+      { url: "https://www.nsb.lk/category/card-offers/page/3/", type: "static_html", crawl: { hops: [], detailMatch: "[a-z0-9-]*nsb[a-z0-9-]*card" } }
     ]
   }
 ];

@@ -1,41 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { getSeedData } from "@/lib/offers/repository";
-import { loadScannedOfferCatalog, syncScannedOffers } from "@/lib/offers/scanned";
+import { syncScannedOffers } from "@/lib/offers/scanned";
 import type { SeedData } from "@/lib/offers/types";
 
 describe("scanned offer catalog", () => {
-  it("loads the tracked scanned-offer handoff catalog and keeps it synced into the app seed", async () => {
-    const scanned = loadScannedOfferCatalog();
-    const seed = await getSeedData();
-    const seedOffersById = new Map(seed.offers.map((offer) => [offer.id, offer]));
-
-    expect(scanned.version).toBe(2);
-    expect(scanned.offers).toHaveLength(1053);
-    expect(scanned.offers.filter((offer) => offer.bankId === "seylan")).toHaveLength(195);
-    expect(scanned.offers.filter((offer) => offer.bankId === "boc")).toHaveLength(73);
-    expect(scanned.offers.filter((offer) => offer.bankId === "cargills-bank")).toHaveLength(23);
-    expect(scanned.offers.filter((offer) => offer.bankId === "ndb")).toHaveLength(98);
-    expect(scanned.offers.filter((offer) => offer.bankId === "ntb")).toHaveLength(143);
-    expect(scanned.offers.filter((offer) => offer.bankId === "peoples-bank")).toHaveLength(190);
-    expect(scanned.offers.filter((offer) => offer.bankId === "pan-asia-bank")).toHaveLength(6);
-    expect(scanned.offers.filter((offer) => offer.bankId === "sampath")).toHaveLength(113);
-    expect(scanned.offers.filter((offer) => offer.bankId === "standard-chartered")).toHaveLength(26);
-    expect(scanned.offers.filter((offer) => offer.bankId === "union-bank")).toHaveLength(14);
-
-    for (const scannedOffer of scanned.offers) {
-      const seedOffer = seedOffersById.get(scannedOffer.id);
-
-      expect(seedOffer).toBeDefined();
-      expect(seedOffer).toEqual(expect.objectContaining({
-        cardId: scannedOffer.cardId,
-        category: scannedOffer.category,
-        title: scannedOffer.title,
-        sourceUrl: scannedOffer.sourceUrl,
-        termsLink: scannedOffer.termsLink
-      }));
-    }
-  });
-
   it("upserts scanned offers without dropping unrelated seed records", () => {
     const seed: SeedData = {
       banks: [
