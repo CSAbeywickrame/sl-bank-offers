@@ -4,7 +4,7 @@ import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
 
-const MODEL = "claude-sonnet-4-6";
+export const EXTRACTION_MODEL = "claude-haiku-4-5-20251001";
 
 export interface ExtractInput {
   entry: BankRegistryEntry;
@@ -129,10 +129,12 @@ export async function extractOffers(
   // Stream with a high cap: offer-heavy banks produce large JSON, and >16K output requires
   // streaming to avoid SDK HTTP timeouts. Output is billed per actual token, so the high cap is free.
   const stream = client.messages.stream({
-    model: MODEL,
+    model: EXTRACTION_MODEL,
     max_tokens: 64000,
     thinking: { type: "disabled" },
-    output_config: { effort: "low", format: { type: "json_schema", schema: OFFER_SCHEMA } },
+    // `effort` is not accepted by all models (e.g. Haiku 4.5 rejects it); omit it so the extractor
+    // is model-agnostic. `format` (structured JSON schema output) is supported on Haiku and Sonnet.
+    output_config: { format: { type: "json_schema", schema: OFFER_SCHEMA } },
     system: [{ type: "text", text: SYSTEM_PROMPT, cache_control: { type: "ephemeral" } }],
     messages: [{ role: "user", content: userContent }]
   });
