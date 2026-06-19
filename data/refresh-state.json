@@ -1,8 +1,8 @@
 {
-  "lastRunAt": "2026-06-19T06:59:02.926Z",
+  "lastRunAt": "2026-06-19T09:57:04.900Z",
   "banks": {
     "peoples-bank": {
-      "lastUpdatedAt": "2026-06-19T06:21:32.419Z",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
       "details": {
         "https://www.peoplesbank.lk/promotion/siddhalepa-ayurveda-hospital-30-off-credit/": "d976cc0aec559993eb2ff0af421b94c8bebb3e05",
         "https://www.peoplesbank.lk/promotion/british-cosmetics-30-off-credit/": "1c0974345d78440e403d23b1f117110d9df9e9f5",
@@ -183,7 +183,7 @@
       }
     },
     "commercial-bank": {
-      "lastUpdatedAt": "2026-06-19T06:59:02.926Z",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
       "details": {
         "https://www.combank.lk/rewards-promotion/seasonal-offers/turn-this-fathers-day-into-a-memorable-celebration-with-combank-credit-and-debit-cards/": "6b2262a68996e6eb6519b592bd8d6e8517342791",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-radisson-resort-and-spa-galle-with-combank-credit-cards/": "93c57688739e9c2197bc640971b03fec21a25150",
@@ -367,7 +367,7 @@
       }
     },
     "seylan": {
-      "lastUpdatedAt": "2026-06-19T06:59:02.926Z",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
       "details": {
         "https://www.seylan.lk/promotions/cards/supermarket/keells/": "37c48f2f6a294165221e692184db8aa6c38de7c6",
         "https://www.seylan.lk/promotions/cards/gadgets/abans-elite/": "98ea9301e25244464e7179269a7dc9a46903ee8e",
@@ -401,7 +401,7 @@
       }
     },
     "nsb": {
-      "lastUpdatedAt": "2026-06-19T06:59:02.926Z",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
       "details": {
         "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/": "37a6b7e4af83ed4aed4e6a2c6e9ca50b86f44f21",
         "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/": "d471b27ea21756c088ba7b08b7bd063ec6c879ae",
@@ -425,6 +425,34 @@
         "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/": "a9ac95fe4ea44edc76ad71d182c66f407143fe90",
         "https://www.nsb.lk/enjoy-30-off-amara-hotels-with-nsb-debit-card-3/": "1b61111fec79099bc61e352df49bdc55c38f8ad6"
       }
+    },
+    "ndb": {
+      "hash": "631ff274adb6ee8f0aeed4758f331cf89fe808bd",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "pan-asia-bank": {
+      "hash": "2e5bc52aa88cef0d07e7468092146b7edccbabf6",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "standard-chartered": {
+      "hash": "e7c36f074d27afd1e148678e96c74e17fc5fc464",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "union-bank": {
+      "hash": "89b8f614c83daa71cd7c4ccb408e2242f4bf3c51",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "cargills-bank": {
+      "hash": "098b44cd56864cd4e50f56d466fac0c553f6bd79",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "sampath": {
+      "hash": "3ffbd61ded555dd27fe8138162f86f6317150ea7",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+    },
+    "dfcc": {
+      "hash": "8a2554f5701c57070a0d5a77942e916156887687",
+      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
     }
   }
 }
