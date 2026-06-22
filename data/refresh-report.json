@@ -1,8 +1,8 @@
 {
-  "runAt": "2026-06-19T09:57:04.900Z",
+  "runAt": "2026-06-22T07:26:08.222Z",
   "tokensUsed": {
-    "input": 55157,
-    "output": 36176
+    "input": 45244,
+    "output": 35906
   },
   "banks": {
     "commercial-bank": {
@@ -10,14 +10,14 @@
       "sources": [
         "https://www.combank.lk/rewards-promotions"
       ],
-      "offersWritten": 78
+      "offersWritten": 85
     },
     "ndb": {
       "status": "updated",
       "sources": [
         "https://www.ndbbank.com/cards/card-offers"
       ],
-      "offersWritten": 96
+      "offersWritten": 95
     },
     "boc": {
       "status": "fetch-failed",
@@ -31,7 +31,7 @@
       "sources": [
         "https://www.peoplesbank.lk/special-offers/"
       ],
-      "offersWritten": 174
+      "offersWritten": 166
     },
     "ntb": {
       "status": "fetch-failed",
@@ -45,14 +45,13 @@
       "sources": [
         "https://www.pabcbank.com/card-offers/"
       ],
-      "offersWritten": 24
+      "offersWritten": 27
     },
     "standard-chartered": {
-      "status": "updated",
+      "status": "unchanged",
       "sources": [
         "https://www.sc.com/lk/data/tgl/offers.json"
-      ],
-      "offersWritten": 27
+      ]
     },
     "union-bank": {
       "status": "updated",
@@ -67,7 +66,7 @@
         "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
         "https://www.cargillsbank.com/products/mastercard-promotions/"
       ],
-      "offersWritten": 29
+      "offersWritten": 24
     },
     "sampath": {
       "status": "updated",
@@ -84,7 +83,7 @@
         "https://www.dfcc.lk/cards/cards/mastercard-offers",
         "https://www.dfcc.lk/cards/cards/visa-offers"
       ],
-      "offersWritten": 70
+      "offersWritten": 71
     },
     "seylan": {
       "status": "updated",

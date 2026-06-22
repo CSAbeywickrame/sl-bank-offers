@@ -1,11 +1,10 @@
 {
-  "lastRunAt": "2026-06-19T09:57:04.900Z",
+  "lastRunAt": "2026-06-22T07:26:08.222Z",
   "banks": {
     "peoples-bank": {
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z",
       "details": {
         "https://www.peoplesbank.lk/promotion/siddhalepa-ayurveda-hospital-30-off-credit/": "d976cc0aec559993eb2ff0af421b94c8bebb3e05",
-        "https://www.peoplesbank.lk/promotion/british-cosmetics-30-off-credit/": "1c0974345d78440e403d23b1f117110d9df9e9f5",
         "https://www.peoplesbank.lk/promotion/kurundu-wellness-by-choice-at-cinnamon-life-city-of-dreams-30-off-credit/": "dcff8f94b751472c45635577bef0465a8390884d",
         "https://www.peoplesbank.lk/promotion/siddhalepa-clinics-25-off-credit/": "2249fbd249499d3fc6cc243e9c96e10e6c6d62b0",
         "https://www.peoplesbank.lk/promotion/c-seven-luxury-skin-clinic-25-off-credit/": "7602f80de665e2315c5f121c88ef55f45b71ff93",
@@ -74,8 +73,6 @@
         "https://www.peoplesbank.lk/promotion/pelwehera-village-resort-dambulla-up-to-25-off-credit/": "38e2a0ea380ff416faaa7b9d2d08d3bb066b2745",
         "https://www.peoplesbank.lk/promotion/sun-siyam-pasikudah-up-to-20-credit/": "0e3d64ff268b47e3e84afcd9e65477369d2452d6",
         "https://www.peoplesbank.lk/promotion/laya-beach-wadduwa-up-to-35-credit/": "5bc2f83b5df0d89a54ab44fcab6233a062a73588",
-        "https://www.peoplesbank.lk/promotion/anantaya-resort-spa-pasikudah-up-to-60-off-credit/": "777d403dea728f27fc78cef6b26159a0b0030187",
-        "https://www.peoplesbank.lk/promotion/anantaya-resort-spa-chilaw-up-to-60-off-credit/": "e6dcdd72187c53f1b1cc5a2aef26aaef76076c4f",
         "https://www.peoplesbank.lk/promotion/radisson-hotel-kandy-dine-restaurant-30-off-credit/": "6a708fa2c5ab3e22b88441f32670ecda69e4b616",
         "https://www.peoplesbank.lk/promotion/radisson-blu-resort-galle-40-off-credit/": "3ad9f2b44652c4fce55cc652278f21f755b268f7",
         "https://www.peoplesbank.lk/promotion/radisson-hotel-colombo-fathers-day-special-brunch-40-off-credit/": "8c454196dcb6045b616fdf6abbf6b6fc135a787e",
@@ -161,9 +158,7 @@
         "https://www.peoplesbank.lk/promotion/www-glomark-lk-25-off-credit/": "41684c1b553cd961561158ab57699484e7cf1f39",
         "https://www.peoplesbank.lk/promotion/pickme-events-25-off-credit/": "ac57199d4276ac5643fd329a42a02fb87dde9789",
         "https://www.peoplesbank.lk/promotion/www-dsifootcandy-lk-25-off-credit/": "d80b09ae7a1fd90e7197472b152b19180b50fb72",
-        "https://www.peoplesbank.lk/promotion/www-lassana-com-25-off-credit/": "948172ed6e8b91a947b9b23ffb8201726b108bdf",
         "https://www.peoplesbank.lk/promotion/www-wasi-lk-credit/": "0b7aadc23cba51ffe2383be64b7559be7e399318",
-        "https://www.peoplesbank.lk/promotion/www-cargillsonline-com-20-off-credit/": "658f923b0f57dd3db54e20c2869308e71409df0c",
         "https://www.peoplesbank.lk/promotion/www-tudo-lk-15-off-credit/": "8e9cf463a18de46bbbe7080da9cfffee785c3ada",
         "https://www.peoplesbank.lk/promotion/buyme-lk-10-off-credit/": "54095edea8ff35fea2196768f17e14dab67b4133",
         "https://www.peoplesbank.lk/promotion/www-buyabans-com-up-to-50-off-credit/": "d09ded57ea27c20bd71b94a06be39fe9019006e8",
@@ -183,9 +178,10 @@
       }
     },
     "commercial-bank": {
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z",
       "details": {
         "https://www.combank.lk/rewards-promotion/seasonal-offers/turn-this-fathers-day-into-a-memorable-celebration-with-combank-credit-and-debit-cards/": "6b2262a68996e6eb6519b592bd8d6e8517342791",
+        "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-amari-colombo-with-combank-credit-cards/": "ded0d57b61a3b1b5aac0e996a8fcc7ad96fb1b0b",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-radisson-resort-and-spa-galle-with-combank-credit-cards/": "93c57688739e9c2197bc640971b03fec21a25150",
         "https://www.combank.lk/rewards-promotion/food-restaurants/treat-yourself-with-amazing-combank-visa-card-offers/": "de54ebdc60f204aba32b3b2b5abc1304faaf60e5",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-courtyard-by-marriott-colombo-with-combank-credit-cards/": "709df5a2f360b3fbc5d2e006f2115faf352db051",
@@ -198,9 +194,10 @@
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-jetwing-hotels-with-combank-credit-cards/": "f056dff658ba666627a97b0bdb3cf75fbdf1cfd6",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-doubletree-by-hilton-weerawila-rajawarna-resort-with-combank-credit-cards/": "e0cbef50a7b9d81ace2dc5cc5d719ff8b58914b4",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-your-favourite-softlogic-restaurants-with-combank-credit-and-debit-cards/": "295d4e06b13c93480ef555efb19bcd49f7cf7d0d",
-        "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-credit-cards/": "3ffcbef71cc2609e4374e808e5627603ec6a3049",
+        "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-credit-cards/": "f027a574adf30d07401a963e42b0c4b969da60e0",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-ramada-with-combank-credit-and-debit-cards/": "684e123bbe78e177d48e451792bc67f6169cbc03",
         "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-ceylon-curry-club-with-combank-credit-and-debit-cards/": "48d67e2f1a52dcc84eef9f8adc9a2cac66e073b3",
+        "https://www.combank.lk/rewards-promotion/leisure/make-every-purchase-more-rewarding-at-clove-beach-wadduwa-with-combank-mastercard-credit-and-debit-cards/": "e9c0acaf58e0a2f0dd01d1d455e95f8c586f00ce",
         "https://www.combank.lk/rewards-promotion/leisure/relax-recharge-and-unwind-at-radisson-resort-and-spa-galle-with-combank-credit-cards/": "59608dda90961f8d8a8fac5e0d977ff3dcfacbf4",
         "https://www.combank.lk/rewards-promotion/leisure/relax-at-celestia-ayurveda-resort-with-combank-credit-and-debit-cards/": "55dd65a74c31aff9446aa2ae85e2b7b4976bda8c",
         "https://www.combank.lk/rewards-promotion/leisure/relax-at-anataya-resorts-and-spas-with-combank-credit-cards/": "9f86a68b769957a9e6c3a01a91036897b64dc701",
@@ -217,8 +214,12 @@
         "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-fresh-deals-at-spar-supermarket-with-combank-credit-cards/": "7f5e09df56deb82012f367e347f35b065aac56b0",
         "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-glomark-with-combank-credit-and-debit-cards/": "afca57ec57a0dc4e2adaa516209fd2dc6d33762b",
         "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-fresh-deals-at-softlogic-glomark-with-combank-credit-and-debit-cards/": "200541d2cf8decbf9cae3f8ccc09e2024ace1e25",
+        "https://www.combank.lk/rewards-promotion/fashion-jewellery/make-every-purchase-more-rewarding-at-giva-with-combank-mastercard-credit-and-debit-cards/": "2ae55f1d71ccb343392d9173995c4a73cb28dac8",
         "https://www.combank.lk/rewards-promotion/fashion-jewellery/rejuvenate-and-reward-yourself-with-combank-visa-cards/": "55e21c5c665655a7ba60383cef137205900d2dc4",
         "https://www.combank.lk/rewards-promotion/fashion-jewellery/elegance-made-easy-with-combank-credit-cards/": "bc67d0ed51967eecb1ec259a945d7fb5bf25f25e",
+        "https://www.combank.lk/rewards-promotion/healthcare/enjoy-a-bonus-month-when-you-enroll-for-3-months-at-the-health-club-with-combank-mastercard-credit-and-debit-cards/": "69676805fed28b3b636d538851f4cc2488f1e9b2",
+        "https://www.combank.lk/rewards-promotion/healthcare/make-every-purchase-more-rewarding-at-shangri-la-chithe-spa-with-combank-mastercard-credit-and-debit-cards/": "aac6a115297408a37463d31e58adc19fd2574e8b",
+        "https://www.combank.lk/rewards-promotion/healthcare/make-every-purchase-more-rewarding-at-neolines-wellness-with-combank-mastercard-credit-and-debit-cards/": "69f3b813307182179dc25edb8a7a3f4b492816c8",
         "https://www.combank.lk/rewards-promotion/healthcare/embark-the-journey-of-holistic-healing-at-siddhalepa-clinic-with-combank-credit-and-debit-cards/": "c6d23fdbe06bff3ea1cd4c2e4d9a264f25d981e5",
         "https://www.combank.lk/rewards-promotion/healthcare/embrace-the-wisdom-of-ayurveda-at-siddhalepa-hospital-with-combank-credit-and-debit-cards/": "c2272c5029d491615ef02b7310654fdd113da8aa",
         "https://www.combank.lk/rewards-promotion/healthcare/access-premium-medical-care-abroad-with-ease-with-combank-visa-cards/": "e1ebb0f2ae00799cd1e22821fb8d2b72d4c1ae68",
@@ -235,6 +236,7 @@
         "https://www.combank.lk/rewards-promotion/travel/explore-your-dream-holiday-destination-effortlessly-with-combank-credit-cards/": "e44d18b7219a4ba77924a621d7b49da3405b4b97",
         "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-crazy-jets-and-combank-credit-cards/": "2f5e62d7162d2f3d6d9588cd2e4f3dbeec29dcac",
         "https://www.combank.lk/rewards-promotion/auto/fuel-your-journey-with-savings-on-mobil-engine-oil-with-combank-credit-and-debit-cards/": "34263c52f1557c5822164986a18f6a1a641939a1",
+        "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-amari-colombo-with-combank-premium-credit-cards/": "188aeb60b333749ce746d2d98dd47077465eac03",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-nh-collection-colombo-with-combank-premium-credit-cards/": "92c467e1fb2a8962ab2e0edce1fa84bec0bf72fc",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/relax-at-your-favourite-holiday-destination-with-combank-premium-credit-cards/": "62f9eddba84110ec24ad94ad4a7ca699d41491de",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/shop-duty-free-now-and-pay-later-with-combank-premium-credit-cards/": "4e3b17c01b3cba23c48e133cf0a5a333935aa393",
@@ -242,12 +244,11 @@
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-blue-orbit-by-citrus-with-combank-platinum-debit-cards/": "688f868a9afb71e44d5bedd04cbfa4227e893a22",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-galle-face-hotel-with-combank-premium-credit-cards/": "f8f88b1152902815920c55c448eaf3f69cc6240a",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-hilton-colombo-residences-with-combank-premium-credit-cards/": "40814cb4fcb4b44b2eefa2f312c4928952ced09d",
-        "https://www.combank.lk/rewards-promotion/premium-card-offers/exclusive-supermarket-deals-at-softlogic-glomark-with-combank-premium-credit-cards/": "f13f4442fc7e4061fe02dd578ea2b46903c8cd7b",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-cinnamon-red-colombo-with-combank-premium-credit-cards/": "e6f214e7e6bbb72b93c3ba74c3a9f5b1d76af10f",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-jetwing-hotels-with-combank-premium-credit-cards/": "54cbb385e8346f5919e68678acff0ff94a961505",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-double-tree-by-hilton-weerawila-rajawarna-resort-with-combank-premium-credit-cards/": "7902b356622e08e65e957fbe15658e8caef0a41b",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-ceylon-curry-club-and-co-pub-and-kitchen-with-combank-premium-credit-cards/": "55ba6b4c71aa4ca7b7ac5dfbfef834a82eeb5a24",
-        "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-premium-credit-cards/": "104d258d739562eb5631de1867635fb06827736c",
+        "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-premium-credit-cards/": "17d4c34064b31616351a305d543fc8b1ac197764",
         "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-ramada-with-combank-premium-credit-cards/": "d105a3148d34b0d87860130fde5888b9a7efd31d",
         "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-singapore-with-combank-visa-cards/": "f7685fddb25f95f490f89744ecaf6341b23c1204",
         "https://www.combank.lk/rewards-promotion/other-offers/enjoy-50-cashback-on-express-way-toll-payments-with-combank-unionpay-cards/": "83879643956dc582c7001e69933f51e17f51f701",
@@ -261,6 +262,7 @@
         "https://www.combank.lk/rewards-promotion/other-offers/experience-seamless-worldwide-delivery-at-dhl-with-combank-credit-and-debit-cards/": "dacad1da55dc7cf8db85e7dac05706448c891ca8",
         "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-malaysia-with-combank-visa-card/": "f7bdb0c5e3a2187ea27ce94141f8d0d202acb6a3",
         "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-japan-with-combank-visa-cards/": "8bb9ee76729d36386253e7afdda829798df999f1",
+        "https://www.combank.lk/rewards-promotion/q-payment-app-offers/enjoy-a-25-cashback-for-expressway-toll-payments-with-q-payment-app/": "3c8d07d99980b5ac25fc6691976f34b56f354d5c",
         "https://www.combank.lk/rewards-promotion/q-payment-app-offers/combank-debit-card-challenge-through-q-payment-app-pay-more-win-more/": "bab2070bccf76040d045a3167cea87b2eb902f00",
         "https://www.combank.lk/rewards-promotion/product-promotions/combank-debit-card-challenge-pay-more-win-more/": "498d9e04494e86d80078ff0053e6f94948de1029"
       }
@@ -367,7 +369,7 @@
       }
     },
     "seylan": {
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z",
       "details": {
         "https://www.seylan.lk/promotions/cards/supermarket/keells/": "37c48f2f6a294165221e692184db8aa6c38de7c6",
         "https://www.seylan.lk/promotions/cards/gadgets/abans-elite/": "98ea9301e25244464e7179269a7dc9a46903ee8e",
@@ -401,7 +403,7 @@
       }
     },
     "nsb": {
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z",
       "details": {
         "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/": "37a6b7e4af83ed4aed4e6a2c6e9ca50b86f44f21",
         "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/": "d471b27ea21756c088ba7b08b7bd063ec6c879ae",
@@ -427,32 +429,32 @@
       }
     },
     "ndb": {
-      "hash": "631ff274adb6ee8f0aeed4758f331cf89fe808bd",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "851deb502a82b4dae697eb64d9383e956420d560",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     },
     "pan-asia-bank": {
-      "hash": "2e5bc52aa88cef0d07e7468092146b7edccbabf6",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "33142e6bfd2becbad18175c652ed15dc4b019332",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     },
     "standard-chartered": {
       "hash": "e7c36f074d27afd1e148678e96c74e17fc5fc464",
       "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
     },
     "union-bank": {
-      "hash": "89b8f614c83daa71cd7c4ccb408e2242f4bf3c51",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "10a86c9f86b156d72c8be9291a7aba584d1332d3",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     },
     "cargills-bank": {
-      "hash": "098b44cd56864cd4e50f56d466fac0c553f6bd79",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "ad78ed128663e5ecaedd2b0dd9010a77d530df53",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     },
     "sampath": {
-      "hash": "3ffbd61ded555dd27fe8138162f86f6317150ea7",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "0206a73ada0108a6ea9f94cab77074dcb7d45634",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     },
     "dfcc": {
-      "hash": "8a2554f5701c57070a0d5a77942e916156887687",
-      "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
+      "hash": "95cd11eec6e2d6c229001d9545dc5e87888f51b5",
+      "lastUpdatedAt": "2026-06-22T07:26:08.222Z"
     }
   }
 }
