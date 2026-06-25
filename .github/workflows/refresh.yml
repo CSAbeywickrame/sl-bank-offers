@@ -1,13 +1,24 @@
 name: Weekly fresh data
 
 # Scrapes each bank source, extracts changed banks with Claude, and commits the
-# updated data/*.json so Vercel auto-deploys. Run it manually first
-# (Actions tab -> "Weekly fresh data" -> Run workflow) and confirm the diff +
-# data/refresh-report.json before enabling the weekly schedule below.
+# updated data/*.json so Vercel auto-deploys.
+# - Weekly cron runs ALL banks automatically.
+# - Manual run (Actions tab -> "Weekly fresh data" -> Run workflow) optionally scopes to
+#   specific banks via the "only_banks" input (comma-separated bankIds); empty = all banks.
+# Requires the ANTHROPIC_API_KEY repo secret. Check the diff + data/refresh-report.json after a run.
 
 on:
   workflow_dispatch:
-  # Uncomment to run automatically every Monday at 02:00 UTC once you've tested a manual run:
+    inputs:
+      only_banks:
+        description: "Comma-separated bankIds to run (e.g. peoples-bank,boc). Leave empty to run ALL banks."
+        required: false
+        default: ""
+      sanity_override:
+        description: "Comma-separated bankIds allowed to bypass the sanity gate (accept a big offer-count drop)."
+        required: false
+        default: ""
+  # Runs automatically every Monday at 02:00 UTC (always all banks; inputs only apply to manual runs):
   schedule:
     - cron: "0 2 * * 1"
 
@@ -40,6 +51,9 @@ jobs:
         continue-on-error: true
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Empty on schedule runs -> all banks. Set via "Run workflow" inputs to scope a manual run.
+          ONLY_BANKS: ${{ github.event.inputs.only_banks }}
+          SANITY_OVERRIDE: ${{ github.event.inputs.sanity_override }}
         run: npm run refresh:fresh
 
       - name: Commit updated data
