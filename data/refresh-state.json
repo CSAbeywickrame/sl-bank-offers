@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-06-29T06:49:22.832Z",
+  "lastRunAt": "2026-07-01T08:00:19.464Z",
   "banks": {
     "peoples-bank": {
       "lastUpdatedAt": "2026-06-29T06:49:22.832Z",
@@ -512,8 +512,8 @@
       "lastUpdatedAt": "2026-06-19T09:57:04.900Z"
     },
     "union-bank": {
-      "hash": "7ef30f79370e7aad60d9ebdab478924d6cdebe90",
-      "lastUpdatedAt": "2026-06-29T06:49:22.832Z"
+      "hash": "6753af1d9fbdd1b0109fb098c1adb63bba82a61d",
+      "lastUpdatedAt": "2026-07-01T08:00:19.464Z"
     },
     "cargills-bank": {
       "hash": "bc850677802147a12e57685229dedc9b2376dc84",
