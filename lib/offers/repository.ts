@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import { loadSeedData } from "./seed";
+import { isActiveOffer } from "@/lib/ingest/importBank";
 import type { Bank, Card, CatalogOffer, Offer, SeedData } from "./types";
 
 function toOfferStatus(status: CatalogOffer["status"]): Offer["status"] {
@@ -65,7 +66,8 @@ export async function getAllOffers(): Promise<Offer[]> {
 
 export async function getActiveOffers(): Promise<Offer[]> {
   const offers = await getAllOffers();
-  return offers.filter((offer) => offer.status === "active");
+  const now = new Date().toISOString();
+  return offers.filter((offer) => offer.status === "active" && isActiveOffer(offer.validUntil, now));
 }
 
 export async function getOfferById(offerId: string): Promise<Offer | undefined> {
