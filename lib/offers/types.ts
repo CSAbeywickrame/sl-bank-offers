@@ -2,6 +2,15 @@ export const offerCategories = ["dining", "fuel", "supermarket", "travel", "onli
 
 export type OfferCategory = (typeof offerCategories)[number];
 
+// Supported offer list sort orders, in the order they should appear in a sort control
+export const sortKeys = ["relevance", "newest", "expiring-soon"] as const;
+
+// A valid sort order for the offer list
+export type SortKey = (typeof sortKeys)[number];
+
+// The sort order applied when no sort is specified
+export const DEFAULT_SORT: SortKey = "relevance";
+
 export type OfferStatus = "active" | "inactive" | "expired" | "needs_review";
 
 export type SourceType = "static_html" | "dynamic_page" | "feed" | "pdf_or_image" | "unknown";
@@ -95,4 +104,6 @@ export interface OfferFilters {
   cardId?: string;
   category?: OfferCategory;
   search?: string;
+  bankIds?: string[];
+  categories?: OfferCategory[];
 }
