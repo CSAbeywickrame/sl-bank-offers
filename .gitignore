@@ -10,3 +10,4 @@ tsconfig.tsbuildinfo
 .vercel
 tmp/
 /design-spec
+.claude
