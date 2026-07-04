@@ -95,6 +95,7 @@ export interface CrawlExtractResult {
   discovered: number;
   extracted: number;
   reused: number;
+  assetFailures: { url: string; reason: string }[];
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
@@ -148,9 +149,10 @@ export async function refreshCrawlBank(
 ): Promise<CrawlExtractResult> {
   const throttleMs = deps.throttleMs ?? 0;
   const maxExtractions = deps.maxExtractions ?? Infinity;
+  const assetFailures: { url: string; reason: string }[] = [];
   const base: CrawlExtractResult = {
     ok: false, offers: [], detailHashes: prevHashes,
-    inputTokens: 0, outputTokens: 0, discovered: 0, extracted: 0, reused: 0,
+    inputTokens: 0, outputTokens: 0, discovered: 0, extracted: 0, reused: 0, assetFailures,
   };
 
   const disc = await deps.discover();
@@ -182,7 +184,12 @@ export async function refreshCrawlBank(
 
     const fetched = await deps.fetchDetail(url, discovered.type);
     const hasContent = Boolean(fetched.strippedText || fetched.pdfBytes || fetched.imageBytes);
-    if (!fetched.ok || !hasContent) {
+    if (!fetched.ok) {
+      assetFailures.push({ url, reason: fetched.error ?? "fetch failed" });
+      keepPrior(dedupKey, prior);
+      continue;
+    }
+    if (!hasContent) {
       keepPrior(dedupKey, prior);
       continue;
     }
@@ -219,6 +226,6 @@ export async function refreshCrawlBank(
 
   return {
     ok: true, offers: [...dedup.values()], detailHashes: nextHashes,
-    inputTokens, outputTokens, discovered: disc.urls.length, extracted, reused,
+    inputTokens, outputTokens, discovered: disc.urls.length, extracted, reused, assetFailures,
   };
 }

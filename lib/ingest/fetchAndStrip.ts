@@ -6,6 +6,13 @@ import { normalizeText } from "@/lib/ingest/textUtils";
 const USER_AGENT = "SLBankOffersBot/0.1 (+https://github.com/CSAbeywickrame/sl-bank-offers)";
 const CRAWL_THROTTLE_MS = 300;
 
+// Largest pdf byte size accepted before it is rejected as too large to safely process.
+export const MAX_PDF_BYTES = 32 * 1024 * 1024;
+// Largest image byte size accepted before it is rejected as too large to safely process.
+export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+// Largest estimated pdf page count accepted before it is rejected as too large to safely process.
+export const MAX_PDF_PAGES = 100;
+
 export type ImageMediaType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
 
 export interface FetchResult {
@@ -88,6 +95,14 @@ function resolveImageMediaType(contentType: string | null): ImageMediaType | nul
   return SUPPORTED_IMAGE_MEDIA_TYPES.has(normalized as ImageMediaType) ? (normalized as ImageMediaType) : null;
 }
 
+// Best-effort page count for a PDF: counts uncompressed /Type/Page markers (latin1 decode).
+// Heuristic-only — compressed object streams make this under-count, so it never falsely rejects.
+function estimatePdfPageCount(bytes: Buffer): number {
+  const text = bytes.toString("latin1");
+  const matches = text.match(/\/Type\s*\/Page(?!s)/g);
+  return matches ? matches.length : 0;
+}
+
 // Fetches one registry source and returns stripped content plus a content hash, never throws
 export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult> {
   try {
@@ -111,6 +126,13 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
     if (source.type === "pdf") {
       const res = await fetchWithTimeout(source.url, {});
       const pdfBytes = Buffer.from(await res.arrayBuffer());
+      if (pdfBytes.length > MAX_PDF_BYTES) {
+        return { ok: false, error: `pdf too large: ${pdfBytes.length} bytes (max ${MAX_PDF_BYTES})` };
+      }
+      const pageCount = estimatePdfPageCount(pdfBytes);
+      if (pageCount > MAX_PDF_PAGES) {
+        return { ok: false, error: `pdf too many pages (~${pageCount} > ${MAX_PDF_PAGES})` };
+      }
       const contentHash = hashContent(pdfBytes);
       return { ok: true, pdfBytes, contentHash };
     }
@@ -122,6 +144,9 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
         return { ok: false, error: `unsupported or missing image content-type for ${source.url}` };
       }
       const imageBytes = Buffer.from(await res.arrayBuffer());
+      if (imageBytes.length > MAX_IMAGE_BYTES) {
+        return { ok: false, error: `image too large: ${imageBytes.length} bytes (max ${MAX_IMAGE_BYTES})` };
+      }
       const contentHash = hashContent(imageBytes);
       return { ok: true, imageBytes, imageMediaType, contentHash };
     }
