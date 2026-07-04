@@ -4,7 +4,9 @@ export const navLinks = [
   { href: "/categories", label: "View Categories" },
 ] as const;
 
-export function isActivePath(href: string, pathname: string): boolean {
+export function isActivePath(href: string, pathname: string | null): boolean {
+  // usePathname() can return null, so guard before any null-unsafe comparison
+  if (!pathname) return false;
   if (href === "/") return pathname === "/";
   return pathname === href || pathname.startsWith(href + "/");
 }
