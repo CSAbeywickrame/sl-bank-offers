@@ -148,6 +148,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
         cards={cards}
         selectedCategories={filters.categories ?? []}
         selectedCardId={filters.cardId ?? ""}
+        selectedSort={sort}
         search={filters.search ?? ""}
         lockedBankId={bankId}
         actionPath={`/banks/${bankId}`}

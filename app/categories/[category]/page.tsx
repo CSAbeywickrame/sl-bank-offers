@@ -132,6 +132,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         cards={cards}
         selectedBankIds={filters.bankIds ?? []}
         selectedCardId={filters.cardId ?? ""}
+        selectedSort={sort}
         search={filters.search ?? ""}
         lockedCategory={categoryParam}
         actionPath={`/categories/${categoryParam}`}

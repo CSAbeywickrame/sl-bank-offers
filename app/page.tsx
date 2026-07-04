@@ -178,6 +178,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         selectedBankIds={filters.bankIds ?? []}
         selectedCategories={filters.categories ?? []}
         selectedCardId={filters.cardId ?? ""}
+        selectedSort={sort}
         search={filters.search ?? ""}
       />
 
