@@ -3,6 +3,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 
 export const EXTRACTION_MODEL = "claude-haiku-4-5-20251001";
 
@@ -11,6 +12,8 @@ export interface ExtractInput {
   sourceUrl: string; // the page/source URL — fallback for an offer's own sourceUrl/termsLink
   strippedText?: string; // for static_html / feed / dynamic_page
   pdfBytes?: Buffer; // for pdf sources
+  imageBytes?: Buffer; // for image sources — sent to Claude as vision input
+  imageMediaType?: ImageMediaType; // required alongside imageBytes
 }
 
 export interface ExtractResult {
@@ -67,6 +70,7 @@ const SYSTEM_PROMPT = [
   "- `sourceUrl` = the specific offer's detail URL if it appears in the content, otherwise the page URL provided in the message.",
   "- `termsLink` = the terms/detail URL if present, otherwise the same URL as `sourceUrl`.",
   "- `description` = a concise, factual summary of the offer.",
+  "- The supplied content may be an image of a promotional flyer or banner instead of page text — if so, carefully read every visible line, including small print, footnotes, and text near logos, before extracting offers.",
   "- Ignore navigation, menus, headers, footers, cookie/consent notices, and clearly expired promotions.",
   "- If the content contains no offers, return an empty `offers` array."
 ].join("\n");
@@ -105,8 +109,8 @@ export async function extractOffers(
 ): Promise<ExtractResult> {
   const { entry, sourceUrl } = input;
 
-  // Guard against a wasted API call: callers must supply page text or a PDF.
-  if (!input.pdfBytes && !input.strippedText) {
+  // Guard against a wasted API call: callers must supply page text, a PDF, or an image.
+  if (!input.pdfBytes && !input.imageBytes && !input.strippedText) {
     throw new Error(`extractOffers: no content for ${entry.bankId} / ${sourceUrl}`);
   }
 
@@ -121,6 +125,11 @@ export async function extractOffers(
     userContent.push({
       type: "document",
       source: { type: "base64", media_type: "application/pdf", data: input.pdfBytes.toString("base64") }
+    });
+  } else if (input.imageBytes && input.imageMediaType) {
+    userContent.push({
+      type: "image",
+      source: { type: "base64", media_type: input.imageMediaType, data: input.imageBytes.toString("base64") }
     });
   } else {
     userContent.push({ type: "text", text: input.strippedText ?? "" });

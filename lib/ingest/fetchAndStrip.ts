@@ -6,10 +6,14 @@ import { normalizeText } from "@/lib/ingest/textUtils";
 const USER_AGENT = "SLBankOffersBot/0.1 (+https://github.com/CSAbeywickrame/sl-bank-offers)";
 const CRAWL_THROTTLE_MS = 300;
 
+export type ImageMediaType = "image/jpeg" | "image/png" | "image/gif" | "image/webp";
+
 export interface FetchResult {
   ok: boolean;
   strippedText?: string;
   pdfBytes?: Buffer;
+  imageBytes?: Buffer;
+  imageMediaType?: ImageMediaType;
   contentHash?: string;
   error?: string;
 }
@@ -75,6 +79,15 @@ function stripHtml(html: string): string {
   return normalizeText(collapsed);
 }
 
+const SUPPORTED_IMAGE_MEDIA_TYPES: ReadonlySet<ImageMediaType> = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
+
+// Normalizes a response Content-Type header into a Claude-supported image media type, or null when missing/unsupported
+function resolveImageMediaType(contentType: string | null): ImageMediaType | null {
+  const base = contentType?.split(";")[0]?.trim().toLowerCase();
+  const normalized = base === "image/jpg" ? "image/jpeg" : base;
+  return SUPPORTED_IMAGE_MEDIA_TYPES.has(normalized as ImageMediaType) ? (normalized as ImageMediaType) : null;
+}
+
 // Fetches one registry source and returns stripped content plus a content hash, never throws
 export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult> {
   try {
@@ -100,6 +113,17 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
       const pdfBytes = Buffer.from(await res.arrayBuffer());
       const contentHash = hashContent(pdfBytes);
       return { ok: true, pdfBytes, contentHash };
+    }
+
+    if (source.type === "image") {
+      const res = await fetchWithTimeout(source.url, {});
+      const imageMediaType = resolveImageMediaType(res.headers.get("content-type"));
+      if (!imageMediaType) {
+        return { ok: false, error: `unsupported or missing image content-type for ${source.url}` };
+      }
+      const imageBytes = Buffer.from(await res.arrayBuffer());
+      const contentHash = hashContent(imageBytes);
+      return { ok: true, imageBytes, imageMediaType, contentHash };
     }
 
     if (source.type === "dynamic_page") {

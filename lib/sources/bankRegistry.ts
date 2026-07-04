@@ -15,7 +15,7 @@
 import type { Bank, Card } from "@/lib/offers/types";
 import type { CrawlRecipe } from "@/lib/ingest/crawlBank";
 
-export type RegistrySourceType = "static_html" | "feed" | "pdf" | "dynamic_page";
+export type RegistrySourceType = "static_html" | "feed" | "pdf" | "image" | "dynamic_page";
 
 export interface RegistrySource {
   url: string;
