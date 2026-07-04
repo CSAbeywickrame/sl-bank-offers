@@ -21,7 +21,8 @@ test("home page deep links into the requested page and preserves filters while p
 test("changing filters and page size resets back to page 1 while preserving the rest of the query state", async ({ page }) => {
   await page.goto("/?bank=commercial-bank&page=2&pageSize=24");
 
-  await page.getByLabel(/^Category$/).selectOption("dining");
+  await page.getByLabel(/^Category$/).click();
+  await page.getByRole("checkbox", { name: "Dining" }).click();
   await expect(page).toHaveURL(/bank=commercial-bank/);
   await expect(page).toHaveURL(/category=dining/);
   await expect(page).toHaveURL(/pageSize=24/);

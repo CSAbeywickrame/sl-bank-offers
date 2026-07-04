@@ -9,8 +9,10 @@ import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { getCategoryLabel, isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
-import { firstQueryValue, paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
+import { sortOffers } from "@/lib/offers/sort";
 import { siteUrl } from "@/lib/site-config";
 
 interface CategoryPageProps {
@@ -43,11 +45,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
   }
 
   const query = await searchParams;
-  const bankId = firstQueryValue(query.bank);
-  const cardId = firstQueryValue(query.card);
-  const search = firstQueryValue(query.search);
+  const filters = { ...parseOfferFilters(query), category: categoryParam, categories: undefined };
+  const sort = parseSortKey(query);
   const pagination = parsePaginationParams(query);
-  const filteredOffers = filterOffers(await getActiveOffers(), { bankId, cardId, category: categoryParam, search });
+  const filteredOffers = sortOffers(filterOffers(await getActiveOffers(), filters), sort);
   const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
@@ -129,10 +130,10 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <FilterPanel
         banks={banks}
         cards={cards}
-        selectedBankId={bankId}
-        selectedCardId={cardId}
-        selectedCategory={categoryParam}
-        search={search}
+        selectedBankIds={filters.bankIds ?? []}
+        selectedCardId={filters.cardId ?? ""}
+        search={filters.search ?? ""}
+        lockedCategory={categoryParam}
         actionPath={`/categories/${categoryParam}`}
       />
 

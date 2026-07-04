@@ -2,18 +2,21 @@
 
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { categories } from "@/lib/offers/categories";
-import { buildUpdatedQueryString } from "@/lib/offers/pagination";
+import { buildFilterQueryString } from "@/lib/offers/query";
 import type { Bank, Card, OfferCategory } from "@/lib/offers/types";
 
 interface FilterPanelProps {
   banks: Bank[];
   cards: Card[];
-  selectedBankId?: string;
+  selectedBankIds?: string[];
+  selectedCategories?: OfferCategory[];
   selectedCardId?: string;
-  selectedCategory?: OfferCategory;
   search?: string;
   actionPath?: string;
+  lockedBankId?: string;
+  lockedCategory?: OfferCategory;
 }
 
 const fieldStyle: React.CSSProperties = {
@@ -35,36 +38,154 @@ const labelStyle: React.CSSProperties = {
   color: "#6a7d73",
 };
 
+interface MultiSelectFieldProps {
+  id: string;
+  label: string;
+  allLabel: string;
+  options: { id: string; label: string }[];
+  selectedIds: string[];
+  onToggle: (id: string) => void;
+}
+
+// Dependency-free accessible multi-select: a toggle button that reveals a checkbox list panel
+function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle }: MultiSelectFieldProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Closes the panel when a mousedown happens outside the field container
+    function handleClickOutside(event: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    // Closes the panel on Escape and returns focus to the toggle button
+    function handleEscape(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+        buttonRef.current?.focus();
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("keydown", handleEscape);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("keydown", handleEscape);
+    };
+  }, [isOpen]);
+
+  const summary = selectedIds.length > 0 ? `${selectedIds.length} selected` : allLabel;
+
+  return (
+    <div className="grid gap-1" style={{ position: "relative" }} ref={containerRef}>
+      <label htmlFor={id} style={labelStyle}>{label}</label>
+      <button
+        type="button"
+        id={id}
+        ref={buttonRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        className="flex items-center justify-between text-left"
+        style={fieldStyle}
+      >
+        <span>{summary}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+          <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </button>
+      {isOpen && (
+        <div
+          role="group"
+          aria-label={label}
+          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg p-2"
+          style={{
+            top: "100%",
+            marginTop: "4px",
+            border: "1px solid #c4d3cb",
+            background: "#fff",
+            boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
+            maxHeight: "240px",
+            overflowY: "auto",
+          }}
+        >
+          {options.map((option) => (
+            <label key={option.id} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm" style={{ color: "#16201b" }}>
+              <input type="checkbox" checked={selectedIds.includes(option.id)} onChange={() => onToggle(option.id)} />
+              {option.label}
+            </label>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 export function FilterPanel({
   banks,
   cards,
-  selectedBankId = "",
+  selectedBankIds = [],
+  selectedCategories = [],
   selectedCardId = "",
-  selectedCategory,
   search = "",
   actionPath = "/",
+  lockedBankId,
+  lockedCategory,
 }: FilterPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const availableCards = selectedBankId ? cards.filter((c) => c.bankId === selectedBankId) : cards;
+  const cardScopeBankIds = lockedBankId ? [lockedBankId] : selectedBankIds;
+  const availableCards =
+    cardScopeBankIds.length > 0 ? cards.filter((card) => cardScopeBankIds.includes(card.bankId)) : cards;
   const bankById = Object.fromEntries(banks.map((b) => [b.id, b]));
-  const activeFilterCount = [selectedBankId, selectedCardId, selectedCategory, search].filter(Boolean).length;
+  const activeFilterCount =
+    selectedBankIds.length + selectedCategories.length + (selectedCardId ? 1 : 0) + (search ? 1 : 0);
 
-  function pushFilter(overrides: Partial<{ bank: string; card: string; category: string; search: string }>) {
-    const query = buildUpdatedQueryString(
-      new URLSearchParams(searchParams.toString()),
-      {
-        bank: selectedBankId,
-        card: selectedCardId,
-        category: selectedCategory ?? "",
-        search,
-        ...overrides,
-      },
-      { resetPage: true }
-    );
-
+  // Builds a query string from the given filter updates and navigates to actionPath, resetting pagination
+  function pushQuery(updates: Parameters<typeof buildFilterQueryString>[1]) {
+    const query = buildFilterQueryString(new URLSearchParams(searchParams.toString()), updates, { resetPage: true });
     router.push((query ? `${actionPath}?${query}` : actionPath) as Route);
+  }
+
+  // Pushes an updated query string to actionPath, merging the current filter state with overrides
+  function pushFilter(overrides: Partial<{ bankIds: string[]; categories: string[]; cardId: string; search: string }>) {
+    pushQuery({
+      bankIds: selectedBankIds,
+      categories: selectedCategories,
+      cardId: selectedCardId,
+      search,
+      ...overrides,
+    });
+  }
+
+  // Adds id to the list if absent, or removes it if present
+  function toggleInList<T>(list: T[], id: T): T[] {
+    return list.includes(id) ? list.filter((item) => item !== id) : [...list, id];
+  }
+
+  // Toggles a bank in the selection and clears the selected card, since available cards depend on the bank
+  function toggleBank(bankId: string) {
+    pushFilter({ bankIds: toggleInList(selectedBankIds, bankId), cardId: "" });
+  }
+
+  // Toggles a category in the selection, leaving the selected card untouched
+  function toggleCategory(categoryId: string) {
+    pushFilter({ categories: toggleInList(selectedCategories, categoryId as OfferCategory) });
+  }
+
+  // Clears every filter dimension, skipping any dimension locked by the current page
+  function clearAll() {
+    pushQuery({
+      ...(lockedBankId ? {} : { bankIds: [] }),
+      ...(lockedCategory ? {} : { categories: [] }),
+      cardId: "",
+      search: "",
+    });
   }
 
   return (
@@ -85,15 +206,7 @@ export function FilterPanel({
           {activeFilterCount > 0 && (
             <button
               type="button"
-              onClick={() => {
-                const query = buildUpdatedQueryString(
-                  new URLSearchParams(searchParams.toString()),
-                  { bank: "", card: "", category: "", search: "" },
-                  { resetPage: true }
-                );
-
-                router.push((query ? `${actionPath}?${query}` : actionPath) as Route);
-              }}
+              onClick={clearAll}
               className="text-sm underline underline-offset-2 transition-colors"
               style={{ color: "#6a7d73" }}
             >
@@ -103,21 +216,16 @@ export function FilterPanel({
         </div>
 
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_2fr]">
-          <div className="grid gap-1">
-            <label htmlFor="offer-bank-filter" style={labelStyle}>Bank</label>
-            <select
+          {!lockedBankId && (
+            <MultiSelectField
               id="offer-bank-filter"
-              name="bank"
-              value={selectedBankId}
-              onChange={(e) => pushFilter({ bank: e.target.value, card: "" })}
-              style={fieldStyle}
-            >
-              <option value="">All banks</option>
-              {banks.map((bank) => (
-                <option key={bank.id} value={bank.id}>{bank.shortName}</option>
-              ))}
-            </select>
-          </div>
+              label="Bank"
+              allLabel="All banks"
+              options={banks.map((bank) => ({ id: bank.id, label: bank.shortName }))}
+              selectedIds={selectedBankIds}
+              onToggle={toggleBank}
+            />
+          )}
 
           <div className="grid gap-1">
             <label htmlFor="offer-card-filter" style={labelStyle}>Card</label>
@@ -125,13 +233,13 @@ export function FilterPanel({
               id="offer-card-filter"
               name="card"
               value={selectedCardId}
-              onChange={(e) => pushFilter({ card: e.target.value })}
+              onChange={(e) => pushFilter({ cardId: e.target.value })}
               style={fieldStyle}
             >
               <option value="">All cards</option>
               {availableCards.map((card) => {
                 const bank = bankById[card.bankId];
-                const bankLabel = selectedBankId ? "" : `${bank?.shortName ?? card.bankId} · `;
+                const bankLabel = cardScopeBankIds.length === 1 ? "" : `${bank?.shortName ?? card.bankId} · `;
                 return (
                   <option key={card.id} value={card.id}>{bankLabel}{card.name}</option>
                 );
@@ -139,21 +247,16 @@ export function FilterPanel({
             </select>
           </div>
 
-          <div className="grid gap-1">
-            <label htmlFor="offer-category-filter" style={labelStyle}>Category</label>
-            <select
+          {!lockedCategory && (
+            <MultiSelectField
               id="offer-category-filter"
-              name="category"
-              value={selectedCategory ?? ""}
-              onChange={(e) => pushFilter({ category: e.target.value })}
-              style={fieldStyle}
-            >
-              <option value="">All categories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>{category.label}</option>
-              ))}
-            </select>
-          </div>
+              label="Category"
+              allLabel="All categories"
+              options={categories}
+              selectedIds={selectedCategories}
+              onToggle={toggleCategory}
+            />
+          )}
 
           <div className="grid gap-1">
             <label htmlFor="offer-search-filter" style={labelStyle}>Search</label>

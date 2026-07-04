@@ -46,7 +46,8 @@ test("changing page size resets pagination to page 1", async ({ page }) => {
 test("filter changes preserve page size and reset back to page 1", async ({ page }) => {
   await page.goto("/?page=2&pageSize=24");
 
-  await page.getByLabel(/^Category$/).selectOption("dining");
+  await page.getByLabel(/^Category$/).click();
+  await page.getByRole("checkbox", { name: "Dining" }).click();
 
   await expect(page).toHaveURL(/category=dining/);
   await expect(page).toHaveURL(/pageSize=24/);
