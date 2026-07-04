@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { categories } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
-import type { Bank, Card, OfferCategory } from "@/lib/offers/types";
+import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
 
 interface FilterPanelProps {
   banks: Bank[];
@@ -13,6 +13,7 @@ interface FilterPanelProps {
   selectedBankIds?: string[];
   selectedCategories?: OfferCategory[];
   selectedCardId?: string;
+  selectedSort?: SortKey;
   search?: string;
   actionPath?: string;
   lockedBankId?: string;
@@ -36,6 +37,13 @@ const labelStyle: React.CSSProperties = {
   textTransform: "uppercase",
   letterSpacing: "0.04em",
   color: "#6a7d73",
+};
+
+// Human-readable labels for each sort key, in display order
+const sortLabels: Record<SortKey, string> = {
+  relevance: "Relevance",
+  newest: "Newest",
+  "expiring-soon": "Expiring soon",
 };
 
 interface MultiSelectFieldProps {
@@ -131,6 +139,7 @@ export function FilterPanel({
   selectedBankIds = [],
   selectedCategories = [],
   selectedCardId = "",
+  selectedSort = "relevance",
   search = "",
   actionPath = "/",
   lockedBankId,
@@ -215,7 +224,7 @@ export function FilterPanel({
           )}
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_2fr]">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]">
           {!lockedBankId && (
             <MultiSelectField
               id="offer-bank-filter"
@@ -257,6 +266,21 @@ export function FilterPanel({
               onToggle={toggleCategory}
             />
           )}
+
+          <div className="grid gap-1">
+            <label htmlFor="offer-sort-filter" style={labelStyle}>Sort</label>
+            <select
+              id="offer-sort-filter"
+              name="sort"
+              value={selectedSort}
+              onChange={(e) => pushQuery({ sort: e.target.value as SortKey })}
+              style={fieldStyle}
+            >
+              {sortKeys.map((key) => (
+                <option key={key} value={key}>{sortLabels[key]}</option>
+              ))}
+            </select>
+          </div>
 
           <div className="grid gap-1">
             <label htmlFor="offer-search-filter" style={labelStyle}>Search</label>
