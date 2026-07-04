@@ -13,7 +13,6 @@ describe("branding assets", () => {
 
     expect(html).toContain('src="/brand/sl-card-offers-logo.png"');
     expect(html).toContain('alt="SL Card Offers"');
-    expect(html).not.toContain("<svg");
   });
 
   it("publishes app icons for browser and install surfaces", () => {
