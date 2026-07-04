@@ -75,3 +75,58 @@ export async function discoverDetailUrls(
     return { ok: false, error: err instanceof Error ? err.message : String(err) };
   }
 }
+
+export type DiscoveredAssetType = "pdf" | "image";
+
+export interface DiscoveredAsset {
+  url: string;
+  type: DiscoveredAssetType;
+}
+
+// Normalizes an asset (PDF/image) file URL: lowercase host, strip fragment — unlike normalizeUrl,
+// never appends a trailing slash, since that would corrupt a file path (e.g. "offers.pdf/" 404s).
+export function normalizeAssetUrl(input: string): string {
+  const u = new URL(input);
+  u.hash = "";
+  u.hostname = u.hostname.toLowerCase();
+  return u.toString();
+}
+
+// Scans html for offer-bearing PDF links and image banners (nav/header/footer chrome excluded), resolved absolute + same-origin against baseUrl.
+export function discoverAssetUrls(html: string, baseUrl: string): DiscoveredAsset[] {
+  const base = new URL(baseUrl);
+  const $ = cheerio.load(html);
+  $("nav, header, footer").remove();
+  const assets = new Map<string, DiscoveredAsset>();
+
+  $("a[href]").each((_, el) => {
+    const href = $(el).attr("href");
+    if (!href) return;
+    let abs: URL;
+    try {
+      abs = new URL(href, base);
+    } catch {
+      return;
+    }
+    if (abs.hostname.toLowerCase() !== base.hostname.toLowerCase()) return;
+    if (!abs.pathname.toLowerCase().endsWith(".pdf")) return;
+    const url = normalizeAssetUrl(abs.toString());
+    assets.set(url, { url, type: "pdf" });
+  });
+
+  $("img[src]").each((_, el) => {
+    const src = $(el).attr("src");
+    if (!src) return;
+    let abs: URL;
+    try {
+      abs = new URL(src, base);
+    } catch {
+      return;
+    }
+    if (abs.hostname.toLowerCase() !== base.hostname.toLowerCase()) return;
+    const url = normalizeAssetUrl(abs.toString());
+    assets.set(url, { url, type: "image" });
+  });
+
+  return [...assets.values()];
+}
