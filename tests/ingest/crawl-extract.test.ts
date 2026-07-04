@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
 import { refreshCrawlBank, groupOffersBySourceUrl, discoverCrawlUrls, type CrawlExtractDeps, type DiscoveredCrawlUrl } from "@/lib/ingest/crawlExtract";
-import type { CrawlRecipe } from "@/lib/ingest/crawlBank";
+import { normalizeUrl, type CrawlRecipe } from "@/lib/ingest/crawlBank";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import type { ScannedOffer } from "@/lib/offers/types";
 
@@ -151,6 +151,38 @@ describe("refreshCrawlBank", () => {
 
     const sourceUrls = res.offers.map((o) => o.sourceUrl).sort();
     expect(sourceUrls).toEqual([IMAGE_URL, PDF_URL, URL_A].sort());
+  });
+
+  it("records a failed asset in assetFailures without discarding offers from sibling URLs", async () => {
+    const GOOD_URL_B = "https://www.peoplesbank.lk/promotion/cargills-25-off-credit/";
+    const BAD_URL = "https://www.peoplesbank.lk/promotion/broken-link/";
+    const urls: DiscoveredCrawlUrl[] = [
+      { url: URL_A, type: "static_html" },
+      { url: GOOD_URL_B, type: "static_html" },
+      { url: BAD_URL, type: "static_html" },
+    ];
+
+    const fetchDetail = vi.fn(async (url: string) =>
+      url === BAD_URL
+        ? { ok: false, error: "404 not found" }
+        : { ok: true, strippedText: "Keells 25% off Validity ...", contentHash: "h1" },
+    );
+    const extract = vi.fn(async (sourceUrl: string) => ({
+      offers: [{ ...offerFor(sourceUrl, `peoples-bank-${sourceUrl.length}`) }],
+      inputTokens: 10, outputTokens: 5,
+    }));
+
+    const res = await refreshCrawlBank(entry, [], {}, reviewDate, {
+      discover: async () => ({ ok: true, urls }),
+      fetchDetail,
+      extract,
+      throttleMs: 0,
+    });
+
+    expect(res.ok).toBe(true);
+    expect(res.extracted).toBe(2);
+    expect(res.assetFailures).toEqual([{ url: normalizeUrl(BAD_URL), reason: "404 not found" }]);
+    expect(res.assetFailures.every((f) => f.url !== normalizeUrl(URL_A) && f.url !== normalizeUrl(GOOD_URL_B))).toBe(true);
   });
 
   it("does not force a trailing slash onto a discovered pdf URL used for fetching (regression test)", async () => {
