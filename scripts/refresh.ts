@@ -2,9 +2,8 @@ import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { discoverDetailUrls } from "@/lib/ingest/crawlBank";
 import { fetchAndStrip, hashContent, fetchRawHtml } from "@/lib/ingest/fetchAndStrip";
-import { refreshCrawlBank } from "@/lib/ingest/crawlExtract";
+import { refreshCrawlBank, discoverCrawlUrls } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
@@ -101,10 +100,10 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverDetailUrls(seedUrls, recipe, fetchRawHtml),
-          fetchDetail: (url) => fetchAndStrip({ url, type: "static_html" }),
-          extract: async (sourceUrl, strippedText) => {
-            const ex = await extractOffers({ entry, sourceUrl, strippedText }, client, reviewDateIso);
+          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml),
+          fetchDetail: (url, type) => fetchAndStrip({ url, type }),
+          extract: async (sourceUrl, fetched) => {
+            const ex = await extractOffers({ entry, sourceUrl, ...fetched }, client, reviewDateIso);
             return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
           },
           throttleMs: 300,
@@ -158,7 +157,9 @@ async function main(): Promise<void> {
       const tooThin = fetched.some(({ source, result }) =>
         source.type === "pdf"
           ? !result.pdfBytes || result.pdfBytes.length === 0
-          : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
+          : source.type === "image"
+            ? !result.imageBytes || result.imageBytes.length === 0
+            : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
       );
       if (tooThin) {
         report.banks[entry.bankId] = {
@@ -196,7 +197,14 @@ async function main(): Promise<void> {
         }
         for (const { source, result } of fetched) {
           const extracted = await extractOffers(
-            { entry, sourceUrl: source.url, strippedText: result.strippedText, pdfBytes: result.pdfBytes },
+            {
+              entry,
+              sourceUrl: source.url,
+              strippedText: result.strippedText,
+              pdfBytes: result.pdfBytes,
+              imageBytes: result.imageBytes,
+              imageMediaType: result.imageMediaType,
+            },
             client,
             reviewDateIso
           );

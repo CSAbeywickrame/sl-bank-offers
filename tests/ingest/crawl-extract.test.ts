@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import { refreshCrawlBank, groupOffersBySourceUrl, type CrawlExtractDeps } from "@/lib/ingest/crawlExtract";
+import { refreshCrawlBank, groupOffersBySourceUrl, discoverCrawlUrls, type CrawlExtractDeps, type DiscoveredCrawlUrl } from "@/lib/ingest/crawlExtract";
+import type { CrawlRecipe } from "@/lib/ingest/crawlBank";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import type { ScannedOffer } from "@/lib/offers/types";
 
@@ -30,24 +31,35 @@ function makeExtract() {
   }));
 }
 
+// Builds a fetchDetail fake returning static_html text content for every URL, regardless of type.
+function htmlFetchDetail() {
+  return vi.fn(async () => ({ ok: true, strippedText: "Keells 25% off Validity ...", contentHash: "h1" }));
+}
+
 describe("groupOffersBySourceUrl", () => {
   it("keys by normalized sourceUrl", () => {
     const map = groupOffersBySourceUrl([offerFor("https://www.peoplesbank.lk/promotion/keells-25-off-credit#x")]);
     expect(map.has(URL_A)).toBe(true);
   });
+
+  it("keys a pdf/image sourceUrl without forcing a trailing slash", () => {
+    const map = groupOffersBySourceUrl([offerFor("https://www.peoplesbank.lk/files/dining-offers.pdf")]);
+    expect(map.has("https://www.peoplesbank.lk/files/dining-offers.pdf")).toBe(true);
+  });
 });
 
 describe("refreshCrawlBank", () => {
   const baseDeps = (over: Partial<CrawlExtractDeps> = {}): CrawlExtractDeps => ({
-    discover: async () => ({ ok: true, urls: [URL_A] }),
-    fetchDetail: async () => ({ ok: true, strippedText: "Keells 25% off Validity ...", contentHash: "h1" }),
-    extract: makeExtract(),
+    discover: async () => ({ ok: true, urls: [{ url: URL_A, type: "static_html" }] }),
+    fetchDetail: htmlFetchDetail(),
+    extract: async (sourceUrl) => makeExtract()(sourceUrl),
     throttleMs: 0,
     ...over,
   });
 
   it("extracts a new detail page and sets the deep link as sourceUrl", async () => {
-    const deps = baseDeps();
+    const extract = makeExtract();
+    const deps = baseDeps({ extract: (sourceUrl) => extract(sourceUrl) });
     const res = await refreshCrawlBank(entry, [], {}, reviewDate, deps);
     expect(res.ok).toBe(true);
     expect(res.extracted).toBe(1);
@@ -57,8 +69,8 @@ describe("refreshCrawlBank", () => {
   });
 
   it("reuses the stored offer when the hash is unchanged (zero extract calls)", async () => {
-    const extract = makeExtract();
-    const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "h1" }, reviewDate, baseDeps({ extract }));
+    const extract = vi.fn(makeExtract());
+    const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "h1" }, reviewDate, baseDeps({ extract: (sourceUrl) => extract(sourceUrl) }));
     expect(extract).not.toHaveBeenCalled();
     expect(res.reused).toBe(1);
     expect(res.offers[0]?.description).toBe("old");
@@ -66,23 +78,25 @@ describe("refreshCrawlBank", () => {
   });
 
   it("re-extracts when the hash changed", async () => {
-    const extract = makeExtract();
-    const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "OLD" }, reviewDate, baseDeps({ extract }));
+    const extract = vi.fn(makeExtract());
+    const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "OLD" }, reviewDate, baseDeps({ extract: (sourceUrl) => extract(sourceUrl) }));
     expect(extract).toHaveBeenCalledTimes(1);
     expect(res.offers[0]?.description).toBe("fresh-from-detail");
   });
 
   it("returns ok:false with no extract calls when discovery fails", async () => {
-    const extract = makeExtract();
-    const res = await refreshCrawlBank(entry, [], {}, reviewDate, baseDeps({ extract, discover: async () => ({ ok: false, error: "boom" }) }));
+    const extract = vi.fn(makeExtract());
+    const res = await refreshCrawlBank(entry, [], {}, reviewDate, baseDeps({
+      extract: (sourceUrl) => extract(sourceUrl), discover: async () => ({ ok: false, error: "boom" }),
+    }));
     expect(res.ok).toBe(false);
     expect(extract).not.toHaveBeenCalled();
   });
 
   it("keeps the stored offer when a detail fetch fails", async () => {
-    const extract = makeExtract();
+    const extract = vi.fn(makeExtract());
     const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "h1" }, reviewDate, baseDeps({
-      extract, fetchDetail: async () => ({ ok: false, error: "404" }),
+      extract: (sourceUrl) => extract(sourceUrl), fetchDetail: async () => ({ ok: false, error: "404" }),
     }));
     expect(extract).not.toHaveBeenCalled();
     expect(res.offers).toHaveLength(1);
@@ -90,12 +104,140 @@ describe("refreshCrawlBank", () => {
   });
 
   it("respects maxExtractions, deferring the rest", async () => {
-    const urls = [URL_A, "https://www.peoplesbank.lk/promotion/cargills-25-off-credit/"];
-    const extract = makeExtract();
+    const urls: DiscoveredCrawlUrl[] = [
+      { url: URL_A, type: "static_html" },
+      { url: "https://www.peoplesbank.lk/promotion/cargills-25-off-credit/", type: "static_html" },
+    ];
+    const extract = vi.fn(makeExtract());
     const res = await refreshCrawlBank(entry, [], {}, reviewDate, baseDeps({
-      extract, discover: async () => ({ ok: true, urls }), maxExtractions: 1,
+      extract: (sourceUrl) => extract(sourceUrl), discover: async () => ({ ok: true, urls }), maxExtractions: 1,
     }));
     expect(extract).toHaveBeenCalledTimes(1);
     expect(res.extracted).toBe(1);
+  });
+
+  it("routes a mix of static_html/pdf/image URLs to the matching fetch+extract branch, each keeping its own sourceUrl", async () => {
+    const PDF_URL = "https://www.peoplesbank.lk/files/dining-offers.pdf";
+    const IMAGE_URL = "https://www.peoplesbank.lk/banners/dining-promo.jpg";
+    const urls: DiscoveredCrawlUrl[] = [
+      { url: URL_A, type: "static_html" },
+      { url: PDF_URL, type: "pdf" },
+      { url: IMAGE_URL, type: "image" },
+    ];
+
+    const fetchDetail = vi.fn(async (url: string, type: DiscoveredCrawlUrl["type"]) => {
+      if (type === "static_html") return { ok: true, strippedText: "html content here", contentHash: "h-html" };
+      if (type === "pdf") return { ok: true, pdfBytes: Buffer.from("pdf-bytes"), contentHash: "h-pdf" };
+      return { ok: true, imageBytes: Buffer.from("image-bytes"), imageMediaType: "image/jpeg" as const, contentHash: "h-image" };
+    });
+
+    const extract = vi.fn(async (sourceUrl: string) => ({
+      offers: [{ ...offerFor(sourceUrl, `peoples-bank-${sourceUrl.length}`) }],
+      inputTokens: 10, outputTokens: 5,
+    }));
+
+    const res = await refreshCrawlBank(entry, [], {}, reviewDate, {
+      discover: async () => ({ ok: true, urls }),
+      fetchDetail,
+      extract,
+      throttleMs: 0,
+    });
+
+    expect(res.ok).toBe(true);
+    expect(fetchDetail).toHaveBeenCalledWith(URL_A, "static_html");
+    expect(fetchDetail).toHaveBeenCalledWith(PDF_URL, "pdf");
+    expect(fetchDetail).toHaveBeenCalledWith(IMAGE_URL, "image");
+    expect(extract).toHaveBeenCalledTimes(3);
+
+    const sourceUrls = res.offers.map((o) => o.sourceUrl).sort();
+    expect(sourceUrls).toEqual([IMAGE_URL, PDF_URL, URL_A].sort());
+  });
+
+  it("does not force a trailing slash onto a discovered pdf URL used for fetching (regression test)", async () => {
+    const PDF_URL = "https://www.peoplesbank.lk/files/report.pdf";
+    const fetchDetail = vi.fn(async () => ({ ok: true, pdfBytes: Buffer.from("x"), contentHash: "h" }));
+    const extract = vi.fn(async (sourceUrl: string) => ({ offers: [offerFor(sourceUrl)], inputTokens: 1, outputTokens: 1 }));
+
+    await refreshCrawlBank(entry, [], {}, reviewDate, {
+      discover: async () => ({ ok: true, urls: [{ url: PDF_URL, type: "pdf" }] }),
+      fetchDetail,
+      extract,
+      throttleMs: 0,
+    });
+
+    expect(fetchDetail).toHaveBeenCalledWith(PDF_URL, "pdf");
+  });
+});
+
+describe("discoverCrawlUrls", () => {
+  const restaurantsUrl = "https://www.peoplesbank.lk/promotion-category/restaurants/";
+  const supermarketsUrl = "https://www.peoplesbank.lk/promotion-category/supermarkets/";
+  const recipe: CrawlRecipe = { hops: [], detailMatch: "/promotion/[a-z0-9-]+/" };
+
+  it("merges static_html detail pages with pdf/image assets, deduped and filtered, detail-first", async () => {
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `
+        <main>
+          <a href="/promotion/plates-30-off-credit/">Plates</a>
+          <a href="/files/dining-offers.pdf">Dining PDF</a>
+          <img src="/banners/dining-promo.jpg" alt="promo">
+          <img src="/icons/tracker" alt="no extension, filtered">
+        </main>`,
+      [supermarketsUrl]: `
+        <main>
+          <a href="/promotion/keells-25-off-credit/">Keells</a>
+          <a href="/files/dining-offers.pdf">Same PDF, linked again</a>
+        </main>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const res = await discoverCrawlUrls([restaurantsUrl, supermarketsUrl], recipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(res.urls).toEqual([
+      { url: "https://www.peoplesbank.lk/promotion/plates-30-off-credit/", type: "static_html" },
+      { url: "https://www.peoplesbank.lk/promotion/keells-25-off-credit/", type: "static_html" },
+      { url: "https://www.peoplesbank.lk/files/dining-offers.pdf", type: "pdf" },
+      { url: "https://www.peoplesbank.lk/banners/dining-promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("skips asset discovery for a seed page whose html re-fetch fails, without failing the whole discover", async () => {
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a><a href="/files/menu.pdf">Menu</a></main>`,
+      [supermarketsUrl]: `<main><a href="/promotion/keells-25-off-credit/">Keells</a></main>`,
+    };
+    const callCounts = new Map<string, number>();
+    const fetchHtml = vi.fn(async (url: string) => {
+      const count = (callCounts.get(url) ?? 0) + 1;
+      callCounts.set(url, count);
+      // Succeeds the first time (used by detail discovery), fails on the re-fetch used for asset scanning.
+      if (url === supermarketsUrl && count > 1) throw new Error("network blip");
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const res = await discoverCrawlUrls([restaurantsUrl, supermarketsUrl], recipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(res.urls).toEqual([
+      { url: "https://www.peoplesbank.lk/promotion/plates-30-off-credit/", type: "static_html" },
+      { url: "https://www.peoplesbank.lk/promotion/keells-25-off-credit/", type: "static_html" },
+      { url: "https://www.peoplesbank.lk/files/menu.pdf", type: "pdf" },
+    ]);
+  });
+
+  it("returns ok:false and never scans for assets when detail discovery fails", async () => {
+    const fetchHtml = vi.fn(async () => {
+      throw new Error("boom");
+    });
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
+    expect(res.ok).toBe(false);
+    expect(fetchHtml).toHaveBeenCalledTimes(1);
   });
 });
