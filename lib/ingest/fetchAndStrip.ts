@@ -22,6 +22,7 @@ export interface FetchResult {
   imageBytes?: Buffer;
   imageMediaType?: ImageMediaType;
   contentHash?: string;
+  rawHtml?: string; // raw HTML for static_html/dynamic_page sources, so callers can scan it for assets without a second fetch
   error?: string;
 }
 
@@ -111,7 +112,7 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
       const html = await res.text();
       const strippedText = stripHtml(html);
       const contentHash = hashContent(strippedText);
-      return { ok: true, strippedText, contentHash };
+      return { ok: true, strippedText, contentHash, rawHtml: html };
     }
 
     if (source.type === "feed") {
@@ -169,7 +170,7 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
         const html = await page.content();
         const strippedText = stripHtml(html);
         const contentHash = hashContent(strippedText);
-        return { ok: true, strippedText, contentHash };
+        return { ok: true, strippedText, contentHash, rawHtml: html };
       } finally {
         await browser.close();
       }

@@ -3,7 +3,7 @@ import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
 import { fetchAndStrip, hashContent, fetchRawHtml, type FetchResult } from "@/lib/ingest/fetchAndStrip";
-import { refreshCrawlBank, discoverCrawlUrls } from "@/lib/ingest/crawlExtract";
+import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
@@ -101,8 +101,14 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml),
-          fetchDetail: (url, type) => fetchAndStrip({ url, type }),
+          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? []),
+          fetchDetail: async (url, type) => {
+            const fetched = await fetchAndStrip({ url, type });
+            if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
+              return { ok: true };
+            }
+            return fetched;
+          },
           extract: async (sourceUrl, fetched) => {
             const ex = await extractOffers({ entry, sourceUrl, ...fetched }, client, reviewDateIso);
             return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
@@ -187,8 +193,17 @@ async function main(): Promise<void> {
         continue;
       }
 
+      // Auto-discovered PDF/image assets on the fetched pages (banners/flyers embedded as <img>/<a href=.pdf>,
+      // not explicit registry sources) — folded into the hash so an image swap alone re-triggers extraction.
+      const pageAssets = collectPageAssets(
+        fetched.filter((f) => f.result.rawHtml !== undefined).map((f) => ({ url: f.source.url, rawHtml: f.result.rawHtml! })),
+        entry.assetHosts ?? [],
+      );
+
       // Gate 3: unchanged content hash means nothing to do (no tokens).
-      const combinedHash = hashContent(fetched.map(f => f.result.contentHash ?? "").join("|"));
+      const combinedHash = hashContent(
+        [...fetched.map(f => f.result.contentHash ?? ""), ...pageAssets.map(a => a.url).sort()].join("|")
+      );
       if (state.banks[entry.bankId]?.hash === combinedHash) {
         report.banks[entry.bankId] = {
           status: "unchanged", sources: sourceUrls,
@@ -234,6 +249,37 @@ async function main(): Promise<void> {
           offers.push(...extracted.offers);
         }
         extractedCount += 1;
+
+        // Auto-discovered assets (banner images/PDFs found while scanning the page, not explicit registry
+        // sources): run each through Claude too, capped by the same per-run detail budget as crawl banks.
+        let assetExtractions = 0;
+        for (const asset of pageAssets) {
+          if (assetExtractions >= maxDetails) break;
+          const assetResult = await fetchAndStrip({ url: asset.url, type: asset.type });
+          if (!assetResult.ok) {
+            assetFailures.push({ url: asset.url, reason: assetResult.error ?? "unknown" });
+            continue;
+          }
+          if (isUndersizedImage(asset.type, assetResult.imageBytes)) {
+            continue;
+          }
+          const extracted = await extractOffers(
+            {
+              entry,
+              sourceUrl: asset.url,
+              strippedText: assetResult.strippedText,
+              pdfBytes: assetResult.pdfBytes,
+              imageBytes: assetResult.imageBytes,
+              imageMediaType: assetResult.imageMediaType,
+            },
+            client,
+            reviewDateIso
+          );
+          report.tokensUsed.input += extracted.inputTokens;
+          report.tokensUsed.output += extracted.outputTokens;
+          offers.push(...extracted.offers);
+          assetExtractions += 1;
+        }
       }
 
       const activeOffers = offers.filter(o => isActiveOffer(o.validUntil, reviewDateIso));
