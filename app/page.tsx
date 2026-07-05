@@ -5,10 +5,11 @@ import { OfferGrid } from "@/components/OfferGrid";
 import { OfferPagination } from "@/components/OfferPagination";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
-import { isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
-import { firstQueryValue, paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
+import { sortOffers } from "@/lib/offers/sort";
 import Link from "next/link";
 
 interface HomePageProps {
@@ -64,15 +65,12 @@ const faqJsonLd = {
 
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
-  const bankId = firstQueryValue(params.bank);
-  const cardId = firstQueryValue(params.card);
-  const categoryParam = firstQueryValue(params.category);
-  const search = firstQueryValue(params.search);
-  const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
+  const filters = parseOfferFilters(params);
+  const sort = parseSortKey(params);
   const pagination = parsePaginationParams(params);
 
   const allOffers = await getActiveOffers();
-  const filteredOffers = filterOffers(allOffers, { bankId, cardId, category, search });
+  const filteredOffers = sortOffers(filterOffers(allOffers, filters), sort);
   const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
@@ -174,7 +172,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         </div>
       </section>
 
-      <FilterPanel banks={banks} cards={cards} selectedBankId={bankId} selectedCardId={cardId} selectedCategory={category} search={search} />
+      <FilterPanel
+        banks={banks}
+        cards={cards}
+        selectedBankIds={filters.bankIds ?? []}
+        selectedCategories={filters.categories ?? []}
+        selectedCardId={filters.cardId ?? ""}
+        selectedSort={sort}
+        search={filters.search ?? ""}
+      />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
         {filteredOffers.length > 0 ? (

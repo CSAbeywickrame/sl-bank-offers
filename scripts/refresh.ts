@@ -1,10 +1,9 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
-import { bankRegistry, type BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { discoverDetailUrls } from "@/lib/ingest/crawlBank";
-import { fetchAndStrip, hashContent, fetchRawHtml } from "@/lib/ingest/fetchAndStrip";
-import { refreshCrawlBank } from "@/lib/ingest/crawlExtract";
+import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
+import { fetchAndStrip, hashContent, fetchRawHtml, type FetchResult } from "@/lib/ingest/fetchAndStrip";
+import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
@@ -35,6 +34,7 @@ interface BankReport {
   sources: string[];
   message?: string;
   offersWritten?: number;
+  assetFailures?: { url: string; reason: string }[];
 }
 
 interface RefreshReport {
@@ -101,10 +101,16 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverDetailUrls(seedUrls, recipe, fetchRawHtml),
-          fetchDetail: (url) => fetchAndStrip({ url, type: "static_html" }),
-          extract: async (sourceUrl, strippedText) => {
-            const ex = await extractOffers({ entry, sourceUrl, strippedText }, client, reviewDateIso);
+          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? []),
+          fetchDetail: async (url, type) => {
+            const fetched = await fetchAndStrip({ url, type });
+            if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
+              return { ok: true };
+            }
+            return fetched;
+          },
+          extract: async (sourceUrl, fetched) => {
+            const ex = await extractOffers({ entry, sourceUrl, ...fetched }, client, reviewDateIso);
             return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
           },
           throttleMs: 300,
@@ -113,12 +119,18 @@ async function main(): Promise<void> {
         report.tokensUsed.input += result.inputTokens;
         report.tokensUsed.output += result.outputTokens;
         if (!result.ok) {
-          report.banks[entry.bankId] = { status: "fetch-failed", sources: sourceUrls, message: result.error };
+          report.banks[entry.bankId] = {
+            status: "fetch-failed", sources: sourceUrls, message: result.error,
+            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+          };
           continue;
         }
         const activeOffers = result.offers.filter((o) => isActiveOffer(o.validUntil, reviewDateIso));
         if (activeOffers.length === 0) {
-          report.banks[entry.bankId] = { status: "extract-failed", sources: sourceUrls, message: "crawl returned no active offers" };
+          report.banks[entry.bankId] = {
+            status: "extract-failed", sources: sourceUrls, message: "crawl returned no active offers",
+            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+          };
           continue;
         }
         const currentCount = countBankOffers(seed, entry);
@@ -129,28 +141,37 @@ async function main(): Promise<void> {
             status: "sanity-rejected",
             sources: sourceUrls,
             message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`,
+            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
           };
           continue;
         }
         ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
         state.banks[entry.bankId] = { lastUpdatedAt: reviewDateIso, details: result.detailHashes };
-        report.banks[entry.bankId] = { status: "updated", sources: sourceUrls, offersWritten: newCount };
+        report.banks[entry.bankId] = {
+          status: "updated", sources: sourceUrls, offersWritten: newCount,
+          ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+        };
         continue;
       }
 
-      // Gate 1: fetch + strip every source. Any failure keeps existing rows and flags the bank (no tokens).
-      const fetched = [];
-      let failed: string | undefined;
+      // Gate 1: fetch + strip every source. A source that fails is recorded but does not discard its
+      // siblings — only when EVERY source in the bank fails do we keep existing rows and flag the bank.
+      const fetched: { source: RegistrySource; result: FetchResult }[] = [];
+      const assetFailures: { url: string; reason: string }[] = [];
       for (const source of entry.sources) {
         const result = await fetchAndStrip(source);
         if (!result.ok) {
-          failed = `fetch failed for ${source.url}: ${result.error ?? "unknown"}`;
-          break;
+          assetFailures.push({ url: source.url, reason: result.error ?? "unknown" });
+          continue;
         }
         fetched.push({ source, result });
       }
-      if (failed) {
-        report.banks[entry.bankId] = { status: "fetch-failed", sources: sourceUrls, message: failed };
+      if (fetched.length === 0) {
+        report.banks[entry.bankId] = {
+          status: "fetch-failed",
+          sources: sourceUrls,
+          message: `fetch failed for all sources: ${assetFailures.map(f => `${f.url} (${f.reason})`).join("; ")}`,
+        };
         continue;
       }
 
@@ -158,21 +179,36 @@ async function main(): Promise<void> {
       const tooThin = fetched.some(({ source, result }) =>
         source.type === "pdf"
           ? !result.pdfBytes || result.pdfBytes.length === 0
-          : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
+          : source.type === "image"
+            ? !result.imageBytes || result.imageBytes.length === 0
+            : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
       );
       if (tooThin) {
         report.banks[entry.bankId] = {
           status: "skipped-empty",
           sources: sourceUrls,
-          message: "content empty or below minimum length (consider source type 'dynamic_page')"
+          message: "content empty or below minimum length (consider source type 'dynamic_page')",
+          ...(assetFailures.length > 0 ? { assetFailures } : {}),
         };
         continue;
       }
 
+      // Auto-discovered PDF/image assets on the fetched pages (banners/flyers embedded as <img>/<a href=.pdf>,
+      // not explicit registry sources) — folded into the hash so an image swap alone re-triggers extraction.
+      const pageAssets = collectPageAssets(
+        fetched.filter((f) => f.result.rawHtml !== undefined).map((f) => ({ url: f.source.url, rawHtml: f.result.rawHtml! })),
+        entry.assetHosts ?? [],
+      );
+
       // Gate 3: unchanged content hash means nothing to do (no tokens).
-      const combinedHash = hashContent(fetched.map(f => f.result.contentHash ?? "").join("|"));
+      const combinedHash = hashContent(
+        [...fetched.map(f => f.result.contentHash ?? ""), ...pageAssets.map(a => a.url).sort()].join("|")
+      );
       if (state.banks[entry.bankId]?.hash === combinedHash) {
-        report.banks[entry.bankId] = { status: "unchanged", sources: sourceUrls };
+        report.banks[entry.bankId] = {
+          status: "unchanged", sources: sourceUrls,
+          ...(assetFailures.length > 0 ? { assetFailures } : {}),
+        };
         continue;
       }
 
@@ -190,13 +226,21 @@ async function main(): Promise<void> {
           report.banks[entry.bankId] = {
             status: "deferred",
             sources: sourceUrls,
-            message: client ? "MAX_BANKS_PER_RUN reached" : "ANTHROPIC_API_KEY not set"
+            message: client ? "MAX_BANKS_PER_RUN reached" : "ANTHROPIC_API_KEY not set",
+            ...(assetFailures.length > 0 ? { assetFailures } : {}),
           };
           continue;
         }
         for (const { source, result } of fetched) {
           const extracted = await extractOffers(
-            { entry, sourceUrl: source.url, strippedText: result.strippedText, pdfBytes: result.pdfBytes },
+            {
+              entry,
+              sourceUrl: source.url,
+              strippedText: result.strippedText,
+              pdfBytes: result.pdfBytes,
+              imageBytes: result.imageBytes,
+              imageMediaType: result.imageMediaType,
+            },
             client,
             reviewDateIso
           );
@@ -205,6 +249,37 @@ async function main(): Promise<void> {
           offers.push(...extracted.offers);
         }
         extractedCount += 1;
+
+        // Auto-discovered assets (banner images/PDFs found while scanning the page, not explicit registry
+        // sources): run each through Claude too, capped by the same per-run detail budget as crawl banks.
+        let assetExtractions = 0;
+        for (const asset of pageAssets) {
+          if (assetExtractions >= maxDetails) break;
+          const assetResult = await fetchAndStrip({ url: asset.url, type: asset.type });
+          if (!assetResult.ok) {
+            assetFailures.push({ url: asset.url, reason: assetResult.error ?? "unknown" });
+            continue;
+          }
+          if (isUndersizedImage(asset.type, assetResult.imageBytes)) {
+            continue;
+          }
+          const extracted = await extractOffers(
+            {
+              entry,
+              sourceUrl: asset.url,
+              strippedText: assetResult.strippedText,
+              pdfBytes: assetResult.pdfBytes,
+              imageBytes: assetResult.imageBytes,
+              imageMediaType: assetResult.imageMediaType,
+            },
+            client,
+            reviewDateIso
+          );
+          report.tokensUsed.input += extracted.inputTokens;
+          report.tokensUsed.output += extracted.outputTokens;
+          offers.push(...extracted.offers);
+          assetExtractions += 1;
+        }
       }
 
       const activeOffers = offers.filter(o => isActiveOffer(o.validUntil, reviewDateIso));
@@ -213,7 +288,8 @@ async function main(): Promise<void> {
         report.banks[entry.bankId] = {
           status: "extract-failed",
           sources: sourceUrls,
-          message: "extraction returned no active offers"
+          message: "extraction returned no active offers",
+          ...(assetFailures.length > 0 ? { assetFailures } : {}),
         };
         continue;
       }
@@ -228,14 +304,18 @@ async function main(): Promise<void> {
         report.banks[entry.bankId] = {
           status: "sanity-rejected",
           sources: sourceUrls,
-          message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`
+          message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`,
+          ...(assetFailures.length > 0 ? { assetFailures } : {}),
         };
         continue;
       }
 
       ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
       state.banks[entry.bankId] = { hash: combinedHash, lastUpdatedAt: reviewDateIso };
-      report.banks[entry.bankId] = { status: "updated", sources: sourceUrls, offersWritten: newCount };
+      report.banks[entry.bankId] = {
+        status: "updated", sources: sourceUrls, offersWritten: newCount,
+        ...(assetFailures.length > 0 ? { assetFailures } : {}),
+      };
     } catch (error) {
       report.banks[entry.bankId] = {
         status: "extract-failed",

@@ -1,12 +1,137 @@
 // lib/ingest/crawlExtract.ts
-import { normalizeUrl } from "@/lib/ingest/crawlBank";
+import { normalizeUrl, normalizeAssetUrl, discoverDetailUrls, discoverAssetUrls } from "@/lib/ingest/crawlBank";
+import type { CrawlRecipe, HtmlFetcher } from "@/lib/ingest/crawlBank";
+import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 import type { ScannedOffer } from "@/lib/offers/types";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 
+// Which fetch+extract branch a discovered URL should use, decided by the discovery step.
+export type DiscoveredCrawlAssetType = "static_html" | "pdf" | "image";
+
+export interface DiscoveredCrawlUrl {
+  url: string;
+  type: DiscoveredCrawlAssetType;
+}
+
+const CONTENT_IMAGE_EXTENSIONS = /\.(jpe?g|png|gif|webp)$/i;
+
+// True when an asset URL is worth sending to Claude vision: a real image file, not a data URI or an
+// extension-less icon/tracking pixel. PDFs are never filtered here — they're high-signal by nature.
+function isContentImage(url: string): boolean {
+  if (url.startsWith("data:")) return false;
+  try {
+    return CONTENT_IMAGE_EXTENSIONS.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
+
+// Discovered images smaller than this are icons/decoration, not offer banners — skipped before Claude
+// vision to avoid wasted calls. Applies only to auto-discovered assets, never to explicit registry
+// `image` sources (those are always sent, regardless of size, as long as they pass fetchAndStrip's own limits).
+export const MIN_ASSET_IMAGE_BYTES = 10 * 1024;
+
+// True when a fetched image's byte size is below MIN_ASSET_IMAGE_BYTES — an icon/decoration, not a real offer banner.
+export function isUndersizedImage(type: DiscoveredCrawlAssetType, imageBytes?: Buffer): boolean {
+  return type === "image" && (imageBytes?.length ?? 0) < MIN_ASSET_IMAGE_BYTES;
+}
+
+// Folds one page's content-worthy PDF/image assets into an existing seen-set + output array — shared
+// by discoverCrawlUrls (page fetched fresh) and collectPageAssets (page already fetched).
+function foldPageAssets(
+  html: string,
+  baseUrl: string,
+  assetHosts: string[],
+  seen: Set<string>,
+  out: DiscoveredCrawlUrl[],
+): void {
+  for (const asset of discoverAssetUrls(html, baseUrl, assetHosts)) {
+    if (seen.has(asset.url)) continue;
+    if (asset.type === "image" && !isContentImage(asset.url)) continue;
+    seen.add(asset.url);
+    out.push(asset);
+  }
+}
+
+// Discovers a crawl bank's detail pages via the recipe's hops, plus any PDF/image assets linked
+// directly from each seed page AND each discovered detail page. Merges both into one list — detail
+// pages first, then assets — deduped by url, with junk images (data URIs / no image extension) dropped
+// before they reach Claude vision. A page whose HTML can't be (re-)fetched for asset scanning is
+// skipped, not fatal to the whole discover. Note: this means a detail page gets fetched twice across
+// the whole pipeline (once here during discovery, once later via fetchDetail) — an accepted
+// simplicity trade-off, not a bug.
+export async function discoverCrawlUrls(
+  seedUrls: string[],
+  recipe: CrawlRecipe,
+  fetchHtml: HtmlFetcher,
+  assetHosts: string[] = [],
+): Promise<{ ok: boolean; urls?: DiscoveredCrawlUrl[]; error?: string }> {
+  const disc = await discoverDetailUrls(seedUrls, recipe, fetchHtml);
+  if (!disc.ok || !disc.urls) return { ok: false, error: disc.error };
+
+  const urls: DiscoveredCrawlUrl[] = disc.urls.map((url) => ({ url, type: "static_html" as const }));
+  const seen = new Set(urls.map((u) => u.url));
+
+  // Fetches one page and folds its content-worthy assets into `urls`, deduped; a page whose HTML
+  // can't be (re-)fetched is skipped, not fatal to the whole discover.
+  const scanPageForAssets = async (pageUrl: string): Promise<void> => {
+    let html: string;
+    let normalized: string;
+    try {
+      normalized = normalizeUrl(pageUrl);
+      html = await fetchHtml(normalized);
+    } catch {
+      return;
+    }
+    foldPageAssets(html, normalized, assetHosts, seen, urls);
+  };
+
+  for (const seedUrl of seedUrls) await scanPageForAssets(seedUrl);
+  for (const detailUrl of disc.urls) await scanPageForAssets(detailUrl);
+
+  return { ok: true, urls };
+}
+
+// Discovers content-worthy PDF/image assets across already-fetched pages (rawHtml + its page URL),
+// deduped by normalized URL, junk images filtered — the non-crawl counterpart of discoverCrawlUrls.
+export function collectPageAssets(
+  pages: { url: string; rawHtml: string }[],
+  assetHosts: string[] = [],
+): DiscoveredCrawlUrl[] {
+  const seen = new Set<string>();
+  const assets: DiscoveredCrawlUrl[] = [];
+  for (const page of pages) {
+    let baseUrl: string;
+    try {
+      baseUrl = normalizeUrl(page.url);
+    } catch {
+      continue;
+    }
+    foldPageAssets(page.rawHtml, baseUrl, assetHosts, seen, assets);
+  }
+  return assets;
+}
+
+// Content fetched for one discovered URL — only the fields matching its type are populated.
+export interface FetchedCrawlContent {
+  strippedText?: string;
+  pdfBytes?: Buffer;
+  imageBytes?: Buffer;
+  imageMediaType?: ImageMediaType;
+}
+
 export interface CrawlExtractDeps {
-  discover: () => Promise<{ ok: boolean; urls?: string[]; error?: string }>;
-  fetchDetail: (url: string) => Promise<{ ok: boolean; strippedText?: string; contentHash?: string; error?: string }>;
-  extract: (sourceUrl: string, strippedText: string) => Promise<{ offers: ScannedOffer[]; inputTokens: number; outputTokens: number }>;
+  discover: () => Promise<{ ok: boolean; urls?: DiscoveredCrawlUrl[]; error?: string }>;
+  fetchDetail: (url: string, type: DiscoveredCrawlAssetType) => Promise<{
+    ok: boolean;
+    strippedText?: string;
+    pdfBytes?: Buffer;
+    imageBytes?: Buffer;
+    imageMediaType?: ImageMediaType;
+    contentHash?: string;
+    error?: string;
+  }>;
+  extract: (sourceUrl: string, fetched: FetchedCrawlContent) => Promise<{ offers: ScannedOffer[]; inputTokens: number; outputTokens: number }>;
   throttleMs?: number;
   maxExtractions?: number;
 }
@@ -21,9 +146,32 @@ export interface CrawlExtractResult {
   discovered: number;
   extracted: number;
   reused: number;
+  assetFailures: { url: string; reason: string }[];
 }
 
 const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
+
+// True when a URL's pathname ends in a known asset extension (pdf/image) — used only to pick a stable
+// dedup key for reusing prior offers, since a stored offer carries no explicit source type.
+function looksLikeAssetUrl(url: string): boolean {
+  try {
+    return /\.(pdf|jpe?g|png|gif|webp)$/i.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
+
+// Normalizes a URL for the reuse/dedup map only: asset-shaped URLs must not gain a forced trailing
+// slash (that would corrupt a file path), everything else uses the existing page-normalization.
+// This is a pure function of the URL string, so it's always self-consistent across runs regardless
+// of whether it's applied to a freshly discovered URL or a previously stored offer's sourceUrl.
+function normalizeForDedup(url: string): string {
+  try {
+    return looksLikeAssetUrl(url) ? normalizeAssetUrl(url) : normalizeUrl(url);
+  } catch {
+    return url;
+  }
+}
 
 // Group a bank's existing scanned offers by normalized sourceUrl (the reuse source for unchanged pages).
 export function groupOffersBySourceUrl(offers: ScannedOffer[]): Map<string, ScannedOffer[]> {
@@ -31,7 +179,7 @@ export function groupOffersBySourceUrl(offers: ScannedOffer[]): Map<string, Scan
   for (const offer of offers) {
     let key: string;
     try {
-      key = normalizeUrl(offer.sourceUrl);
+      key = normalizeForDedup(offer.sourceUrl);
     } catch {
       continue;
     }
@@ -42,7 +190,7 @@ export function groupOffersBySourceUrl(offers: ScannedOffer[]): Map<string, Scan
   return map;
 }
 
-// Crawl a bank's detail pages, extracting only new/changed pages (hash-gated) and reusing the rest.
+// Crawl a bank's detail pages/assets, extracting only new/changed ones (hash-gated) and reusing the rest.
 export async function refreshCrawlBank(
   entry: BankRegistryEntry,
   snapshot: ScannedOffer[],
@@ -52,9 +200,10 @@ export async function refreshCrawlBank(
 ): Promise<CrawlExtractResult> {
   const throttleMs = deps.throttleMs ?? 0;
   const maxExtractions = deps.maxExtractions ?? Infinity;
+  const assetFailures: { url: string; reason: string }[] = [];
   const base: CrawlExtractResult = {
     ok: false, offers: [], detailHashes: prevHashes,
-    inputTokens: 0, outputTokens: 0, discovered: 0, extracted: 0, reused: 0,
+    inputTokens: 0, outputTokens: 0, discovered: 0, extracted: 0, reused: 0, assetFailures,
   };
 
   const disc = await deps.discover();
@@ -70,43 +219,57 @@ export async function refreshCrawlBank(
   let extracted = 0;
   let reused = 0;
 
-  const keepPrior = (url: string, prior: ScannedOffer[]): void => {
+  const keepPrior = (dedupKey: string, prior: ScannedOffer[]): void => {
     if (prior.length === 0) return;
     collected.push(...prior);
     reused += prior.length;
-    if (prevHashes[url] !== undefined) nextHashes[url] = prevHashes[url];
+    if (prevHashes[dedupKey] !== undefined) nextHashes[dedupKey] = prevHashes[dedupKey];
   };
 
-  for (const rawUrl of disc.urls) {
-    const url = normalizeUrl(rawUrl);
-    const prior = byUrl.get(url) ?? [];
+  for (const discovered of disc.urls) {
+    // The URL actually fetched (and later stored as the offer's sourceUrl): normalized per its own
+    // type so a pdf/image link never gains a corrupting trailing slash.
+    const url = discovered.type === "static_html" ? normalizeUrl(discovered.url) : normalizeAssetUrl(discovered.url);
+    const dedupKey = normalizeForDedup(discovered.url);
+    const prior = byUrl.get(dedupKey) ?? [];
 
-    const fetched = await deps.fetchDetail(url);
-    if (!fetched.ok || !fetched.strippedText) {
-      keepPrior(url, prior);
+    const fetched = await deps.fetchDetail(url, discovered.type);
+    const hasContent = Boolean(fetched.strippedText || fetched.pdfBytes || fetched.imageBytes);
+    if (!fetched.ok) {
+      assetFailures.push({ url, reason: fetched.error ?? "fetch failed" });
+      keepPrior(dedupKey, prior);
+      continue;
+    }
+    if (!hasContent) {
+      keepPrior(dedupKey, prior);
       continue;
     }
     const hash = fetched.contentHash ?? "";
 
-    if (prevHashes[url] !== undefined && prevHashes[url] === hash && prior.length > 0) {
+    if (prevHashes[dedupKey] !== undefined && prevHashes[dedupKey] === hash && prior.length > 0) {
       collected.push(...prior.map((o) => ({ ...o, lastReviewedAt: reviewDateIso })));
       reused += prior.length;
-      nextHashes[url] = hash;
+      nextHashes[dedupKey] = hash;
       continue;
     }
 
     if (extracted >= maxExtractions) {
-      keepPrior(url, prior);
+      keepPrior(dedupKey, prior);
       continue;
     }
 
     if (throttleMs > 0) await sleep(throttleMs);
-    const ex = await deps.extract(url, fetched.strippedText);
+    const ex = await deps.extract(url, {
+      strippedText: fetched.strippedText,
+      pdfBytes: fetched.pdfBytes,
+      imageBytes: fetched.imageBytes,
+      imageMediaType: fetched.imageMediaType,
+    });
     inputTokens += ex.inputTokens;
     outputTokens += ex.outputTokens;
     extracted += 1;
     for (const offer of ex.offers) collected.push({ ...offer, sourceUrl: url });
-    nextHashes[url] = hash;
+    nextHashes[dedupKey] = hash;
   }
 
   const dedup = new Map<string, ScannedOffer>();
@@ -114,6 +277,6 @@ export async function refreshCrawlBank(
 
   return {
     ok: true, offers: [...dedup.values()], detailHashes: nextHashes,
-    inputTokens, outputTokens, discovered: disc.urls.length, extracted, reused,
+    inputTokens, outputTokens, discovered: disc.urls.length, extracted, reused, assetFailures,
   };
 }

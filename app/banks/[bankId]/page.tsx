@@ -8,10 +8,11 @@ import { OfferGrid } from "@/components/OfferGrid";
 import { OfferPagination } from "@/components/OfferPagination";
 import { getBankById, getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
-import { isOfferCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
-import { firstQueryValue, paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
+import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
+import { sortOffers } from "@/lib/offers/sort";
 import { siteUrl } from "@/lib/site-config";
 
 interface BankPageProps {
@@ -45,12 +46,10 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   }
 
   const query = await searchParams;
-  const cardId = firstQueryValue(query.card);
-  const categoryParam = firstQueryValue(query.category);
-  const search = firstQueryValue(query.search);
-  const category = isOfferCategory(categoryParam) ? categoryParam : undefined;
+  const filters = { ...parseOfferFilters(query), bankId, bankIds: undefined };
+  const sort = parseSortKey(query);
   const pagination = parsePaginationParams(query);
-  const filteredOffers = filterOffers(await getActiveOffers(), { bankId, cardId, category, search });
+  const filteredOffers = sortOffers(filterOffers(await getActiveOffers(), filters), sort);
   const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
@@ -147,10 +146,11 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
       <FilterPanel
         banks={banks}
         cards={cards}
-        selectedBankId={bankId}
-        selectedCardId={cardId}
-        selectedCategory={category}
-        search={search}
+        selectedCategories={filters.categories ?? []}
+        selectedCardId={filters.cardId ?? ""}
+        selectedSort={sort}
+        search={filters.search ?? ""}
+        lockedBankId={bankId}
         actionPath={`/banks/${bankId}`}
       />
 

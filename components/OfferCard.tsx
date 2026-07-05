@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { getCategoryLabel } from "@/lib/offers/categories";
+import { isExpiringSoon } from "@/lib/offers/expiry";
 import type { Offer } from "@/lib/offers/types";
 
 function formatDate(value: string | undefined): string {
@@ -7,15 +8,6 @@ function formatDate(value: string | undefined): string {
   const date = new Date(value);
   if (!Number.isFinite(date.getTime())) return "Not specified";
   return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
-}
-
-function isExpiringSoon(validUntil: string | undefined): boolean {
-  if (!validUntil) return false;
-  const normalized = validUntil.includes("T") ? validUntil : `${validUntil}T23:59:59.999Z`;
-  const date = new Date(normalized);
-  if (!Number.isFinite(date.getTime())) return false;
-  const daysRemaining = (date.getTime() - Date.now()) / (1000 * 60 * 60 * 24);
-  return daysRemaining >= 0 && daysRemaining <= 14;
 }
 
 export function OfferCard({ offer }: { offer: Offer }) {
