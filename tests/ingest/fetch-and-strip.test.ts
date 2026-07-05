@@ -92,3 +92,17 @@ describe("fetchAndStrip — pdf source", () => {
     expect(res.error).toMatch(/too many pages/);
   });
 });
+
+describe("fetchAndStrip — static_html source", () => {
+  it("returns rawHtml equal to the raw HTML body served by fetch, alongside the stripped text", async () => {
+    const html = "<html><body><main>25% off at Keells<img src=\"/banners/promo.jpg\"></main></body></html>";
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(html, { status: 200 })));
+
+    const source: RegistrySource = { url: "https://www.example.lk/offers/", type: "static_html" };
+    const res = await fetchAndStrip(source);
+
+    expect(res.ok).toBe(true);
+    expect(res.rawHtml).toBe(html);
+    expect(res.strippedText).toMatch(/25% off at Keells/);
+  });
+});

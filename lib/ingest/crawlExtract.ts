@@ -26,14 +26,45 @@ function isContentImage(url: string): boolean {
   }
 }
 
+// Discovered images smaller than this are icons/decoration, not offer banners — skipped before Claude
+// vision to avoid wasted calls. Applies only to auto-discovered assets, never to explicit registry
+// `image` sources (those are always sent, regardless of size, as long as they pass fetchAndStrip's own limits).
+export const MIN_ASSET_IMAGE_BYTES = 10 * 1024;
+
+// True when a fetched image's byte size is below MIN_ASSET_IMAGE_BYTES — an icon/decoration, not a real offer banner.
+export function isUndersizedImage(type: DiscoveredCrawlAssetType, imageBytes?: Buffer): boolean {
+  return type === "image" && (imageBytes?.length ?? 0) < MIN_ASSET_IMAGE_BYTES;
+}
+
+// Folds one page's content-worthy PDF/image assets into an existing seen-set + output array — shared
+// by discoverCrawlUrls (page fetched fresh) and collectPageAssets (page already fetched).
+function foldPageAssets(
+  html: string,
+  baseUrl: string,
+  assetHosts: string[],
+  seen: Set<string>,
+  out: DiscoveredCrawlUrl[],
+): void {
+  for (const asset of discoverAssetUrls(html, baseUrl, assetHosts)) {
+    if (seen.has(asset.url)) continue;
+    if (asset.type === "image" && !isContentImage(asset.url)) continue;
+    seen.add(asset.url);
+    out.push(asset);
+  }
+}
+
 // Discovers a crawl bank's detail pages via the recipe's hops, plus any PDF/image assets linked
-// directly from each seed page. Merges both into one list — detail pages first, then assets — deduped
-// by url, with junk images (data URIs / no image extension) dropped before they reach Claude vision.
-// A seed page whose HTML can't be fetched for asset scanning is skipped, not fatal to the whole discover.
+// directly from each seed page AND each discovered detail page. Merges both into one list — detail
+// pages first, then assets — deduped by url, with junk images (data URIs / no image extension) dropped
+// before they reach Claude vision. A page whose HTML can't be (re-)fetched for asset scanning is
+// skipped, not fatal to the whole discover. Note: this means a detail page gets fetched twice across
+// the whole pipeline (once here during discovery, once later via fetchDetail) — an accepted
+// simplicity trade-off, not a bug.
 export async function discoverCrawlUrls(
   seedUrls: string[],
   recipe: CrawlRecipe,
   fetchHtml: HtmlFetcher,
+  assetHosts: string[] = [],
 ): Promise<{ ok: boolean; urls?: DiscoveredCrawlUrl[]; error?: string }> {
   const disc = await discoverDetailUrls(seedUrls, recipe, fetchHtml);
   if (!disc.ok || !disc.urls) return { ok: false, error: disc.error };
@@ -41,24 +72,44 @@ export async function discoverCrawlUrls(
   const urls: DiscoveredCrawlUrl[] = disc.urls.map((url) => ({ url, type: "static_html" as const }));
   const seen = new Set(urls.map((u) => u.url));
 
-  for (const seedUrl of seedUrls) {
+  // Fetches one page and folds its content-worthy assets into `urls`, deduped; a page whose HTML
+  // can't be (re-)fetched is skipped, not fatal to the whole discover.
+  const scanPageForAssets = async (pageUrl: string): Promise<void> => {
     let html: string;
-    let normalizedSeedUrl: string;
+    let normalized: string;
     try {
-      normalizedSeedUrl = normalizeUrl(seedUrl);
-      html = await fetchHtml(normalizedSeedUrl);
+      normalized = normalizeUrl(pageUrl);
+      html = await fetchHtml(normalized);
+    } catch {
+      return;
+    }
+    foldPageAssets(html, normalized, assetHosts, seen, urls);
+  };
+
+  for (const seedUrl of seedUrls) await scanPageForAssets(seedUrl);
+  for (const detailUrl of disc.urls) await scanPageForAssets(detailUrl);
+
+  return { ok: true, urls };
+}
+
+// Discovers content-worthy PDF/image assets across already-fetched pages (rawHtml + its page URL),
+// deduped by normalized URL, junk images filtered — the non-crawl counterpart of discoverCrawlUrls.
+export function collectPageAssets(
+  pages: { url: string; rawHtml: string }[],
+  assetHosts: string[] = [],
+): DiscoveredCrawlUrl[] {
+  const seen = new Set<string>();
+  const assets: DiscoveredCrawlUrl[] = [];
+  for (const page of pages) {
+    let baseUrl: string;
+    try {
+      baseUrl = normalizeUrl(page.url);
     } catch {
       continue;
     }
-    for (const asset of discoverAssetUrls(html, normalizedSeedUrl)) {
-      if (seen.has(asset.url)) continue;
-      if (asset.type === "image" && !isContentImage(asset.url)) continue;
-      seen.add(asset.url);
-      urls.push(asset);
-    }
+    foldPageAssets(page.rawHtml, baseUrl, assetHosts, seen, assets);
   }
-
-  return { ok: true, urls };
+  return assets;
 }
 
 // Content fetched for one discovered URL — only the fields matching its type are populated.

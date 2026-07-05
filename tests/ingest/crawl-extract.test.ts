@@ -1,5 +1,13 @@
 import { describe, expect, it, vi } from "vitest";
-import { refreshCrawlBank, groupOffersBySourceUrl, discoverCrawlUrls, type CrawlExtractDeps, type DiscoveredCrawlUrl } from "@/lib/ingest/crawlExtract";
+import {
+  refreshCrawlBank,
+  groupOffersBySourceUrl,
+  discoverCrawlUrls,
+  collectPageAssets,
+  MIN_ASSET_IMAGE_BYTES,
+  type CrawlExtractDeps,
+  type DiscoveredCrawlUrl,
+} from "@/lib/ingest/crawlExtract";
 import { normalizeUrl, type CrawlRecipe } from "@/lib/ingest/crawlBank";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import type { ScannedOffer } from "@/lib/offers/types";
@@ -271,5 +279,148 @@ describe("discoverCrawlUrls", () => {
     const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
     expect(res.ok).toBe(false);
     expect(fetchHtml).toHaveBeenCalledTimes(1);
+  });
+
+  it("discovers assets on detail pages, not just seed pages", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a></main>`,
+      [detailUrl]: `<main><img src="/banners/plates-promo.jpg" alt="promo"></main>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(res.urls).toEqual([
+      { url: detailUrl, type: "static_html" },
+      { url: "https://www.peoplesbank.lk/banners/plates-promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("discovers a cross-host detail-page asset only when its host is passed as assetHosts", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const crossHostImage = "https://cdn.example.com/banners/plates-promo.jpg";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a></main>`,
+      [detailUrl]: `<main><img src="${crossHostImage}" alt="promo"></main>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const withoutAllowlist = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
+    expect(withoutAllowlist.urls).toEqual([{ url: detailUrl, type: "static_html" }]);
+
+    const withAllowlist = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml, ["cdn.example.com"]);
+    expect(withAllowlist.urls).toEqual([
+      { url: detailUrl, type: "static_html" },
+      { url: crossHostImage, type: "image" },
+    ]);
+  });
+
+  it("dedupes a detail-page asset against the same asset already found on a seed page", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const sharedImage = "/banners/shared-promo.jpg";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a><img src="${sharedImage}" alt="promo"></main>`,
+      [detailUrl]: `<main><img src="${sharedImage}" alt="promo"></main>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
+
+    expect(res.urls).toEqual([
+      { url: detailUrl, type: "static_html" },
+      { url: "https://www.peoplesbank.lk/banners/shared-promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("does not fail the whole discovery when a detail page's html re-fetch fails during asset scanning", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a><a href="/files/menu.pdf">Menu</a></main>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      // Detail pages are never fetched by discoverDetailUrls itself for a hops:[] recipe (detail
+      // links are read straight from the seed's html), so this throw only ever hits the new
+      // detail-page asset-scan pass, not detail discovery.
+      if (url === detailUrl) throw new Error("network blip");
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(res.urls).toEqual([
+      { url: detailUrl, type: "static_html" },
+      { url: "https://www.peoplesbank.lk/files/menu.pdf", type: "pdf" },
+    ]);
+  });
+});
+
+describe("collectPageAssets", () => {
+  const pageA = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+  const pageB = "https://www.peoplesbank.lk/promotion/keells-25-off-credit/";
+
+  it("dedupes the same asset URL found across two different pages", () => {
+    const rawHtml = `<main><img src="/banners/shared-promo.jpg" alt="promo"></main>`;
+
+    const assets = collectPageAssets([
+      { url: pageA, rawHtml },
+      { url: pageB, rawHtml },
+    ]);
+
+    expect(assets).toEqual([
+      { url: "https://www.peoplesbank.lk/banners/shared-promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("filters out junk images: a data-URI image and an extension-less image", () => {
+    const rawHtml = `
+      <main>
+        <img src="data:image/png;base64,AAA" alt="inline">
+        <img src="/icons/tracker" alt="no extension">
+      </main>`;
+
+    expect(collectPageAssets([{ url: pageA, rawHtml }])).toEqual([]);
+  });
+
+  it("includes a cross-host image only when its host is passed in assetHosts", () => {
+    const rawHtml = `<main><img src="https://cdn.example.com/banners/promo.jpg" alt="promo"></main>`;
+
+    expect(collectPageAssets([{ url: pageA, rawHtml }])).toEqual([]);
+    expect(collectPageAssets([{ url: pageA, rawHtml }], ["cdn.example.com"])).toEqual([
+      { url: "https://cdn.example.com/banners/promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("skips a page whose url fails URL parsing, without throwing or affecting other pages' assets", () => {
+    const assets = collectPageAssets([
+      { url: "not a url", rawHtml: `<main><img src="/banners/broken.jpg" alt="promo"></main>` },
+      { url: pageA, rawHtml: `<main><img src="/banners/shared-promo.jpg" alt="promo"></main>` },
+    ]);
+
+    expect(assets).toEqual([
+      { url: "https://www.peoplesbank.lk/banners/shared-promo.jpg", type: "image" },
+    ]);
+  });
+});
+
+describe("MIN_ASSET_IMAGE_BYTES", () => {
+  it("is 10 KiB", () => {
+    expect(MIN_ASSET_IMAGE_BYTES).toBe(10 * 1024);
   });
 });

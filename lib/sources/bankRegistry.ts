@@ -30,6 +30,9 @@ export interface BankRegistryEntry {
   cards: Card[];
   defaultCardId: string;
   sources: RegistrySource[];
+  // Extra hostnames (lowercase) whose PDF/image assets may be ingested alongside the bank's own
+  // origin — for banks that serve offer creatives from a CDN/object-store host.
+  assetHosts?: string[];
 }
 
 export const bankRegistry: BankRegistryEntry[] = [
@@ -48,6 +51,7 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "commercial-bank-platinum-debit-cards", bankId: "commercial-bank", name: "Commercial Bank Platinum Debit Cards", network: "Visa / Mastercard", tier: "Platinum" }
     ],
     defaultCardId: "commercial-bank-credit-cards",
+    assetHosts: ["s3.ap-southeast-1.amazonaws.com"],
     // Listing -> per-offer /rewards-promotion/<category>/<slug> detail pages (singular "promotion"; static + rich).
     sources: [{
       url: "https://www.combank.lk/rewards-promotions",

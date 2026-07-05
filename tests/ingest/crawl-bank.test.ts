@@ -141,4 +141,40 @@ describe("discoverAssetUrls", () => {
       { url: "https://www.example.lk/files/dining-offers.pdf", type: "pdf" },
     ]);
   });
+
+  it("accepts a cross-host image and pdf when their hostname is passed in assetHosts", () => {
+    const html = `
+      <main>
+        <a href="https://s3.ap-southeast-1.amazonaws.com/files/dining-offers.pdf">Offsite PDF (allowed)</a>
+        <img src="https://s3.ap-southeast-1.amazonaws.com/banners/dining-promo.jpg" alt="Offsite image (allowed)">
+      </main>`;
+
+    expect(discoverAssetUrls(html, base, ["s3.ap-southeast-1.amazonaws.com"])).toEqual([
+      { url: "https://s3.ap-southeast-1.amazonaws.com/files/dining-offers.pdf", type: "pdf" },
+      { url: "https://s3.ap-southeast-1.amazonaws.com/banners/dining-promo.jpg", type: "image" },
+    ]);
+  });
+
+  it("still rejects a cross-host asset whose host is not in assetHosts", () => {
+    const html = `
+      <main>
+        <a href="https://cdn.otherdomain.com/x.pdf">Offsite PDF (excluded)</a>
+        <img src="https://cdn.otherdomain.com/y.jpg" alt="Offsite image (excluded)">
+      </main>`;
+
+    expect(discoverAssetUrls(html, base, ["s3.ap-southeast-1.amazonaws.com"])).toEqual([]);
+  });
+
+  it("still includes a base-host asset alongside an allowlisted cross-host asset", () => {
+    const html = `
+      <main>
+        <a href="/files/dining-offers.pdf">Same-origin PDF</a>
+        <img src="https://s3.ap-southeast-1.amazonaws.com/banners/dining-promo.jpg" alt="Offsite image (allowed)">
+      </main>`;
+
+    expect(discoverAssetUrls(html, base, ["s3.ap-southeast-1.amazonaws.com"])).toEqual([
+      { url: "https://www.example.lk/files/dining-offers.pdf", type: "pdf" },
+      { url: "https://s3.ap-southeast-1.amazonaws.com/banners/dining-promo.jpg", type: "image" },
+    ]);
+  });
 });

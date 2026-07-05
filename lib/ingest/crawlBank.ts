@@ -92,9 +92,13 @@ export function normalizeAssetUrl(input: string): string {
   return u.toString();
 }
 
-// Scans html for offer-bearing PDF links and image banners (nav/header/footer chrome excluded), resolved absolute + same-origin against baseUrl.
-export function discoverAssetUrls(html: string, baseUrl: string): DiscoveredAsset[] {
+// Scans html for offer-bearing PDF links and image banners (nav/header/footer chrome excluded),
+// resolved absolute against baseUrl and restricted to the base hostname plus any hostname in
+// `assetHosts` (for banks that serve offer creatives from a CDN/object-store host).
+export function discoverAssetUrls(html: string, baseUrl: string, assetHosts: string[] = []): DiscoveredAsset[] {
   const base = new URL(baseUrl);
+  const baseHost = base.hostname.toLowerCase();
+  const allowedHosts = new Set([baseHost, ...assetHosts.map((h) => h.toLowerCase())]);
   const $ = cheerio.load(html);
   $("nav, header, footer").remove();
   const assets = new Map<string, DiscoveredAsset>();
@@ -108,7 +112,7 @@ export function discoverAssetUrls(html: string, baseUrl: string): DiscoveredAsse
     } catch {
       return;
     }
-    if (abs.hostname.toLowerCase() !== base.hostname.toLowerCase()) return;
+    if (!allowedHosts.has(abs.hostname.toLowerCase())) return;
     if (!abs.pathname.toLowerCase().endsWith(".pdf")) return;
     const url = normalizeAssetUrl(abs.toString());
     assets.set(url, { url, type: "pdf" });
@@ -123,7 +127,7 @@ export function discoverAssetUrls(html: string, baseUrl: string): DiscoveredAsse
     } catch {
       return;
     }
-    if (abs.hostname.toLowerCase() !== base.hostname.toLowerCase()) return;
+    if (!allowedHosts.has(abs.hostname.toLowerCase())) return;
     const url = normalizeAssetUrl(abs.toString());
     assets.set(url, { url, type: "image" });
   });
