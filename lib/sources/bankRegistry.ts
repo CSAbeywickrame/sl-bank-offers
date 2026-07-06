@@ -189,7 +189,10 @@ export const bankRegistry: BankRegistryEntry[] = [
     // headless Playwright, so it cannot be auto-scraped yet. Left enabled so its existing offers are
     // PRESERVED (a failed/empty fetch keeps rows); it will report skipped-empty each run until a
     // working approach is found. Do NOT set enabled:false (that would delete its offers).
-    sources: [{ url: "https://www.unionb.com/credit-cards-offers/", type: "static_html" }]
+    sources: [
+      { url: "https://www.unionb.com/credit-cards-offers/", type: "static_html" },
+      { url: "https://www.unionb.com/credit-cards-offers/page/2/", type: "static_html" }
+    ]
   },
   {
     bankId: "cargills-bank",

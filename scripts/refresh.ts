@@ -66,6 +66,8 @@ async function main(): Promise<void> {
   }
   const onlyBanks = new Set((process.env.ONLY_BANKS ?? "").split(",").map((s) => s.trim()).filter(Boolean));
   const maxDetails = Number(process.env.MAX_DETAILS_PER_RUN ?? "") || Infinity;
+  // Skip all auto-discovered image/PDF asset work (discovery re-scan + asset extraction) — perf isolation lever.
+  const skipAssets = process.env.SKIP_ASSETS === "1";
   const apiKey = process.env.ANTHROPIC_API_KEY;
   const client = apiKey ? new Anthropic() : null;
 
@@ -101,7 +103,7 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? []),
+          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? [], skipAssets),
           fetchDetail: async (url, type) => {
             const fetched = await fetchAndStrip({ url, type });
             if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
@@ -195,7 +197,7 @@ async function main(): Promise<void> {
 
       // Auto-discovered PDF/image assets on the fetched pages (banners/flyers embedded as <img>/<a href=.pdf>,
       // not explicit registry sources) — folded into the hash so an image swap alone re-triggers extraction.
-      const pageAssets = collectPageAssets(
+      const pageAssets = skipAssets ? [] : collectPageAssets(
         fetched.filter((f) => f.result.rawHtml !== undefined).map((f) => ({ url: f.source.url, rawHtml: f.result.rawHtml! })),
         entry.assetHosts ?? [],
       );

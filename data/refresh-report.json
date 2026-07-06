@@ -1,23 +1,15 @@
 {
-  "runAt": "2026-07-06T08:16:48.705Z",
+  "runAt": "2026-07-06T15:01:06.267Z",
   "tokensUsed": {
     "input": 0,
     "output": 0
   },
   "banks": {
-    "peoples-bank": {
-      "status": "extract-failed",
+    "standard-chartered": {
+      "status": "unchanged",
       "sources": [
-        "https://www.peoplesbank.lk/special-offers/"
-      ],
-      "message": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CckWng8UQZgWTCVCJctdT\"}"
-    },
-    "ntb": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.nationstrust.com/promotions"
-      ],
-      "message": "HTTP 403"
+        "https://www.sc.com/lk/data/tgl/offers.json"
+      ]
     }
   }
 }
