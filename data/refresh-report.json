@@ -1,23 +1,23 @@
 {
-  "runAt": "2026-07-06T07:43:30.376Z",
+  "runAt": "2026-07-06T08:16:48.705Z",
   "tokensUsed": {
-    "input": 22387,
-    "output": 4176
+    "input": 0,
+    "output": 0
   },
   "banks": {
-    "boc": {
-      "status": "updated",
+    "peoples-bank": {
+      "status": "extract-failed",
       "sources": [
-        "https://www.boc.lk/personal-banking/card-offers"
+        "https://www.peoplesbank.lk/special-offers/"
       ],
-      "offersWritten": 63
+      "message": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CckWng8UQZgWTCVCJctdT\"}"
     },
     "ntb": {
-      "status": "extract-failed",
+      "status": "fetch-failed",
       "sources": [
         "https://www.nationstrust.com/promotions"
       ],
-      "message": "{\"type\":\"error\",\"error\":{\"details\":null,\"type\":\"overloaded_error\",\"message\":\"Overloaded\"},\"request_id\":\"req_011CckT4CBgwwpRrF6xLguZX\"}"
+      "message": "HTTP 403"
     }
   }
 }
