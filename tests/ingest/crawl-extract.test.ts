@@ -193,6 +193,28 @@ describe("refreshCrawlBank", () => {
     expect(res.assetFailures.every((f) => f.url !== normalizeUrl(URL_A) && f.url !== normalizeUrl(GOOD_URL_B))).toBe(true);
   });
 
+  it("keeps prior offers and records assetFailures when extract throws for one url, without rejecting or dropping siblings", async () => {
+    const BAD_URL = "https://www.peoplesbank.lk/promotion/broken-detail/";
+    const urls: DiscoveredCrawlUrl[] = [
+      { url: URL_A, type: "static_html" },
+      { url: BAD_URL, type: "static_html" },
+    ];
+    const priorForBad = offerFor(BAD_URL, "peoples-bank-bad");
+    const extract = vi.fn(async (sourceUrl: string) => {
+      if (sourceUrl === BAD_URL) throw new Error("extract blew up");
+      return { offers: [{ ...offerFor(sourceUrl), description: "fresh-from-detail" }], inputTokens: 5, outputTokens: 2 };
+    });
+
+    const res = await refreshCrawlBank(entry, [priorForBad], { [BAD_URL]: "OLD" }, reviewDate, baseDeps({
+      extract: (sourceUrl) => extract(sourceUrl), discover: async () => ({ ok: true, urls }),
+    }));
+
+    expect(res.ok).toBe(true);
+    expect(res.assetFailures).toEqual([{ url: BAD_URL, reason: "extract blew up" }]);
+    expect(res.offers.some((o) => o.id === "peoples-bank-bad" && o.description === "old")).toBe(true);
+    expect(res.offers.some((o) => o.sourceUrl === URL_A && o.description === "fresh-from-detail")).toBe(true);
+  });
+
   it("does not force a trailing slash onto a discovered pdf URL used for fetching (regression test)", async () => {
     const PDF_URL = "https://www.peoplesbank.lk/files/report.pdf";
     const fetchDetail = vi.fn(async () => ({ ok: true, pdfBytes: Buffer.from("x"), contentHash: "h" }));

@@ -1,23 +1,17 @@
 {
-  "runAt": "2026-07-06T08:16:48.705Z",
+  "runAt": "2026-07-07T04:13:58.754Z",
   "tokensUsed": {
-    "input": 0,
-    "output": 0
+    "input": 140523,
+    "output": 10818
   },
   "banks": {
-    "peoples-bank": {
-      "status": "extract-failed",
+    "cargills-bank": {
+      "status": "updated",
       "sources": [
-        "https://www.peoplesbank.lk/special-offers/"
+        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
+        "https://www.cargillsbank.com/products/mastercard-promotions/"
       ],
-      "message": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CckWng8UQZgWTCVCJctdT\"}"
-    },
-    "ntb": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.nationstrust.com/promotions"
-      ],
-      "message": "HTTP 403"
+      "offersWritten": 48
     }
   }
 }

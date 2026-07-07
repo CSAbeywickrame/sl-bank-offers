@@ -1,7 +1,8 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import {
   normalizeUrl,
   extractLinks,
+  extractHrefsBySelector,
   discoverDetailUrls,
   discoverAssetUrls,
   type CrawlRecipe,
@@ -35,6 +36,24 @@ describe("extractLinks", () => {
   it("matches against pathname + search so query filters work", () => {
     const links = extractLinks(html, base, /\/promotion-category\/.*cardType=credit_card/);
     expect(links).toEqual(["https://www.peoplesbank.lk/promotion-category/restaurants/?cardType=credit_card"]);
+  });
+});
+
+describe("extractHrefsBySelector", () => {
+  const base = "https://www.seylan.lk/promotions/cards/";
+  const html = `
+    <a class="btn new-promotion-btn" href="/keells-25-off-credit">Read more</a>
+    <a class="btn new-promotion-btn" href="https://www.seylan.lk/radisson-40-off-credit#x">dup host, diff path</a>
+    <a class="btn new-promotion-btn" href="https://facebook.com/offsite-promo">offsite (excluded)</a>
+    <a class="btn new-promotion-btn">blank href (excluded)</a>
+    <a href="/not-a-promo">wrong selector (excluded)</a>`;
+
+  it("returns deduped, same-origin, normalized hrefs for anchors matching the selector", () => {
+    const links = extractHrefsBySelector(html, base, "a.new-promotion-btn");
+    expect(new Set(links)).toEqual(new Set([
+      "https://www.seylan.lk/keells-25-off-credit/",
+      "https://www.seylan.lk/radisson-40-off-credit/",
+    ]));
   });
 });
 
@@ -84,6 +103,86 @@ describe("discoverDetailUrls", () => {
     const fetchHtml = fakeFetcher({}); // any url throws
     const res = await discoverDetailUrls(["https://www.peoplesbank.lk/special-offers/"], peoplesRecipe, fetchHtml);
     expect(res.ok).toBe(false);
+  });
+});
+
+describe("discoverDetailUrls with detailSelector", () => {
+  const seylanCatalogUrl = "https://www.seylan.lk/promotions/cards/";
+  const seylanRecipe: CrawlRecipe = { hops: [], detailSelector: "a.new-promotion-btn" };
+
+  it("extracts detail links by selector from a single stubbed page", async () => {
+    const fetchHtml = fakeFetcher({
+      [seylanCatalogUrl]: `
+        <a class="btn new-promotion-btn" href="/keells-25-off-credit">Read more</a>
+        <a class="btn new-promotion-btn" href="/radisson-40-off-credit">Read more</a>
+        <a href="/about-us">nav (excluded)</a>`,
+    });
+    const res = await discoverDetailUrls([seylanCatalogUrl], seylanRecipe, fetchHtml);
+    expect(res.ok).toBe(true);
+    expect(new Set(res.urls)).toEqual(new Set([
+      "https://www.seylan.lk/keells-25-off-credit/",
+      "https://www.seylan.lk/radisson-40-off-credit/",
+    ]));
+  });
+
+  it("returns ok:false naming the selector when nothing matches", async () => {
+    const fetchHtml = fakeFetcher({ [seylanCatalogUrl]: "<a href='/about/'>x</a>" });
+    const res = await discoverDetailUrls([seylanCatalogUrl], seylanRecipe, fetchHtml);
+    expect(res.ok).toBe(false);
+    expect(res.error).toBe("no detail links matched selector a.new-promotion-btn");
+  });
+});
+
+describe("discoverDetailUrls with paginateNextSelector", () => {
+  const page1 = "https://www.seylan.lk/promotions/cards/";
+  const page2 = "https://www.seylan.lk/promotions/cards/?page=2";
+  const page3 = "https://www.seylan.lk/promotions/cards/?page=3";
+  const paginatedRecipe: CrawlRecipe = {
+    hops: [],
+    detailSelector: "a.new-promotion-btn",
+    paginateNextSelector: "a.page-link[rel=next]",
+  };
+
+  it("walks the pager end-to-end, fetching each page exactly once and collecting all detail links", async () => {
+    const html: Record<string, string> = {
+      [page1]: `
+        <a class="btn new-promotion-btn" href="/promo-a">A</a>
+        <a class="btn new-promotion-btn" href="/promo-b">B</a>
+        <a class="page-link" rel="next" href="${page2}">Next</a>`,
+      [page2]: `
+        <a class="btn new-promotion-btn" href="/promo-c">C</a>
+        <a class="btn new-promotion-btn" href="/promo-d">D</a>
+        <a class="page-link" rel="next" href="${page3}">Next</a>`,
+      [page3]: `<a class="btn new-promotion-btn" href="/promo-e">E</a>`,
+    };
+    const fetchHtml = vi.fn(fakeFetcher(html));
+
+    const res = await discoverDetailUrls([page1], paginatedRecipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(new Set(res.urls)).toEqual(new Set([
+      "https://www.seylan.lk/promo-a/",
+      "https://www.seylan.lk/promo-b/",
+      "https://www.seylan.lk/promo-c/",
+      "https://www.seylan.lk/promo-d/",
+      "https://www.seylan.lk/promo-e/",
+    ]));
+    expect(fetchHtml).toHaveBeenCalledTimes(3);
+  });
+
+  it("stops at a self-linking next page instead of looping forever (visited-set/cap guard)", async () => {
+    const selfLoopUrl = "https://www.seylan.lk/promotions/cards/loop/";
+    const fetchHtml = vi.fn(fakeFetcher({
+      [selfLoopUrl]: `
+        <a class="btn new-promotion-btn" href="/promo-only">Only</a>
+        <a class="page-link" rel="next" href="${selfLoopUrl}">Next</a>`,
+    }));
+
+    const res = await discoverDetailUrls([selfLoopUrl], paginatedRecipe, fetchHtml);
+
+    expect(res.ok).toBe(true);
+    expect(res.urls).toEqual(["https://www.seylan.lk/promo-only/"]);
+    expect(fetchHtml).toHaveBeenCalledTimes(1);
   });
 });
 

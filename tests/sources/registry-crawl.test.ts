@@ -9,7 +9,7 @@ describe("People's Bank crawl recipe", () => {
     expect(crawl?.hops).toEqual(["/promotion-category/.*cardType=credit_card"]);
     expect(crawl?.detailMatch).toBe("/promotion/[a-z0-9-]+/");
     // The detail matcher must NOT match a category URL.
-    expect(new RegExp(crawl!.detailMatch).test("/promotion-category/wellness/")).toBe(false);
-    expect(new RegExp(crawl!.detailMatch).test("/promotion/keells-25-off-credit/")).toBe(true);
+    expect(new RegExp(crawl!.detailMatch!).test("/promotion-category/wellness/")).toBe(false);
+    expect(new RegExp(crawl!.detailMatch!).test("/promotion/keells-25-off-credit/")).toBe(true);
   });
 });

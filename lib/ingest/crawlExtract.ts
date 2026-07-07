@@ -65,11 +65,15 @@ export async function discoverCrawlUrls(
   recipe: CrawlRecipe,
   fetchHtml: HtmlFetcher,
   assetHosts: string[] = [],
+  skipAssets: boolean = false,
 ): Promise<{ ok: boolean; urls?: DiscoveredCrawlUrl[]; error?: string }> {
   const disc = await discoverDetailUrls(seedUrls, recipe, fetchHtml);
   if (!disc.ok || !disc.urls) return { ok: false, error: disc.error };
 
   const urls: DiscoveredCrawlUrl[] = disc.urls.map((url) => ({ url, type: "static_html" as const }));
+  // skipAssets short-circuits the asset re-scan below (perf/isolation runs) — no extra page re-fetches happen.
+  if (skipAssets) return { ok: true, urls };
+
   const seen = new Set(urls.map((u) => u.url));
 
   // Fetches one page and folds its content-worthy assets into `urls`, deduped; a page whose HTML
@@ -259,12 +263,19 @@ export async function refreshCrawlBank(
     }
 
     if (throttleMs > 0) await sleep(throttleMs);
-    const ex = await deps.extract(url, {
-      strippedText: fetched.strippedText,
-      pdfBytes: fetched.pdfBytes,
-      imageBytes: fetched.imageBytes,
-      imageMediaType: fetched.imageMediaType,
-    });
+    let ex;
+    try {
+      ex = await deps.extract(url, {
+        strippedText: fetched.strippedText,
+        pdfBytes: fetched.pdfBytes,
+        imageBytes: fetched.imageBytes,
+        imageMediaType: fetched.imageMediaType,
+      });
+    } catch (err) {
+      assetFailures.push({ url, reason: err instanceof Error ? err.message : "extract failed" });
+      keepPrior(dedupKey, prior);
+      continue;
+    }
     inputTokens += ex.inputTokens;
     outputTokens += ex.outputTokens;
     extracted += 1;
