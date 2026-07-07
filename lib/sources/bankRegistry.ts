@@ -33,6 +33,10 @@ export interface BankRegistryEntry {
   // Extra hostnames (lowercase) whose PDF/image assets may be ingested alongside the bank's own
   // origin — for banks that serve offer creatives from a CDN/object-store host.
   assetHosts?: string[];
+  // Default true; set false to skip image/PDF auto-discovery for this bank.
+  scanAssets?: boolean;
+  // Default true; set false to skip the listing-page text-extraction Claude call for this bank.
+  extractPageText?: boolean;
 }
 
 export const bankRegistry: BankRegistryEntry[] = [
@@ -207,6 +211,9 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "cargills-bank-mastercard-credit-cards", bankId: "cargills-bank", name: "Cargills Bank Mastercard Credit Cards", network: "Mastercard" }
     ],
     defaultCardId: "cargills-bank-mastercard-credit-cards",
+    // Offers live only in flyer JPEGs on these two listing pages (page text is nav-menu chrome) — skip
+    // the listing-page text-extraction call and rely on auto-discovered image assets instead.
+    extractPageText: false,
     sources: [
       { url: "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/", type: "static_html" },
       { url: "https://www.cargillsbank.com/products/mastercard-promotions/", type: "static_html" }
@@ -262,12 +269,19 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "seylan-credit-cards", bankId: "seylan", name: "Seylan Credit Cards", network: "Visa / Mastercard" }
     ],
     defaultCardId: "seylan-credit-cards",
-    // Listing -> per-offer /promotions/cards/<category>/<merchant> detail pages (static + rich).
+    // Full paginated credit-card catalog (23 pages behind an ellipsis pager) -> each promo is a
+    // root-level slug linked as <a class="btn new-promotion-btn">READ MORE</a>, not a URL-pattern-matchable
+    // path, so detail links are read by class selector and the pager is walked page-by-page.
     sources: [{
-      url: "https://www.seylan.lk/promotions",
+      url: "https://www.seylan.lk/promotions/cards?type[]=credit_card",
       type: "static_html",
-      crawl: { hops: [], detailMatch: "/promotions/cards/[^/]+/[^/]+" }
-    }]
+      crawl: {
+        hops: [],
+        detailSelector: "a.new-promotion-btn",
+        paginateNextSelector: "a.page-link[rel=next]",
+      },
+    }],
+    scanAssets: false,
   },
   // NOTE: NSB is a new bank not yet in seed.json
   {

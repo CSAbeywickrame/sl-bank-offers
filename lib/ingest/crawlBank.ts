@@ -9,6 +9,18 @@ export function normalizeUrl(input: string): string {
   return u.toString();
 }
 
+// Resolves an anchor's href against base, returning the absolute URL only if it parses and shares
+// base's hostname — the shared same-origin gate behind both extractLinks and extractHrefsBySelector.
+function resolveSameOriginHref(href: string | undefined, base: URL): URL | undefined {
+  if (!href) return undefined;
+  try {
+    const abs = new URL(href, base);
+    return abs.hostname.toLowerCase() === base.hostname.toLowerCase() ? abs : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // Extract absolute, same-origin links from html whose `pathname + search` matches `pattern`,
 // resolved against baseUrl, deduped + normalized.
 export function extractLinks(html: string, baseUrl: string, pattern: RegExp): string[] {
@@ -16,16 +28,23 @@ export function extractLinks(html: string, baseUrl: string, pattern: RegExp): st
   const $ = cheerio.load(html);
   const out = new Set<string>();
   $("a[href]").each((_, el) => {
-    const href = $(el).attr("href");
-    if (!href) return;
-    let abs: URL;
-    try {
-      abs = new URL(href, base);
-    } catch {
-      return;
-    }
-    if (abs.hostname.toLowerCase() !== base.hostname.toLowerCase()) return;
-    if (!pattern.test(`${abs.pathname}${abs.search}`)) return;
+    const abs = resolveSameOriginHref($(el).attr("href"), base);
+    if (!abs || !pattern.test(`${abs.pathname}${abs.search}`)) return;
+    out.add(normalizeUrl(abs.toString()));
+  });
+  return [...out];
+}
+
+// Extract absolute, same-origin, normalized hrefs from anchors matching a cheerio CSS selector —
+// an alternative to extractLinks' regex match, for detail links marked by class/attribute rather
+// than a URL pattern.
+export function extractHrefsBySelector(html: string, baseUrl: string, selector: string): string[] {
+  const base = new URL(baseUrl);
+  const $ = cheerio.load(html);
+  const out = new Set<string>();
+  $(selector).each((_, el) => {
+    const abs = resolveSameOriginHref($(el).attr("href"), base);
+    if (!abs) return;
     out.add(normalizeUrl(abs.toString()));
   });
   return [...out];
@@ -33,7 +52,9 @@ export function extractLinks(html: string, baseUrl: string, pattern: RegExp): st
 
 export interface CrawlRecipe {
   hops: string[];
-  detailMatch: string;
+  detailMatch?: string; // URL-pattern matcher for detail links (either this or detailSelector must be set)
+  detailSelector?: string; // cheerio CSS selector for detail-page anchors, when links aren't a URL pattern
+  paginateNextSelector?: string; // cheerio CSS selector for the "next page" link; when set, walk the pager
   render?: "static" | "dynamic";
 }
 
@@ -44,6 +65,8 @@ export interface DiscoverResult {
 }
 
 export type HtmlFetcher = (url: string) => Promise<string>;
+
+const PAGINATION_HARD_CAP = 100;
 
 // Walks the index -> intermediate (hops) -> detail-page URLs. Never throws.
 export async function discoverDetailUrls(
@@ -63,13 +86,50 @@ export async function discoverDetailUrls(
       if (next.size === 0) return { ok: false, error: `no links matched hop ${hop}` };
       pages = [...next];
     }
-    const detailRe = new RegExp(recipe.detailMatch);
-    const details = new Set<string>();
-    for (const page of pages) {
-      const html = await fetchHtml(page);
-      for (const link of extractLinks(html, page, detailRe)) details.add(link);
+
+    // A recipe must pick a matcher — without this guard, `new RegExp(undefined)` below would
+    // silently compile to an empty pattern that matches every same-origin link.
+    if (!recipe.detailSelector && !recipe.detailMatch) {
+      return { ok: false, error: "crawl recipe defines neither detailMatch nor detailSelector" };
     }
-    if (details.size === 0) return { ok: false, error: `no detail links matched ${recipe.detailMatch}` };
+
+    // Pulls detail links out of one already-fetched page's html, per the recipe's chosen matcher.
+    const detailRe = recipe.detailSelector ? undefined : new RegExp(recipe.detailMatch!);
+    const detailsFromHtml = (html: string, page: string): string[] =>
+      recipe.detailSelector
+        ? extractHrefsBySelector(html, page, recipe.detailSelector)
+        : extractLinks(html, page, detailRe!);
+
+    const details = new Set<string>();
+    if (recipe.paginateNextSelector) {
+      // Walk the pager from the current page frontier, fetching each page exactly once and reading
+      // both its detail links and its next-page link off that single fetch. Loop-guarded by a visited
+      // set (self/back-linking pagers) plus a hard cap, in case both somehow fail to catch a cycle.
+      const visited = new Set<string>();
+      const frontier = [...pages];
+      while (frontier.length > 0 && visited.size < PAGINATION_HARD_CAP) {
+        const page = frontier.shift()!;
+        const key = normalizeUrl(page);
+        if (visited.has(key)) continue;
+        visited.add(key);
+        const html = await fetchHtml(page);
+        for (const link of detailsFromHtml(html, page)) details.add(link);
+        const [nextPage] = extractHrefsBySelector(html, page, recipe.paginateNextSelector);
+        if (nextPage && !visited.has(normalizeUrl(nextPage))) frontier.push(nextPage);
+      }
+    } else {
+      for (const page of pages) {
+        const html = await fetchHtml(page);
+        for (const link of detailsFromHtml(html, page)) details.add(link);
+      }
+    }
+
+    if (details.size === 0) {
+      const error = recipe.detailSelector
+        ? `no detail links matched selector ${recipe.detailSelector}`
+        : `no detail links matched ${recipe.detailMatch}`;
+      return { ok: false, error };
+    }
     return { ok: true, urls: [...details] };
   } catch (err) {
     return { ok: false, error: err instanceof Error ? err.message : String(err) };

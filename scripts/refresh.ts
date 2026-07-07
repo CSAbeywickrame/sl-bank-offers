@@ -89,6 +89,9 @@ async function main(): Promise<void> {
       continue;
     }
 
+    // Per-bank asset policy: global SKIP_ASSETS OR the bank opting out via scanAssets:false.
+    const skipAssetsForBank = skipAssets || entry.scanAssets === false;
+
     try {
       // Crawl branch: a source with a `crawl` recipe is walked to its detail pages, each hash-gated
       // so only new/changed pages reach Claude. Keeps existing rows on any discovery/fetch failure.
@@ -103,7 +106,7 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? [], skipAssets),
+          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? [], skipAssetsForBank),
           fetchDetail: async (url, type) => {
             const fetched = await fetchAndStrip({ url, type });
             if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
@@ -197,7 +200,7 @@ async function main(): Promise<void> {
 
       // Auto-discovered PDF/image assets on the fetched pages (banners/flyers embedded as <img>/<a href=.pdf>,
       // not explicit registry sources) — folded into the hash so an image swap alone re-triggers extraction.
-      const pageAssets = skipAssets ? [] : collectPageAssets(
+      const pageAssets = skipAssetsForBank ? [] : collectPageAssets(
         fetched.filter((f) => f.result.rawHtml !== undefined).map((f) => ({ url: f.source.url, rawHtml: f.result.rawHtml! })),
         entry.assetHosts ?? [],
       );
@@ -233,24 +236,35 @@ async function main(): Promise<void> {
           };
           continue;
         }
-        for (const { source, result } of fetched) {
-          const extracted = await extractOffers(
-            {
-              entry,
-              sourceUrl: source.url,
-              strippedText: result.strippedText,
-              pdfBytes: result.pdfBytes,
-              imageBytes: result.imageBytes,
-              imageMediaType: result.imageMediaType,
-            },
-            client,
-            reviewDateIso
-          );
-          report.tokensUsed.input += extracted.inputTokens;
-          report.tokensUsed.output += extracted.outputTokens;
-          offers.push(...extracted.offers);
+        // Some banks (e.g. cargills-bank) have no usable listing-page text — skip this Claude call
+        // entirely and rely on the auto-discovered asset loop below.
+        if (entry.extractPageText !== false) {
+          for (const { source, result } of fetched) {
+            // A throw on one listing page must not drop a multi-source bank's other sources (dfcc/union-bank).
+            let extracted;
+            try {
+              extracted = await extractOffers(
+                {
+                  entry,
+                  sourceUrl: source.url,
+                  strippedText: result.strippedText,
+                  pdfBytes: result.pdfBytes,
+                  imageBytes: result.imageBytes,
+                  imageMediaType: result.imageMediaType,
+                },
+                client,
+                reviewDateIso
+              );
+            } catch (error) {
+              assetFailures.push({ url: source.url, reason: error instanceof Error ? error.message : "extract failed" });
+              continue;
+            }
+            report.tokensUsed.input += extracted.inputTokens;
+            report.tokensUsed.output += extracted.outputTokens;
+            offers.push(...extracted.offers);
+          }
+          extractedCount += 1;
         }
-        extractedCount += 1;
 
         // Auto-discovered assets (banner images/PDFs found while scanning the page, not explicit registry
         // sources): run each through Claude too, capped by the same per-run detail budget as crawl banks.
@@ -265,18 +279,25 @@ async function main(): Promise<void> {
           if (isUndersizedImage(asset.type, assetResult.imageBytes)) {
             continue;
           }
-          const extracted = await extractOffers(
-            {
-              entry,
-              sourceUrl: asset.url,
-              strippedText: assetResult.strippedText,
-              pdfBytes: assetResult.pdfBytes,
-              imageBytes: assetResult.imageBytes,
-              imageMediaType: assetResult.imageMediaType,
-            },
-            client,
-            reviewDateIso
-          );
+          // A single bad flyer (e.g. a corrupt/oversized image Claude rejects) must not abort the bank.
+          let extracted;
+          try {
+            extracted = await extractOffers(
+              {
+                entry,
+                sourceUrl: asset.url,
+                strippedText: assetResult.strippedText,
+                pdfBytes: assetResult.pdfBytes,
+                imageBytes: assetResult.imageBytes,
+                imageMediaType: assetResult.imageMediaType,
+              },
+              client,
+              reviewDateIso
+            );
+          } catch (error) {
+            assetFailures.push({ url: asset.url, reason: error instanceof Error ? error.message : "extract failed" });
+            continue;
+          }
           report.tokensUsed.input += extracted.inputTokens;
           report.tokensUsed.output += extracted.outputTokens;
           offers.push(...extracted.offers);

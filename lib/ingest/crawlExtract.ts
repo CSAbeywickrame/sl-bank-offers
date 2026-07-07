@@ -263,12 +263,19 @@ export async function refreshCrawlBank(
     }
 
     if (throttleMs > 0) await sleep(throttleMs);
-    const ex = await deps.extract(url, {
-      strippedText: fetched.strippedText,
-      pdfBytes: fetched.pdfBytes,
-      imageBytes: fetched.imageBytes,
-      imageMediaType: fetched.imageMediaType,
-    });
+    let ex;
+    try {
+      ex = await deps.extract(url, {
+        strippedText: fetched.strippedText,
+        pdfBytes: fetched.pdfBytes,
+        imageBytes: fetched.imageBytes,
+        imageMediaType: fetched.imageMediaType,
+      });
+    } catch (err) {
+      assetFailures.push({ url, reason: err instanceof Error ? err.message : "extract failed" });
+      keepPrior(dedupKey, prior);
+      continue;
+    }
     inputTokens += ex.inputTokens;
     outputTokens += ex.outputTokens;
     extracted += 1;

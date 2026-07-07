@@ -1,15 +1,17 @@
 {
-  "runAt": "2026-07-06T15:01:06.267Z",
+  "runAt": "2026-07-07T04:13:58.754Z",
   "tokensUsed": {
-    "input": 0,
-    "output": 0
+    "input": 140523,
+    "output": 10818
   },
   "banks": {
-    "standard-chartered": {
-      "status": "unchanged",
+    "cargills-bank": {
+      "status": "updated",
       "sources": [
-        "https://www.sc.com/lk/data/tgl/offers.json"
-      ]
+        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
+        "https://www.cargillsbank.com/products/mastercard-promotions/"
+      ],
+      "offersWritten": 48
     }
   }
 }
