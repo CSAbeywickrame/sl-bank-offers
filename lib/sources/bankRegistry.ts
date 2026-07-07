@@ -51,8 +51,6 @@ export const bankRegistry: BankRegistryEntry[] = [
     },
     cards: [
       { id: "commercial-bank-credit-cards", bankId: "commercial-bank", name: "Commercial Bank Credit Cards", network: "Visa / Mastercard" },
-      { id: "commercial-bank-premium-credit-cards", bankId: "commercial-bank", name: "Commercial Bank Premium Credit Cards", network: "Visa / Mastercard", tier: "Premium" },
-      { id: "commercial-bank-platinum-debit-cards", bankId: "commercial-bank", name: "Commercial Bank Platinum Debit Cards", network: "Visa / Mastercard", tier: "Platinum" }
     ],
     defaultCardId: "commercial-bank-credit-cards",
     assetHosts: ["s3.ap-southeast-1.amazonaws.com"],
@@ -74,7 +72,6 @@ export const bankRegistry: BankRegistryEntry[] = [
     },
     cards: [
       { id: "ndb-credit-cards", bankId: "ndb", name: "NDB Credit Cards", network: "Visa / Mastercard" },
-      { id: "ndb-premium-credit-cards", bankId: "ndb", name: "NDB Platinum, Signature and Infinite Credit Cards", network: "Visa / Mastercard", tier: "Premium" }
     ],
     defaultCardId: "ndb-credit-cards",
     sources: [{ url: "https://www.ndbbank.com/cards/card-offers", type: "static_html" }]
@@ -135,7 +132,6 @@ export const bankRegistry: BankRegistryEntry[] = [
     },
     cards: [
       { id: "ntb-mastercard-credit-cards", bankId: "ntb", name: "Nations Trust Bank Mastercard Credit Cards", network: "Mastercard" },
-      { id: "ntb-private-banking-mastercard-credit-cards", bankId: "ntb", name: "Nations Trust Bank Private Banking Mastercard Credit Cards", network: "Mastercard", tier: "Private Banking" }
     ],
     defaultCardId: "ntb-mastercard-credit-cards",
     // Flat listing -> per-offer /promotions/<slug> detail pages (static + rich). A stray T&C page yields no offer.
