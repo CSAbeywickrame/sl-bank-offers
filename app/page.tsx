@@ -25,7 +25,7 @@ const faqJsonLd = {
       name: "Which Sri Lankan bank has the best credit card offers?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Commercial Bank, Sampath Bank, and Seylan Bank regularly publish the most credit card offers across dining, fuel, and supermarket categories in Sri Lanka. The best bank depends on your spending habits — use SL Card Offers to filter and compare live deals from all 12 tracked banks side by side.",
+        text: "Commercial Bank, Sampath Bank, and Seylan Bank regularly publish the most credit card offers across dining, fuel, and supermarket categories in Sri Lanka. The best bank depends on your spending habits — use SL Card Offers to filter and compare live deals from all 14 tracked banks side by side.",
       },
     },
     {
@@ -33,7 +33,7 @@ const faqJsonLd = {
       name: "How do I compare credit card offers in Sri Lanka?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Visit SL Card Offers at slcardoffers.com to browse 1,000+ active deals from 12 Sri Lankan banks in one place. Filter by bank, card, or category (dining, fuel, travel, supermarket, cashback, and more) to find offers that match your lifestyle. Each listing links directly to the official bank page so you can verify terms before using an offer.",
+        text: "Visit SL Card Offers at slcardoffers.com to browse 1,000+ active deals from 14 Sri Lankan banks in one place. Filter by bank, card, or category (dining, fuel, travel, supermarket, cashback, and more) to find offers that match your lifestyle. Each listing links directly to the official bank page so you can verify terms before using an offer.",
       },
     },
     {
@@ -49,7 +49,7 @@ const faqJsonLd = {
       name: "Does SL Card Offers cover all Sri Lankan banks?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "SL Card Offers currently tracks 12 Sri Lankan banks including Commercial Bank, Sampath Bank, BOC, People's Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, and Cargills Bank. More banks are added as their offer data becomes available.",
+        text: "SL Card Offers currently tracks 14 Sri Lankan banks including Commercial Bank, Sampath Bank, BOC, People's Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, Cargills Bank, NSB, and HNB. More banks are added as their offer data becomes available.",
       },
     },
     {
@@ -216,7 +216,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           <h2 className="text-xl font-bold text-slate-900 mb-4">About SL Card Offers</h2>
           <div className="prose prose-slate max-w-none text-sm leading-7 text-slate-600 space-y-4">
             <p>
-              SL Card Offers is Sri Lanka&rsquo;s most comprehensive credit card offer aggregator, tracking {totalCount.toLocaleString()}+ active promotions from {bankCount} banks including Commercial Bank, Sampath Bank, BOC, People&rsquo;s Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, and Cargills Bank.
+              SL Card Offers is Sri Lanka&rsquo;s most comprehensive credit card offer aggregator, tracking {totalCount.toLocaleString()}+ active promotions from {bankCount} banks including Commercial Bank, Sampath Bank, BOC, People&rsquo;s Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, Cargills Bank, NSB, and HNB.
             </p>
             <p>
               Finding the best credit card deal in Sri Lanka used to mean visiting each bank&rsquo;s website separately. SL Card Offers solves that by pulling all active promotions into one searchable, filterable listing. Every offer links back to the official bank source so you can confirm terms before redeeming.
@@ -275,7 +275,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 Does SL Card Offers cover all Sri Lankan banks?
               </summary>
               <p className="mt-3 text-sm leading-7 text-slate-600">
-                SL Card Offers currently tracks {bankCount} Sri Lankan banks including Commercial Bank, Sampath Bank, BOC, People&rsquo;s Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, and Cargills Bank. More banks are added as their offer data becomes available.
+                SL Card Offers currently tracks {bankCount} Sri Lankan banks including Commercial Bank, Sampath Bank, BOC, People&rsquo;s Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Standard Chartered, Union Bank, Cargills Bank, NSB, and HNB. More banks are added as their offer data becomes available.
               </p>
             </details>
 

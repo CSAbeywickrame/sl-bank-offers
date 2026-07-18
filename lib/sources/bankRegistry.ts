@@ -300,6 +300,24 @@ export const bankRegistry: BankRegistryEntry[] = [
       { url: "https://www.nsb.lk/category/card-offers/page/2/", type: "static_html", crawl: { hops: [], detailMatch: "[a-z0-9-]*nsb[a-z0-9-]*card" } },
       { url: "https://www.nsb.lk/category/card-offers/page/3/", type: "static_html", crawl: { hops: [], detailMatch: "[a-z0-9-]*nsb[a-z0-9-]*card" } }
     ]
+  },
+  {
+    bankId: "hnb",
+    enabled: true,
+    bank: {
+      id: "hnb",
+      name: "Hatton National Bank",
+      shortName: "HNB",
+      websiteUrl: "https://www.hnb.lk"
+    },
+    cards: [
+      { id: "hnb-credit-cards", bankId: "hnb", name: "HNB Credit Cards", network: "Visa / Mastercard" },
+      { id: "hnb-debit-cards", bankId: "hnb", name: "HNB Debit Cards", network: "Visa / Mastercard" }
+    ],
+    defaultCardId: "hnb-credit-cards",
+    // venus.hnb.lk JSON API (all ~819 promos, one call), parsed by feedMappers["hnb"] — no LLM.
+    // Public page https://www.hnb.lk/card-promotion is a React SPA (empty #root); HTML scraping won't work.
+    sources: [{ url: "https://venus.hnb.lk/api/get_all_web_card_promos?page=1&limit=2000", type: "feed" }]
   }
 ];
 
