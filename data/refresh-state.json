@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-07-13T05:38:53.771Z",
+  "lastRunAt": "2026-07-16T19:42:08.006Z",
   "banks": {
     "peoples-bank": {
       "lastUpdatedAt": "2026-07-13T05:38:53.771Z",
@@ -832,6 +832,10 @@
     "dfcc": {
       "hash": "eec819319f976a0fd299a0f5f34e61d42b772994",
       "lastUpdatedAt": "2026-07-13T05:38:53.771Z"
+    },
+    "hnb": {
+      "hash": "83106a921f787be4a26c430380ae4024c13ad7c1",
+      "lastUpdatedAt": "2026-07-16T19:42:08.006Z"
     }
   }
 }

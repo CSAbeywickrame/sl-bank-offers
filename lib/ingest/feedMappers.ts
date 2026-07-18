@@ -1,4 +1,5 @@
 import * as cheerio from "cheerio";
+import { categorizeOfferText } from "@/lib/ingest/categorize";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
@@ -107,7 +108,83 @@ function mapSampath(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso
   return [...byId.values()];
 }
 
+interface HnbRaw {
+  id?: unknown;
+  title?: unknown;
+  merchant?: unknown;
+  cardType?: unknown;
+  to?: unknown;
+  valid?: unknown;
+}
+
+// Routes an HNB promo to the credit or debit card entry based on its cardType
+// ("credit" | "credit/debit" | "debit"; credit/debit rows go to the default credit card).
+function hnbCardId(cardType: unknown, entry: BankRegistryEntry): string {
+  if (typeof cardType === "string" && cardType.trim().toLowerCase() === "debit") {
+    const debitCard = entry.cards.find((card) => card.id.includes("debit"));
+    if (debitCard) return debitCard.id;
+  }
+  return entry.defaultCardId;
+}
+
+// Maps the HNB venus API card-promos response into ScannedOffers.
+function mapHnb(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso: string): ScannedOffer[] {
+  // Throw actionable errors so a malformed/changed feed surfaces clearly (and keeps existing rows).
+  if (!rawJsonText.trim()) throw new Error("HNB feed: empty response");
+  let parsed: { data?: unknown; total?: unknown };
+  try {
+    parsed = JSON.parse(rawJsonText) as { data?: unknown; total?: unknown };
+  } catch {
+    throw new Error("HNB feed: response was not valid JSON");
+  }
+  if (!Array.isArray(parsed.data)) throw new Error("HNB feed: expected { data: [...] } shape");
+  const rows = parsed.data as HnbRaw[];
+  // Number() keeps the guard working if the API ever returns total as a quoted string.
+  const total = Number(parsed.total);
+  if (Number.isFinite(total) && total > rows.length) {
+    throw new Error(`HNB feed: truncated response (${rows.length}/${total} rows) — API may now cap 'limit'`);
+  }
+
+  const byId = new Map<string, ScannedOffer>();
+  for (const row of rows) {
+    // Ids must be numbers or non-empty strings; anything else would stringify into
+    // garbage offer ids/URLs (e.g. "hnb-[object Object]") that can silently collide.
+    if (typeof row.id !== "number" && (typeof row.id !== "string" || !row.id.trim())) continue;
+    const idStr = String(row.id);
+
+    const title = normalizeText(typeof row.title === "string" ? row.title : "");
+    if (!title) continue;
+
+    const merchant = normalizeText(typeof row.merchant === "string" ? row.merchant : "") || undefined;
+    const cardId = hnbCardId(row.cardType, entry);
+    const category = categorizeOfferText(title);
+    const validUntil = typeof row.to === "string" && /^\d{4}-\d{2}-\d{2}$/.test(row.to) ? row.to : undefined;
+    const validFromMatch = typeof row.valid === "string" ? row.valid.match(/Valid From (\d{4}-\d{2}-\d{2})/) : null;
+    const validFrom = validFromMatch ? validFromMatch[1] : undefined;
+    const detailUrl = `https://www.hnb.lk/card-promotion/search/${idStr}`;
+
+    const offer: ScannedOffer = {
+      id: `hnb-${idStr}`,
+      bankId: entry.bankId,
+      cardId,
+      title,
+      category,
+      description: title,
+      merchant,
+      validFrom,
+      validUntil,
+      termsLink: detailUrl,
+      sourceUrl: detailUrl,
+      lastReviewedAt: reviewDateIso,
+      status: "active"
+    };
+    byId.set(offer.id, offer);
+  }
+  return [...byId.values()];
+}
+
 // Registry of bankId -> deterministic feed mapper. Banks not listed use the Claude extractor.
 export const feedMappers: Record<string, FeedMapper> = {
-  sampath: mapSampath
+  sampath: mapSampath,
+  hnb: mapHnb
 };
