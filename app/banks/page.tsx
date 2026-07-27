@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { StatTile } from "@/components/StatTile";
+import { BankCard } from "@/components/BankCard";
 import { getBanks } from "@/lib/offers/banks";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteName, siteUrl } from "@/lib/site-config";
@@ -54,7 +56,10 @@ export default async function BanksPage() {
       <JsonLd data={breadcrumbJsonLd} />
       <JsonLd data={itemListJsonLd} />
 
-      <section className="relative overflow-hidden" style={{ background: "#08271c", color: "#fff" }}>
+      <section
+        className="relative overflow-hidden"
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+      >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
           <div className="hero-orb hero-orb-gold" />
@@ -79,9 +84,9 @@ export default async function BanksPage() {
               <p
                 className="inline-flex items-center gap-2 text-xs font-semibold uppercase"
                 style={{
-                  background: "rgba(212, 175, 95, 0.16)",
-                  border: "1px solid rgba(212, 175, 95, 0.16)",
-                  color: "#e1c46e",
+                  background: "var(--hero-eyebrow-bg)",
+                  border: "1px solid var(--hero-eyebrow-bg)",
+                  color: "var(--hero-eyebrow-fg)",
                   borderRadius: "9999px",
                   padding: "4px 12px",
                   letterSpacing: "0.04em",
@@ -89,7 +94,7 @@ export default async function BanksPage() {
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Sri Lankan credit card offers
               </p>
@@ -98,29 +103,13 @@ export default async function BanksPage() {
                 style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
                 Banks with{" "}
-                <span style={{ color: "#d4af5f" }}>Credit Card Offers</span>
+                <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
                 Browse active credit card promotions by bank. Select a bank to see all its current offers.
               </p>
             </div>
-            <div
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: "12px",
-                padding: "16px 20px",
-                minWidth: "180px",
-                textAlign: "center",
-              }}
-            >
-              <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
-                {banks.length}
-              </span>
-              <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
-                banks tracked
-              </span>
-            </div>
+            <StatTile value={banks.length} label="banks tracked" className="min-w-[180px]" />
           </div>
         </div>
       </section>
@@ -131,30 +120,7 @@ export default async function BanksPage() {
             const count = offerCountByBank.get(bank.id) ?? 0;
             return (
               <li key={bank.id}>
-                <Link
-                  href={`/banks/${bank.id}`}
-                  className="group flex items-center justify-between rounded-xl bg-white transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
-                  style={{
-                    padding: "16px 20px",
-                    borderRadius: "12px",
-                    border: "1px solid #dde7e1",
-                    boxShadow: "0 1px 2px rgb(15 23 42 / 5%)",
-                    display: "flex",
-                  }}
-                  aria-label={`${bank.name} — ${count} active offer${count !== 1 ? "s" : ""}`}
-                >
-                  <div>
-                    <p className="font-semibold" style={{ fontSize: "15px", color: "#16201b" }}>
-                      {bank.name}
-                    </p>
-                    <p className="mt-0.5 text-xs" style={{ color: "#6a7d73" }}>
-                      {count} active offer{count !== 1 ? "s" : ""}
-                    </p>
-                  </div>
-                  <span className="ml-4 text-sm font-semibold" style={{ color: "#047857" }} aria-hidden="true">
-                    View →
-                  </span>
-                </Link>
+                <BankCard id={bank.id} name={bank.name} count={count} />
               </li>
             );
           })}

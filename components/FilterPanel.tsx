@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { categories } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
 import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
+import { buttonClasses } from "@/components/ui/button";
 
 interface FilterPanelProps {
   banks: Bank[];
@@ -20,24 +21,8 @@ interface FilterPanelProps {
   lockedCategory?: OfferCategory;
 }
 
-const fieldStyle: React.CSSProperties = {
-  width: "100%",
-  height: "40px",
-  borderRadius: "8px",
-  border: "1px solid #c4d3cb",
-  background: "#fff",
-  padding: "0 12px",
-  fontSize: "14px",
-  color: "#16201b",
-};
-
-const labelStyle: React.CSSProperties = {
-  fontSize: "12px",
-  fontWeight: 600,
-  textTransform: "uppercase",
-  letterSpacing: "0.04em",
-  color: "#6a7d73",
-};
+const fieldClass = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900";
+const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-neutral-500";
 
 // Human-readable labels for each sort key, in display order
 const sortLabels: Record<SortKey, string> = {
@@ -91,15 +76,14 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
 
   return (
     <div className="grid gap-1" style={{ position: "relative" }} ref={containerRef}>
-      <label htmlFor={id} style={labelStyle}>{label}</label>
+      <label htmlFor={id} className={labelClass}>{label}</label>
       <button
         type="button"
         id={id}
         ref={buttonRef}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
-        className="flex items-center justify-between text-left"
-        style={fieldStyle}
+        className={`flex items-center justify-between text-left ${fieldClass}`}
       >
         <span>{summary}</span>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
@@ -110,19 +94,17 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
         <div
           role="group"
           aria-label={label}
-          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg p-2"
+          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg border border-neutral-300 bg-white p-2"
           style={{
             top: "100%",
             marginTop: "4px",
-            border: "1px solid #c4d3cb",
-            background: "#fff",
             boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
             maxHeight: "240px",
             overflowY: "auto",
           }}
         >
           {options.map((option) => (
-            <label key={option.id} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm" style={{ color: "#16201b" }}>
+            <label key={option.id} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm text-neutral-900">
               <input type="checkbox" checked={selectedIds.includes(option.id)} onChange={() => onToggle(option.id)} />
               {option.label}
             </label>
@@ -198,16 +180,13 @@ export function FilterPanel({
   }
 
   return (
-    <div style={{ borderTop: "1px solid #dde7e1", borderBottom: "1px solid #dde7e1", background: "#fff", boxShadow: "0 1px 2px rgb(15 23 42 / 5%)" }}>
+    <div className="border-t border-b border-neutral-200 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 py-3">
         <div className="mb-3 flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold" style={{ color: "#16201b" }}>Filter offers</span>
+            <span className="text-sm font-semibold text-neutral-900">Filter offers</span>
             {activeFilterCount > 0 && (
-              <span
-                className="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold text-white"
-                style={{ background: "#047857" }}
-              >
+              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1.5 text-xs font-semibold text-white">
                 {activeFilterCount}
               </span>
             )}
@@ -216,8 +195,7 @@ export function FilterPanel({
             <button
               type="button"
               onClick={clearAll}
-              className="text-sm underline underline-offset-2 transition-colors"
-              style={{ color: "#6a7d73" }}
+              className="text-sm text-neutral-500 underline underline-offset-2 transition-colors"
             >
               Clear all
             </button>
@@ -237,13 +215,13 @@ export function FilterPanel({
           )}
 
           <div className="grid gap-1">
-            <label htmlFor="offer-card-filter" style={labelStyle}>Card</label>
+            <label htmlFor="offer-card-filter" className={labelClass}>Card</label>
             <select
               id="offer-card-filter"
               name="card"
               value={selectedCardId}
               onChange={(e) => pushFilter({ cardId: e.target.value })}
-              style={fieldStyle}
+              className={fieldClass}
             >
               <option value="">All cards</option>
               {availableCards.map((card) => {
@@ -268,13 +246,13 @@ export function FilterPanel({
           )}
 
           <div className="grid gap-1">
-            <label htmlFor="offer-sort-filter" style={labelStyle}>Sort</label>
+            <label htmlFor="offer-sort-filter" className={labelClass}>Sort</label>
             <select
               id="offer-sort-filter"
               name="sort"
               value={selectedSort}
               onChange={(e) => pushQuery({ sort: e.target.value as SortKey })}
-              style={fieldStyle}
+              className={fieldClass}
             >
               {sortKeys.map((key) => (
                 <option key={key} value={key}>{sortLabels[key]}</option>
@@ -283,7 +261,7 @@ export function FilterPanel({
           </div>
 
           <div className="grid gap-1">
-            <label htmlFor="offer-search-filter" style={labelStyle}>Search</label>
+            <label htmlFor="offer-search-filter" className={labelClass}>Search</label>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
@@ -297,14 +275,9 @@ export function FilterPanel({
                 name="search"
                 defaultValue={search}
                 placeholder="Merchant, bank, offer…"
-                className="min-w-0 flex-1"
-                style={fieldStyle}
+                className={`min-w-0 flex-1 ${fieldClass}`}
               />
-              <button
-                type="submit"
-                className="shrink-0 whitespace-nowrap rounded-lg text-sm font-semibold text-white transition-colors duration-150 hover:bg-emerald-800"
-                style={{ height: "40px", background: "#047857", padding: "0 16px" }}
-              >
+              <button type="submit" className={buttonClasses({ variant: "accent" }) + " shrink-0 whitespace-nowrap"}>
                 Search
               </button>
             </form>

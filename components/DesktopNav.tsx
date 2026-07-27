@@ -17,14 +17,9 @@ export function DesktopNav() {
             href={href}
             className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
               active
-                ? "font-semibold"
-                : "hover:bg-neutral-100 hover:text-neutral-900"
+                ? "bg-emerald-50 font-semibold text-emerald-700"
+                : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
             }`}
-            style={
-              active
-                ? { backgroundColor: "#ecfdf5", color: "#047857" }
-                : { color: "#3b4a43" }
-            }
           >
             {label}
           </Link>

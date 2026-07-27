@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
+import { StatTile } from "@/components/StatTile";
 import { categories } from "@/lib/offers/categories";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteName, siteUrl } from "@/lib/site-config";
@@ -65,7 +66,10 @@ export default async function CategoriesPage() {
       <JsonLd data={breadcrumbJsonLd} />
       <JsonLd data={itemListJsonLd} />
 
-      <section className="relative overflow-hidden" style={{ background: "#08271c", color: "#fff" }}>
+      <section
+        className="relative overflow-hidden"
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+      >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
           <div className="hero-orb hero-orb-gold" />
@@ -92,9 +96,9 @@ export default async function CategoriesPage() {
               <p
                 className="inline-flex items-center gap-2 text-xs font-semibold uppercase"
                 style={{
-                  background: "rgba(212, 175, 95, 0.16)",
-                  border: "1px solid rgba(212, 175, 95, 0.16)",
-                  color: "#e1c46e",
+                  background: "var(--hero-eyebrow-bg)",
+                  border: "1px solid var(--hero-eyebrow-bg)",
+                  color: "var(--hero-eyebrow-fg)",
                   borderRadius: "9999px",
                   padding: "4px 12px",
                   letterSpacing: "0.04em",
@@ -102,34 +106,18 @@ export default async function CategoriesPage() {
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Browse offer types
               </p>
               <h1 className="mt-4 font-bold" style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
-                All <span style={{ color: "#d4af5f" }}>Offer Categories</span>
+                All <span style={{ color: "var(--hero-highlight)" }}>Offer Categories</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
                 Jump into dining, fuel, travel, cashback, installments, and every other category tracked across Sri Lankan bank cards.
               </p>
             </div>
-            <div
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: "12px",
-                padding: "16px 20px",
-                minWidth: "180px",
-                textAlign: "center",
-              }}
-            >
-              <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
-                {categories.length}
-              </span>
-              <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
-                categories tracked
-              </span>
-            </div>
+            <StatTile value={categories.length} label="categories tracked" className="min-w-[180px]" />
           </div>
         </div>
       </section>
@@ -142,27 +130,22 @@ export default async function CategoriesPage() {
               <li key={category.id}>
                 <Link
                   href={`/categories/${category.id}`}
-                  className="group flex h-full flex-col justify-between rounded-xl bg-white transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
-                  style={{
-                    padding: "18px 20px",
-                    border: "1px solid #dde7e1",
-                    boxShadow: "0 1px 2px rgb(15 23 42 / 5%)",
-                  }}
+                  className="group flex h-full flex-col justify-between rounded-lg border border-neutral-200 bg-white px-5 py-[18px] shadow-sm transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
                   aria-label={`${category.label} — ${count} active offer${count !== 1 ? "s" : ""}`}
                 >
                   <div>
-                    <p className="font-semibold" style={{ fontSize: "18px", color: "#16201b" }}>
+                    <p className="text-[18px] font-semibold text-neutral-900">
                       {category.label}
                     </p>
-                    <p className="mt-2 text-sm" style={{ color: "#6a7d73", lineHeight: 1.6 }}>
+                    <p className="mt-2 text-sm leading-[1.6] text-neutral-500">
                       {categoryDescriptions[category.id]}
                     </p>
                   </div>
                   <div className="mt-6 flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "#6a7d73" }}>
+                    <span className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">
                       {count} active offer{count !== 1 ? "s" : ""}
                     </span>
-                    <span className="text-sm font-semibold" style={{ color: "#047857" }} aria-hidden="true">
+                    <span className="text-sm font-semibold text-emerald-700" aria-hidden="true">
                       View →
                     </span>
                   </div>
