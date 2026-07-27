@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import { isExpiringSoon } from "@/lib/offers/expiry";
 import type { Offer } from "@/lib/offers/types";
+import { Badge } from "@/components/ui/badge";
+import { buttonClasses } from "@/components/ui/button";
 
 function formatDate(value: string | undefined): string {
   if (!value) return "Not specified";
@@ -14,77 +16,58 @@ export function OfferCard({ offer }: { offer: Offer }) {
   const expiringSoon = isExpiringSoon(offer.validUntil);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border bg-white shadow-sm transition-all duration-150 hover:border-neutral-300 hover:shadow-md" style={{ borderColor: "#dde7e1" }}>
-      {/* Emerald-to-gold top rule */}
-      <div style={{ height: "4px", background: "linear-gradient(90deg, #059669, #c99a2e)", flexShrink: 0 }} />
+    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-150 hover:border-neutral-300 hover:shadow-md">
+      {/* Navy-to-emerald top rule */}
+      <div style={{ height: "4px", background: "var(--offer-rule)", flexShrink: 0 }} />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Badges */}
         <div className="flex flex-wrap items-center gap-2">
-          <span
-            className="rounded-full px-3 py-1 text-xs font-semibold"
-            style={{ background: "#e3f1ea", color: "#065f46", boxShadow: "inset 0 0 0 1px #d1fae5" }}
-          >
-            {offer.bankName}
-          </span>
-          <span
-            className="rounded-full px-3 py-1 text-xs font-semibold"
-            style={{ background: "#fffbeb", color: "#92400e", boxShadow: "inset 0 0 0 1px #fef3c7" }}
-          >
-            {getCategoryLabel(offer.category)}
-          </span>
-          {expiringSoon && (
-            <span
-              className="rounded-full px-3 py-1 text-xs font-semibold"
-              style={{ background: "#fef2f2", color: "#b91c1c", boxShadow: "inset 0 0 0 1px #fee2e2" }}
-            >
-              Expiring soon
-            </span>
-          )}
+          <Badge tone="bank">{offer.bankName}</Badge>
+          <Badge tone="category">{getCategoryLabel(offer.category)}</Badge>
+          {expiringSoon && <Badge tone="expiry">Expiring soon</Badge>}
         </div>
 
         {/* Content */}
         <div className="flex-1">
           {offer.merchant && (
-            <p className="mb-1 text-xs font-semibold uppercase" style={{ color: "#047857", letterSpacing: "0.04em" }}>
+            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.04em] text-emerald-700">
               {offer.merchant}
             </p>
           )}
-          <h2 className="text-base font-semibold leading-snug transition-colors duration-150 group-hover:text-emerald-700" style={{ color: "#16201b" }}>
+          <h2 className="text-base font-semibold leading-snug text-neutral-900 transition-colors duration-150 group-hover:text-emerald-700">
             {offer.title}
           </h2>
-          <p className="mt-2 line-clamp-3 text-sm leading-6" style={{ color: "#6a7d73" }}>
+          <p className="mt-2 line-clamp-3 text-sm leading-6 text-neutral-500">
             {offer.description}
           </p>
         </div>
 
         {/* Validity grid */}
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-lg text-xs" style={{ background: "#e9f1ec", padding: "10px 12px" }}>
+        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-md bg-neutral-100 px-3 py-2.5 text-xs">
           <div>
-            <dt className="font-semibold" style={{ color: "#16201b" }}>Valid until</dt>
-            <dd style={{ color: expiringSoon ? "#dc2626" : "#3b4a43" }}>{formatDate(offer.validUntil)}</dd>
+            <dt className="font-semibold text-neutral-900">Valid until</dt>
+            <dd className={expiringSoon ? "text-red-600" : "text-neutral-700"}>{formatDate(offer.validUntil)}</dd>
           </div>
           <div>
-            <dt className="font-semibold" style={{ color: "#16201b" }}>Last checked</dt>
-            <dd style={{ color: "#3b4a43" }}>{formatDate(offer.lastCheckedAt)}</dd>
+            <dt className="font-semibold text-neutral-900">Last checked</dt>
+            <dd className="text-neutral-700">{formatDate(offer.lastCheckedAt)}</dd>
           </div>
         </dl>
 
-        {/* CTA row */}
-        <div className="flex flex-col gap-2 sm:flex-row">
+        {/* CTA row — side by side to keep the card compact; navy = primary, emerald outline = secondary */}
+        <div className="mt-auto flex gap-2">
           <Link
-            className="inline-flex flex-1 py-2 px-3 items-center justify-center rounded-lg text-sm font-semibold text-white transition-colors duration-150 hover:bg-[#0d3a29]"
+            className={buttonClasses({ variant: "primary" }) + " flex-1 whitespace-nowrap"}
             href={`/offers/${offer.id}`}
-            style={{ background: "#08271c"}}
           >
             View details
           </Link>
           <a
-            className="inline-flex flex-1 py-2 px-3  items-center justify-center rounded-lg text-sm font-semibold transition-colors duration-150 hover:bg-emerald-50"
+            className={buttonClasses({ variant: "outline" }) + " flex-1 whitespace-nowrap"}
             href={offer.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            style={{ border: "1px solid #047857", color: "#047857" }}
           >
             View at bank
           </a>

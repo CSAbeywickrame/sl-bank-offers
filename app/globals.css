@@ -1,21 +1,73 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 @import "tailwindcss";
+@config "../tailwind.config.ts";
 
 :root {
-  --bg-page: #f4f9f6;
-  --surface-card: #ffffff;
-  --surface-muted: #e9f1ec;
-  --surface-inverse: #08271c;
-  --text-strong: #16201b;
-  --text-body: #3b4a43;
-  --text-muted: #6a7d73;
-  --text-faint: #95a89e;
-  --text-link: #047857;
-  --border-subtle: #dde7e1;
-  --border-default: #c4d3cb;
-  --border-focus: #10b981;
-  --ring-focus: rgba(16, 185, 129, 0.32);
-  --offer-rule: linear-gradient(90deg, #059669, #c99a2e);
+  /* Emerald (brand / primary action) */
+  --emerald-50:#ecfdf5; --emerald-100:#d1fae5; --emerald-200:#a7f3d0; --emerald-300:#6ee7b7; --emerald-400:#34d399; --emerald-500:#10b981; --emerald-600:#059669; --emerald-700:#047857; --emerald-800:#065f46; --emerald-900:#064e3b; --emerald-950:#03281d;
+  /* Navy (hero / graphic accent field) */
+  --navy-50:#eaf0f8; --navy-100:#cfdcee; --navy-200:#9fbadd; --navy-300:#6ea8ff; --navy-400:#3d6dc4; --navy-500:#234c8f; --navy-600:#163664; --navy-700:#10294e; --navy-800:#0d2137; --navy-900:#0b1f33; --navy-950:#071523;
+  /* Gold (rewards / premium accent — decorative & large only) */
+  --gold-50:#fbf7ea; --gold-100:#f6ecc9; --gold-200:#edd99b; --gold-300:#e1c46e; --gold-400:#d4af5f; --gold-500:#c99a2e; --gold-600:#a87d1f; --gold-700:#856115; --gold-800:#5f4510;
+  /* Neutral (green-tinted gray) */
+  --neutral-50:#f4f9f6; --neutral-100:#e9f1ec; --neutral-200:#dde7e1; --neutral-300:#c4d3cb; --neutral-400:#95a89e; --neutral-500:#6a7d73; --neutral-600:#51635a; --neutral-700:#3b4a43; --neutral-800:#25322c; --neutral-900:#16201b; --neutral-950:#0c1410;
+  --white:#ffffff;
+  /* Amber / Red / Green semantic accents */
+  --amber-50:#fffbeb; --amber-100:#fef3c7; --amber-700:#b45309; --amber-800:#92400e;
+  --red-50:#fef2f2; --red-100:#fee2e2; --red-600:#dc2626; --red-700:#b91c1c;
+  --green-50:#f0fdf4; --green-100:#dcfce7; --green-700:#15803d;
+
+  /* Fonts */
+  --font-sans: 'Hanken Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  /* Surfaces */
+  --bg-page: var(--neutral-50);
+  --surface-card: var(--white);
+  --surface-muted: var(--neutral-100);
+  --surface-sunken: var(--neutral-200);
+  --surface-inverse: var(--navy-900);
+  /* Text */
+  --text-strong: var(--neutral-900);
+  --text-body: var(--neutral-700);
+  --text-muted: var(--neutral-500);
+  --text-faint: var(--neutral-400);
+  --text-on-inverse: var(--white);
+  --text-on-inverse-muted: rgba(255,255,255,0.78);
+  --text-link: var(--emerald-700);
+  --text-link-hover: var(--emerald-800);
+  /* Borders */
+  --border-subtle: var(--neutral-200);
+  --border-default: var(--neutral-300);
+  --border-strong: var(--neutral-400);
+  --border-focus: var(--emerald-500);
+  /* Primary action — deep navy */
+  --action-primary-bg: var(--navy-900);
+  --action-primary-bg-hover: var(--navy-800);
+  --action-primary-fg: var(--white);
+  /* Accent action — emerald */
+  --action-accent-bg: var(--emerald-700);
+  --action-accent-bg-hover: var(--emerald-800);
+  --action-accent-fg: var(--white);
+  /* Focus ring */
+  --ring-focus: rgba(16,185,129,0.32);
+  /* Signature offer top-rule: navy → emerald */
+  --offer-rule: linear-gradient(90deg, var(--navy-800), var(--emerald-600));
+  /* Badge tones */
+  --badge-bank-bg:#e3f1ea; --badge-bank-fg:var(--emerald-800); --badge-bank-ring:var(--emerald-100);
+  --badge-category-bg:var(--amber-50); --badge-category-fg:var(--amber-800); --badge-category-ring:var(--amber-100);
+  --badge-expiry-bg:var(--red-50); --badge-expiry-fg:var(--red-700); --badge-expiry-ring:var(--red-100);
+  --badge-premium-bg:var(--gold-50); --badge-premium-fg:var(--gold-800); --badge-premium-ring:var(--gold-200);
+  --badge-neutral-bg:var(--neutral-100); --badge-neutral-fg:var(--neutral-700); --badge-neutral-ring:var(--neutral-200);
+  --badge-success-bg:var(--green-50); --badge-success-fg:var(--green-700); --badge-success-ring:var(--green-100);
+  /* Hero accents (on navy band) */
+  --hero-bg: var(--navy-900);
+  --hero-bg-2: var(--navy-800);
+  --hero-dot: rgba(110,168,255,0.16);
+  --hero-highlight: var(--emerald-300);
+  --hero-eyebrow-bg: rgba(16,185,129,0.14);
+  --hero-eyebrow-fg: var(--emerald-300);
+  /* Motion */
+  --motion-fast:150ms; --motion-med:220ms; --motion-slow:480ms;
 }
 
 * {
@@ -33,7 +85,7 @@ body {
   min-height: 100vh;
   background: var(--bg-page);
   color: var(--text-strong);
-  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Hanken Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -67,7 +119,7 @@ a {
 .hero-orb-gold {
   width: 540px;
   height: 540px;
-  background: radial-gradient(circle, rgba(201, 154, 46, 0.22) 0%, transparent 65%);
+  background: radial-gradient(circle, rgba(110, 168, 255, 0.22) 0%, transparent 65%);
   bottom: -180px;
   right: -70px;
   animation: hero-drift-b 13s ease-in-out infinite;
@@ -85,7 +137,7 @@ a {
 .hero-dots {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(110, 168, 255, 0.10) 1px, transparent 1px);
   background-size: 28px 28px;
   pointer-events: none;
 }
@@ -135,3 +187,13 @@ a {
   0%, 100% { opacity: 1; transform: scale(1); }
   50% { opacity: 0.45; transform: scale(0.7); }
 }
+
+/* ── Hero credit-card stack ─────────────────────────────────── */
+.sl-hero-cardstack { position: relative; height: 300px; display: none; }
+@media (min-width: 900px) { .sl-hero-cardstack { display: block; } }
+.sl-cc { transform: rotate(var(--r, 0deg)); }
+@keyframes sl-cc-float {
+  0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
+  50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
+}
+@media (prefers-reduced-motion: reduce) { .sl-cc { animation: none !important; } }

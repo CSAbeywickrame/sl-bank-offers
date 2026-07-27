@@ -51,10 +51,9 @@ export function MobileMenu() {
         aria-expanded={isOpen}
         aria-controls="mobile-nav"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex h-10 w-10 items-center justify-center rounded-md transition-colors ${
-          isOpen ? "bg-[#08271c]/10" : "hover:bg-neutral-100"
+        className={`flex h-10 w-10 items-center justify-center rounded-md text-neutral-700 transition-colors ${
+          isOpen ? "bg-navy-900/10" : "hover:bg-neutral-100"
         }`}
-        style={{ color: "#3b4a43" }}
       >
         {isOpen ? (
           <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
@@ -84,7 +83,7 @@ export function MobileMenu() {
           className={`fixed left-0 right-0 bottom-0 z-50 flex flex-col justify-center gap-3 transition-all duration-300 ease-out p-3 ${
             isAnimating ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
           }`}
-          style={{ top: "64px", backgroundColor: "#08271c", height: "100vh" }}
+          style={{ top: "64px", backgroundColor: "var(--navy-900)", height: "100vh" }}
         >
           {navLinks.map(({ href, label }, index) => {
             const isActive = pathname === href;
@@ -99,7 +98,7 @@ export function MobileMenu() {
                 <Link
                   href={href}
                   className="text-2xl font-light tracking-wide"
-                  style={{ color: isActive ? "#d4af5f" : "rgba(255,255,255,0.75)" }}
+                  style={{ color: isActive ? "var(--emerald-300)" : "rgba(255,255,255,0.75)" }}
                 >
                   {label}
                 </Link>
@@ -109,7 +108,7 @@ export function MobileMenu() {
                       display: "block",
                       width: "40px",
                       height: "2px",
-                      backgroundColor: "#d4af5f",
+                      backgroundColor: "var(--emerald-300)",
                       borderRadius: "1px",
                       marginTop: "6px",
                     }}

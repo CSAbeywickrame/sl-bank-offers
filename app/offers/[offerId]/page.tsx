@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
+import { buttonClasses } from "@/components/ui/button";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import { getOfferById } from "@/lib/offers/repository";
 import { siteUrl } from "@/lib/site-config";
@@ -73,26 +74,19 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
       <div style={{ display: "grid", gap: "16px" }}>
         <Link
-          className="inline-flex items-center gap-1 text-sm font-semibold hover:underline"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:underline"
           href="/"
-          style={{ color: "#047857" }}
         >
           ← Back to all offers
         </Link>
 
         {/* Dark hero panel */}
-        <div style={{ background: "#08271c", borderRadius: "16px", padding: "32px 28px" }}>
+        <div className="rounded-xl bg-navy-900" style={{ padding: "32px 28px" }}>
           <div className="flex flex-wrap gap-2">
-            <span
-              className="rounded-full px-3 py-1 text-xs font-semibold"
-              style={{ background: "rgba(255,255,255,0.12)", color: "#fff" }}
-            >
+            <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-white">
               {offer.bankName}
             </span>
-            <span
-              className="rounded-full px-3 py-1 text-xs font-semibold"
-              style={{ background: "rgba(212,175,95,0.18)", color: "#e1c46e" }}
-            >
+            <span className="rounded-full bg-[rgba(16,185,129,0.18)] px-3 py-1 text-xs font-semibold text-[var(--emerald-300)]">
               {getCategoryLabel(offer.category)}
             </span>
           </div>
@@ -110,89 +104,68 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
         {/* Details card */}
-        <article
-          className="rounded-2xl bg-white p-6"
-          style={{ border: "1px solid #dde7e1", boxShadow: "0 1px 2px rgb(15 23 42 / 5%)", borderRadius: "16px" }}
-        >
-          <h2 className="font-semibold" style={{ fontSize: "18px", color: "#16201b" }}>
-            Offer details
-          </h2>
+        <article className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
+          <h2 className="text-[18px] font-semibold text-neutral-900">Offer details</h2>
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
             <div>
-              <dt className="font-semibold" style={{ color: "#16201b" }}>Bank</dt>
-              <dd className="mt-1" style={{ color: "#3b4a43" }}>{offer.bankName}</dd>
+              <dt className="font-semibold text-neutral-900">Bank</dt>
+              <dd className="mt-1 text-neutral-700">{offer.bankName}</dd>
             </div>
             {offer.cardName && (
               <div>
-                <dt className="font-semibold" style={{ color: "#16201b" }}>Eligible card</dt>
-                <dd className="mt-1" style={{ color: "#3b4a43" }}>{offer.cardName}</dd>
+                <dt className="font-semibold text-neutral-900">Eligible card</dt>
+                <dd className="mt-1 text-neutral-700">{offer.cardName}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold" style={{ color: "#16201b" }}>Category</dt>
-              <dd className="mt-1" style={{ color: "#3b4a43" }}>{getCategoryLabel(offer.category)}</dd>
+              <dt className="font-semibold text-neutral-900">Category</dt>
+              <dd className="mt-1 text-neutral-700">{getCategoryLabel(offer.category)}</dd>
             </div>
             {offer.merchant && (
               <div>
-                <dt className="font-semibold" style={{ color: "#16201b" }}>Merchant</dt>
-                <dd className="mt-1" style={{ color: "#3b4a43" }}>{offer.merchant}</dd>
+                <dt className="font-semibold text-neutral-900">Merchant</dt>
+                <dd className="mt-1 text-neutral-700">{offer.merchant}</dd>
               </div>
             )}
             {offer.location && (
               <div>
-                <dt className="font-semibold" style={{ color: "#16201b" }}>Location</dt>
-                <dd className="mt-1" style={{ color: "#3b4a43" }}>{offer.location}</dd>
+                <dt className="font-semibold text-neutral-900">Location</dt>
+                <dd className="mt-1 text-neutral-700">{offer.location}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold" style={{ color: "#16201b" }}>Valid until</dt>
-              <dd className="mt-1" style={{ color: "#3b4a43" }}>{formatDate(offer.validUntil)}</dd>
+              <dt className="font-semibold text-neutral-900">Valid until</dt>
+              <dd className="mt-1 text-neutral-700">{formatDate(offer.validUntil)}</dd>
             </div>
             <div>
-              <dt className="font-semibold" style={{ color: "#16201b" }}>Last checked</dt>
-              <dd className="mt-1" style={{ color: "#3b4a43" }}>{formatDate(offer.lastCheckedAt)}</dd>
+              <dt className="font-semibold text-neutral-900">Last checked</dt>
+              <dd className="mt-1 text-neutral-700">{formatDate(offer.lastCheckedAt)}</dd>
             </div>
           </dl>
         </article>
 
         {/* Official links sidebar */}
         <aside
-          className="grid gap-4 p-6"
-          style={{
-            background: "#e9f1ec",
-            border: "1px solid #dde7e1",
-            borderRadius: "16px",
-            alignContent: "start",
-          }}
+          className="grid gap-4 rounded-xl border border-neutral-200 bg-neutral-100 p-6"
+          style={{ alignContent: "start" }}
         >
-          <h2 className="font-semibold" style={{ fontSize: "18px", color: "#16201b" }}>
-            Official links
-          </h2>
-          <p className="text-sm leading-6" style={{ color: "#6a7d73" }}>
+          <h2 className="text-[18px] font-semibold text-neutral-900">Official links</h2>
+          <p className="text-sm leading-6 text-neutral-500">
             Use the official bank source to confirm the latest eligibility, dates, and exclusions before using the offer.
           </p>
           <a
-            className="inline-flex items-center justify-center text-sm font-semibold text-white transition-colors duration-150 hover:bg-emerald-800"
+            className={buttonClasses({ variant: "accent", size: "lg", fullWidth: true })}
             href={offer.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            style={{ height: "44px", borderRadius: "8px", background: "#047857", padding: "0 20px" }}
           >
             View at bank
           </a>
           <a
-            className="inline-flex items-center justify-center text-sm font-semibold transition-colors duration-150 hover:bg-emerald-50"
+            className={buttonClasses({ variant: "outline", size: "lg", fullWidth: true })}
             href={offer.terms ?? offer.sourceUrl}
             target="_blank"
             rel="noreferrer"
-            style={{
-              height: "44px",
-              borderRadius: "8px",
-              border: "1px solid #047857",
-              color: "#047857",
-              padding: "0 20px",
-              background: "#fff",
-            }}
           >
             View terms
           </a>
