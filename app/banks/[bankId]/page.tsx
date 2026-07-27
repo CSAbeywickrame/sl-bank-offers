@@ -6,6 +6,7 @@ import { FilterPanel } from "@/components/FilterPanel";
 import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
 import { OfferPagination } from "@/components/OfferPagination";
+import { StatTile } from "@/components/StatTile";
 import { getBankById, getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { filterOffers } from "@/lib/offers/filter";
@@ -66,7 +67,10 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   return (
     <main>
       <JsonLd data={breadcrumbJsonLd} />
-      <section className="relative overflow-hidden" style={{ background: "#08271c", color: "#fff" }}>
+      <section
+        className="relative overflow-hidden"
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+      >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
           <div className="hero-orb hero-orb-gold" />
@@ -97,9 +101,9 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
               <p
                 className="inline-flex items-center gap-2 text-xs font-semibold uppercase"
                 style={{
-                  background: "rgba(212, 175, 95, 0.16)",
-                  border: "1px solid rgba(212, 175, 95, 0.16)",
-                  color: "#e1c46e",
+                  background: "var(--hero-eyebrow-bg)",
+                  border: "1px solid var(--hero-eyebrow-bg)",
+                  color: "var(--hero-eyebrow-fg)",
                   borderRadius: "9999px",
                   padding: "4px 12px",
                   letterSpacing: "0.04em",
@@ -107,7 +111,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "#d4af5f", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Bank
               </p>
@@ -116,29 +120,17 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
                 style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
               >
                 {bank.shortName}{" "}
-                <span style={{ color: "#d4af5f" }}>Credit Card Offers</span>
+                <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
                 Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
               </p>
             </div>
-            <div
-              style={{
-                background: "rgba(255,255,255,0.06)",
-                border: "1px solid rgba(255,255,255,0.12)",
-                borderRadius: "12px",
-                padding: "16px 20px",
-                minWidth: "180px",
-                textAlign: "center",
-              }}
-            >
-              <span className="block font-bold text-white" style={{ fontSize: "30px" }}>
-                {filteredOffers.length}
-              </span>
-              <span className="mt-0.5 block text-sm" style={{ color: "rgba(255,255,255,0.78)" }}>
-                active offer{filteredOffers.length !== 1 ? "s" : ""}
-              </span>
-            </div>
+            <StatTile
+              value={filteredOffers.length}
+              label={`active offer${filteredOffers.length !== 1 ? "s" : ""}`}
+              className="min-w-[180px]"
+            />
           </div>
         </div>
       </section>
@@ -152,6 +144,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
         search={filters.search ?? ""}
         lockedBankId={bankId}
         actionPath={`/banks/${bankId}`}
+        resultCount={filteredOffers.length}
       />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
