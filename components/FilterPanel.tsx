@@ -3,10 +3,11 @@
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { categories } from "@/lib/offers/categories";
+import { categories, getCategoryLabel } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
 import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
 import { buttonClasses } from "@/components/ui/button";
+import { FilterSummary, type FilterChipData } from "@/components/FilterSummary";
 
 interface FilterPanelProps {
   banks: Bank[];
@@ -19,6 +20,7 @@ interface FilterPanelProps {
   actionPath?: string;
   lockedBankId?: string;
   lockedCategory?: OfferCategory;
+  resultCount?: number;
 }
 
 const fieldClass = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900";
@@ -72,7 +74,13 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
     };
   }, [isOpen]);
 
-  const summary = selectedIds.length > 0 ? `${selectedIds.length} selected` : allLabel;
+  const selectedLabels = options.filter((o) => selectedIds.includes(o.id)).map((o) => o.label);
+  const summary =
+    selectedLabels.length === 0
+      ? allLabel
+      : selectedLabels.length <= 2
+        ? selectedLabels.join(", ")
+        : `${selectedLabels.slice(0, 2).join(", ")} +${selectedLabels.length - 2}`;
 
   return (
     <div className="grid gap-1" style={{ position: "relative" }} ref={containerRef}>
@@ -83,10 +91,10 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
         ref={buttonRef}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
-        className={`flex items-center justify-between text-left ${fieldClass}`}
+        className={`flex items-center justify-between ${fieldClass}`}
       >
-        <span>{summary}</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+        <span className="min-w-0 flex-1 truncate text-left">{summary}</span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="shrink-0">
           <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
       </button>
@@ -115,6 +123,29 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
   );
 }
 
+// Shows the active-filter count next to the "Filters" / "Filter offers" label, hidden when count is 0
+function FilterCountBadge({ count }: { count: number }) {
+  if (count === 0) return null;
+  return (
+    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1.5 text-xs font-semibold text-white">
+      {count}
+    </span>
+  );
+}
+
+// Shared "Clear all" text button used in both the desktop header and mobile toggle bar
+function ClearAllButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="text-sm text-neutral-500 underline underline-offset-2 transition-colors"
+    >
+      Clear all
+    </button>
+  );
+}
+
 export function FilterPanel({
   banks,
   cards,
@@ -126,9 +157,11 @@ export function FilterPanel({
   actionPath = "/",
   lockedBankId,
   lockedCategory,
+  resultCount,
 }: FilterPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
 
   const cardScopeBankIds = lockedBankId ? [lockedBankId] : selectedBankIds;
   const availableCards =
@@ -179,30 +212,69 @@ export function FilterPanel({
     });
   }
 
+  const selectedCard = selectedCardId ? cards.find((c) => c.id === selectedCardId) : undefined;
+  const chips: FilterChipData[] = [
+    ...(lockedBankId ? [] : selectedBankIds.map((bankId) => ({
+      id: `bank:${bankId}`,
+      label: bankById[bankId]?.shortName ?? bankId,
+      onRemove: () => toggleBank(bankId),
+    }))),
+    ...(lockedCategory ? [] : selectedCategories.map((cat) => ({
+      id: `cat:${cat}`,
+      label: getCategoryLabel(cat),
+      onRemove: () => toggleCategory(cat),
+    }))),
+    ...(selectedCard ? [{
+      id: `card:${selectedCard.id}`,
+      label: selectedCard.name,
+      onRemove: () => pushFilter({ cardId: "" }),
+    }] : []),
+    ...(search ? [{
+      id: "search",
+      label: `“${search}”`,
+      onRemove: () => pushFilter({ search: "" }),
+    }] : []),
+  ];
+
   return (
     <div className="border-t border-b border-neutral-200 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 py-3">
-        <div className="mb-3 flex items-center justify-between">
+        <div className="hidden sm:flex sm:mb-3 items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-neutral-900">Filter offers</span>
-            {activeFilterCount > 0 && (
-              <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1.5 text-xs font-semibold text-white">
-                {activeFilterCount}
-              </span>
-            )}
+            <FilterCountBadge count={activeFilterCount} />
           </div>
-          {activeFilterCount > 0 && (
-            <button
-              type="button"
-              onClick={clearAll}
-              className="text-sm text-neutral-500 underline underline-offset-2 transition-colors"
-            >
-              Clear all
-            </button>
-          )}
+          {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]">
+        <div className="mb-3 flex items-center justify-between sm:hidden">
+          <button
+            type="button"
+            onClick={() => setIsFiltersOpen((prev) => !prev)}
+            aria-expanded={isFiltersOpen}
+            aria-controls="filter-fields"
+            className="flex items-center gap-2"
+          >
+            <span className="text-sm font-semibold text-neutral-900">Filters</span>
+            <FilterCountBadge count={activeFilterCount} />
+            <svg
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+              aria-hidden="true"
+              className={`transition-transform ${isFiltersOpen ? "rotate-180" : ""}`}
+            >
+              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
+          {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
+        </div>
+
+        <div
+          id="filter-fields"
+          className={`${isFiltersOpen ? "grid" : "hidden"} sm:grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]`}
+        >
           {!lockedBankId && (
             <MultiSelectField
               id="offer-bank-filter"
@@ -271,6 +343,7 @@ export function FilterPanel({
               className="flex gap-2"
             >
               <input
+                key={search}
                 id="offer-search-filter"
                 name="search"
                 defaultValue={search}
@@ -283,6 +356,12 @@ export function FilterPanel({
             </form>
           </div>
         </div>
+
+        {(chips.length > 0 || resultCount != null) && (
+          <div className="mt-3">
+            <FilterSummary resultCount={resultCount} chips={chips} />
+          </div>
+        )}
       </div>
     </div>
   );

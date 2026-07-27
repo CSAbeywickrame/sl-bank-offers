@@ -55,13 +55,16 @@ export function OfferCard({ offer }: { offer: Offer }) {
           </div>
         </dl>
 
-        {/* CTA row */}
-        <div className="flex flex-col gap-2 sm:flex-row">
-          <Link className={buttonClasses({ variant: "primary" }) + " flex-1"} href={`/offers/${offer.id}`}>
+        {/* CTA row — side by side to keep the card compact; navy = primary, emerald outline = secondary */}
+        <div className="mt-auto flex gap-2">
+          <Link
+            className={buttonClasses({ variant: "primary" }) + " flex-1 whitespace-nowrap"}
+            href={`/offers/${offer.id}`}
+          >
             View details
           </Link>
           <a
-            className={buttonClasses({ variant: "outline" }) + " flex-1"}
+            className={buttonClasses({ variant: "outline" }) + " flex-1 whitespace-nowrap"}
             href={offer.sourceUrl}
             target="_blank"
             rel="noreferrer"

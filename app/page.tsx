@@ -159,6 +159,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         selectedCardId={filters.cardId ?? ""}
         selectedSort={sort}
         search={filters.search ?? ""}
+        resultCount={filteredOffers.length}
       />
 
       <AdSlot className="mt-5" />
