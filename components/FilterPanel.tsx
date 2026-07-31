@@ -170,6 +170,13 @@ export function FilterPanel({
   const activeFilterCount =
     selectedBankIds.length + selectedCategories.length + (selectedCardId ? 1 : 0) + (search ? 1 : 0);
 
+  // Wide-screen column count adapts when a locked page hides the Bank or Category field,
+  // so the remaining fields fill the row instead of leaving the search column empty.
+  const fieldGridClass =
+    lockedBankId || lockedCategory
+      ? "xl:grid-cols-[1fr_1fr_1fr_2fr]"
+      : "xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]";
+
   // Builds a query string from the given filter updates and navigates to actionPath, resetting pagination
   function pushQuery(updates: Parameters<typeof buildFilterQueryString>[1]) {
     const query = buildFilterQueryString(new URLSearchParams(searchParams.toString()), updates, { resetPage: true });
@@ -273,7 +280,7 @@ export function FilterPanel({
 
         <div
           id="filter-fields"
-          className={`${isFiltersOpen ? "grid" : "hidden"} sm:grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]`}
+          className={`${isFiltersOpen ? "grid" : "hidden"} sm:grid grid-cols-1 gap-3 sm:grid-cols-2 ${fieldGridClass}`}
         >
           {!lockedBankId && (
             <MultiSelectField

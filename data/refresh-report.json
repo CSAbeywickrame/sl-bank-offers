@@ -1,23 +1,356 @@
 {
-  "runAt": "2026-07-30T23:50:54.645Z",
+  "runAt": "2026-07-31T00:40:52.298Z",
   "tokensUsed": {
-    "input": 0,
-    "output": 0
+    "input": 113910,
+    "output": 117013
   },
   "banks": {
+    "commercial-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.combank.lk/rewards-promotions"
+      ],
+      "offersWritten": 198,
+      "assetFailures": [
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-sheraton-colombo-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-amari-colombo-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-the-blue-water-hotel-and-spa-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-your-favourite-softlogic-restaurants-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-courtyard-by-marriott-colombo-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/treat-yourself-with-amazing-combank-visa-card-offers/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-nh-collection-colombo-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-your-favourite-restaurant-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-cinnamon-red-colombo-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-ramada-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-sheraton-colombo-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/enjoy-your-perfect-getaway-at-cinnamon-sri-lanka-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-anantaya-resorts-and-spa-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-celestia-ayurveda-resort-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-hunas-falls-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-your-favourite-wellness-holiday-destination-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-your-favourite-holiday-destination-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-at-hemas-estore-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-awaits-at-atlas-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-with-tudolk-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-salary-week-deals-at-tudolk-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/make-your-online-payments-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-laugfs-super-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-keells-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-cargills-food-city-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-spar-supermarket-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-fresh-deals-at-spar-supermarket-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/purchase-your-favourite-outfit-at-fashion-bug-galle-outlet-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/shop-your-favourite-style-at-dsi-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/rejuvenate-and-reward-yourself-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/elegance-made-easy-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/glow-beyond-limit-at-christell-luxury-wellness-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/transform-your-home-workouts-with-quantum-fitness-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/embark-the-journey-of-holistic-healing-at-siddhalepa-clinic-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/embrace-the-wisdom-of-ayurveda-at-siddhalepa-hospital-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/access-premium-medical-care-abroad-with-ease-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/settle-your-hospital-bills-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/education/pay-for-your-education-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/education/special-credit-card-easy-payment-plans-for-the-student-and-members-of-aicpa-and-cima/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/education/pay-your-educational-fees-via-myfeeslk-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-fitsair-using-combank-cedit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-fitsair-and-combank-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-crazy-jets-and-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-find-my-fare-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/travel-to-your-favourite-destination-with-sri-lankan-airlines-using-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/step-into-smarter-bus-travel-with-ncg-express-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/enjoy-an-exclusive-free-travel-insurance-for-combank-premium-and-platinum-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/travel/explore-your-dream-holiday-destination-effortlessly-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/auto/fuel-your-journey-with-savings-on-mobil-engine-oil-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/visit-your-favourite-holiday-destination-with-fitsair-and-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-amari-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/relax-at-your-favourite-destination-from-aahaasa-collection-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-best-supermarket-deals-at-spar-supermarket-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-nh-collection-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/shop-duty-free-at-cdf-duty-free-now-and-pay-later-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-cinnamon-red-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-ramada-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/the-journey-to-your-bts-concert-begins-here-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/switch-to-convenience-with-combank-automatic-bill-settlement-abs-facility/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/laundry-made-easy-at-laundromat-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/book-your-show-and-pay-later-on-myticketslk-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-singapore-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/enjoy-50-cashback-on-express-way-toll-payments-with-combank-unionpay-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/shop-duty-free-at-cdf-duty-free-now-and-pay-later-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-thailand-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-korea-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/enjoy-the-art-of-dining-in-indonesia-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/pay-your-insurance-premiums-using-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/go-solar-and-go-green-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/experience-seamless-worldwide-delivery-at-dhl-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-malaysia-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-japan-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/q-payment-app-offers/enjoy-10-cashback-for-scan-and-pay-transactions-via-q-payment-app/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/q-payment-app-offers/enjoy-a-25-cashback-for-expressway-toll-payments-with-q-payment-app/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/chat-c-1.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/right-arrow.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/right-arrow-white.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/awards/2019/award-2.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/check.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/cancel.png",
+          "reason": "HTTP 403"
+        }
+      ]
+    },
     "boc": {
-      "status": "fetch-failed",
+      "status": "updated",
       "sources": [
         "https://www.boc.lk/personal-banking/card-offers"
       ],
-      "message": "HTTP 403"
+      "offersWritten": 89
     },
     "ntb": {
-      "status": "fetch-failed",
+      "status": "updated",
       "sources": [
         "https://www.nationstrust.com/promotions"
       ],
-      "message": "HTTP 403"
+      "offersWritten": 693
     }
   }
 }
