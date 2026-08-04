@@ -2,12 +2,15 @@
 
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { categories, getCategoryLabel } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
 import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
 import { buttonClasses } from "@/components/ui/button";
+import { usePopover } from "@/components/ui/popover";
 import { FilterSummary, type FilterChipData } from "@/components/FilterSummary";
+import { FilterPresetControls, FilterPresetBanner, useFilterPresets } from "@/components/FilterPresets";
+import { isPresetSelectionEmpty, type PresetSelection, type ReconciledPreset } from "@/lib/offers/presets";
 
 interface FilterPanelProps {
   banks: Bank[];
@@ -23,8 +26,8 @@ interface FilterPanelProps {
   resultCount?: number;
 }
 
-const fieldClass = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900";
-const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-neutral-500";
+export const fieldClass = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900";
+export const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-neutral-500";
 
 // Human-readable labels for each sort key, in display order
 const sortLabels: Record<SortKey, string> = {
@@ -44,35 +47,7 @@ interface MultiSelectFieldProps {
 
 // Dependency-free accessible multi-select: a toggle button that reveals a checkbox list panel
 function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle }: MultiSelectFieldProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    // Closes the panel when a mousedown happens outside the field container
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    // Closes the panel on Escape and returns focus to the toggle button
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-        buttonRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+  const { isOpen, setIsOpen, containerRef, triggerRef } = usePopover();
 
   const selectedLabels = options.filter((o) => selectedIds.includes(o.id)).map((o) => o.label);
   const summary =
@@ -88,7 +63,7 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
       <button
         type="button"
         id={id}
-        ref={buttonRef}
+        ref={triggerRef}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         className={`flex items-center justify-between ${fieldClass}`}
@@ -170,6 +145,24 @@ export function FilterPanel({
   const activeFilterCount =
     selectedBankIds.length + selectedCategories.length + (selectedCardId ? 1 : 0) + (search ? 1 : 0);
 
+  // Preset selection reflects the *effective* filter, folding in any dimension locked by the current page
+  const selection: PresetSelection = {
+    bankIds: lockedBankId ? [lockedBankId] : selectedBankIds,
+    categories: lockedCategory ? [lockedCategory] : selectedCategories,
+    cardId: selectedCardId || undefined,
+  };
+  const catalog = useMemo(() => ({ banks, cards }), [banks, cards]);
+  const {
+    isLoaded,
+    presets,
+    recall,
+    save,
+    remove,
+    clearAll: clearAllPresets,
+    markUsed,
+    dismissRecall,
+  } = useFilterPresets(catalog, activeFilterCount > 0);
+
   // Wide-screen column count adapts when a locked page hides the Bank or Category field,
   // so the remaining fields fill the row instead of leaving the search column empty.
   const fieldGridClass =
@@ -219,6 +212,30 @@ export function FilterPanel({
     });
   }
 
+  // Returns whether a preset's card exists in the catalog and is in scope for the current locked bank, if any
+  function isCardInScope(reconciled: ReconciledPreset): boolean {
+    if (!reconciled.cardId) return true;
+    const card = cards.find((c) => c.id === reconciled.cardId);
+    if (!card) return false;
+    return !lockedBankId || card.bankId === lockedBankId;
+  }
+
+  // Applies a saved preset's filters, respecting locked dimensions, and marks the preset as just-used
+  function applyPreset(reconciled: ReconciledPreset) {
+    const cardId = isCardInScope(reconciled) ? reconciled.cardId ?? "" : "";
+    pushQuery({
+      ...(lockedBankId ? {} : { bankIds: reconciled.bankIds }),
+      ...(lockedCategory ? {} : { categories: reconciled.categories }),
+      cardId,
+      search: "",
+    });
+    markUsed(reconciled.preset.id, {
+      bankIds: reconciled.bankIds,
+      categories: reconciled.categories,
+      cardId: reconciled.cardId,
+    });
+  }
+
   const selectedCard = selectedCardId ? cards.find((c) => c.id === selectedCardId) : undefined;
   const chips: FilterChipData[] = [
     ...(lockedBankId ? [] : selectedBankIds.map((bankId) => ({
@@ -246,15 +263,26 @@ export function FilterPanel({
   return (
     <div className="border-t border-b border-neutral-200 bg-white shadow-sm">
       <div className="mx-auto max-w-7xl px-4 py-3">
-        <div className="hidden sm:flex sm:mb-3 items-center justify-between">
+        <div className="hidden sm:flex sm:mb-3 flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold text-neutral-900">Filter offers</span>
             <FilterCountBadge count={activeFilterCount} />
           </div>
+          <FilterPresetControls
+            presets={presets}
+            isLoaded={isLoaded}
+            selection={selection}
+            catalog={catalog}
+            canSave={activeFilterCount > 0 && !isPresetSelectionEmpty(selection)}
+            onApply={applyPreset}
+            onSave={save}
+            onDelete={remove}
+            onClearAll={clearAllPresets}
+          />
           {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
         </div>
 
-        <div className="mb-3 flex items-center justify-between sm:hidden">
+        <div className="mb-3 flex flex-wrap items-center justify-between gap-2 sm:hidden">
           <button
             type="button"
             onClick={() => setIsFiltersOpen((prev) => !prev)}
@@ -275,8 +303,25 @@ export function FilterPanel({
               <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </button>
+          <FilterPresetControls
+            presets={presets}
+            isLoaded={isLoaded}
+            selection={selection}
+            catalog={catalog}
+            canSave={activeFilterCount > 0 && !isPresetSelectionEmpty(selection)}
+            onApply={applyPreset}
+            onSave={save}
+            onDelete={remove}
+            onClearAll={clearAllPresets}
+          />
           {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
         </div>
+
+        {!(lockedBankId || lockedCategory) && recall && (
+          <div className="mb-3">
+            <FilterPresetBanner recall={recall} onApply={applyPreset} onDismiss={dismissRecall} />
+          </div>
+        )}
 
         <div
           id="filter-fields"
