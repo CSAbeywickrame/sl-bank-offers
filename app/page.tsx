@@ -162,7 +162,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         resultCount={filteredOffers.length}
       />
 
-      <AdSlot className="mt-5" />
+      {/* <AdSlot className="mt-5" /> */}
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">
         {filteredOffers.length > 0 ? (
