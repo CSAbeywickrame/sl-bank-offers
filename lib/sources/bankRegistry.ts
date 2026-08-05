@@ -21,6 +21,7 @@ export interface RegistrySource {
   url: string;
   type: RegistrySourceType;
   crawl?: CrawlRecipe; // when set, the orchestrator crawls detail pages instead of extracting this page directly
+  headers?: Record<string, string>; // extra request headers this source requires (e.g. an API that needs a locale header)
 }
 
 export interface BankRegistryEntry {
@@ -215,9 +216,11 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "sampath-premium-credit-cards", bankId: "sampath", name: "Sampath Visa Infinite, Visa Signature and Mastercard World Credit Cards", network: "Visa / Mastercard", tier: "Premium" }
     ],
     defaultCardId: "sampath-credit-cards",
-    // Structured JSON API (one call returns all offers). Parsed deterministically by feedMappers["sampath"]
-    // (no LLM). The page itself is a bot-blocked Nuxt SPA, so HTML scraping does not work.
-    sources: [{ url: "https://www.sampath.lk/api/card-promotions", type: "feed" }]
+    // Structured JSON API, parsed deterministically by feedMappers["sampath"] (no LLM). The API silently
+    // returns an empty `data` array unless a `locale` header is sent — not an error, just empty. Once
+    // sent, the bare url (no category/pagination query params) already returns every offer, so no
+    // per-category loop is needed. The page itself is a bot-blocked Nuxt SPA, so HTML scraping does not work.
+    sources: [{ url: "https://www.sampath.lk/api/card-promotions", type: "feed", headers: { locale: "en" } }]
   },
   {
     bankId: "dfcc",

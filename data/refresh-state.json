@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-08-05T18:26:15.621Z",
+  "lastRunAt": "2026-08-05T20:41:18.469Z",
   "banks": {
     "peoples-bank": {
       "lastUpdatedAt": "2026-08-03T05:42:58.980Z",
@@ -788,8 +788,8 @@
       "lastUpdatedAt": "2026-08-03T05:42:58.980Z"
     },
     "sampath": {
-      "hash": "a40dec6768e8d3c5e442a5e4df9620772cbc3f7b",
-      "lastUpdatedAt": "2026-07-27T05:51:59.400Z"
+      "hash": "c53eea7ab82801d55294d33200b8ce273ba5b5fb",
+      "lastUpdatedAt": "2026-08-05T20:41:18.469Z"
     },
     "dfcc": {
       "hash": "a05825862b17d3dedd0b6b82c45a7a64c65c0737",
