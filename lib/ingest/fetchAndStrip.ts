@@ -34,9 +34,16 @@ export function hashContent(input: string | Buffer): string {
   return crypto.createHash("sha1").update(input).digest("hex");
 }
 
-// Fetches a URL with a timeout and UA header, retrying once on non-2xx response or network error
-async function fetchWithTimeout(url: string, opts: RequestInit, timeoutMs = 20000): Promise<Response> {
+// Fetches a URL with a timeout and UA header, retrying once on non-2xx response or network error.
+// sourceHeaders are a registry source's extra required headers (e.g. locale); user-agent is always
+// set last so it wins even if sourceHeaders happens to include its own "user-agent" key.
+async function fetchWithTimeout(url: string, opts: RequestInit, sourceHeaders?: Record<string, string>, timeoutMs = 20000): Promise<Response> {
   const headers = new Headers((opts.headers as HeadersInit | undefined) ?? {});
+  if (sourceHeaders) {
+    for (const [key, value] of Object.entries(sourceHeaders)) {
+      headers.set(key, value);
+    }
+  }
   headers.set("user-agent", USER_AGENT);
 
   const attempt = async (): Promise<Response> => {
@@ -78,6 +85,16 @@ export async function fetchRawHtml(url: string): Promise<string> {
   return res.text();
 }
 
+// A feed that reports total > 0 but returns an empty data array is self-inconsistent: the upstream
+// counted rows it then failed to serialize. Treated as a transient upstream fault and retried,
+// rather than silently importing zero offers.
+function isInconsistentFeed(parsed: unknown): boolean {
+  if (typeof parsed !== "object" || parsed === null) return false;
+  const obj = parsed as { data?: unknown; total?: unknown };
+  if (!Array.isArray(obj.data) || obj.data.length !== 0) return false;
+  return typeof obj.total === "number" && Number.isFinite(obj.total) && obj.total > 0;
+}
+
 // Strips HTML noise tags and returns normalized plain text from the body
 function stripHtml(html: string): string {
   const $ = cheerio.load(html);
@@ -108,7 +125,7 @@ function estimatePdfPageCount(bytes: Buffer): number {
 export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult> {
   try {
     if (source.type === "static_html") {
-      const res = await fetchWithTimeout(source.url, {});
+      const res = await fetchWithTimeout(source.url, {}, source.headers);
       const html = await res.text();
       const strippedText = stripHtml(html);
       const contentHash = hashContent(strippedText);
@@ -116,16 +133,30 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
     }
 
     if (source.type === "feed") {
-      const res = await fetchWithTimeout(source.url, {});
-      const strippedText = await res.text();
-      // Validate it is parseable JSON before returning; throws on malformed feed
-      JSON.parse(strippedText);
-      const contentHash = hashContent(strippedText);
-      return { ok: true, strippedText, contentHash };
+      const maxAttempts = 3;
+      let lastTotal = 0;
+      for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+        const res = await fetchWithTimeout(source.url, {}, source.headers);
+        const strippedText = await res.text();
+        // Validate it is parseable JSON before returning; throws on malformed feed
+        const parsed = JSON.parse(strippedText);
+        if (!isInconsistentFeed(parsed)) {
+          const contentHash = hashContent(strippedText);
+          return { ok: true, strippedText, contentHash };
+        }
+        lastTotal = (parsed as { total?: number }).total ?? 0;
+        if (attempt < maxAttempts) {
+          await sleep(attempt * 1000); // 1s after attempt 1, 2s after attempt 2
+        }
+      }
+      return {
+        ok: false,
+        error: `feed reported total=${lastTotal} but returned 0 rows after ${maxAttempts} attempts (upstream serialization fault)`
+      };
     }
 
     if (source.type === "pdf") {
-      const res = await fetchWithTimeout(source.url, {});
+      const res = await fetchWithTimeout(source.url, {}, source.headers);
       const pdfBytes = Buffer.from(await res.arrayBuffer());
       if (pdfBytes.length > MAX_PDF_BYTES) {
         return { ok: false, error: `pdf too large: ${pdfBytes.length} bytes (max ${MAX_PDF_BYTES})` };
@@ -139,7 +170,7 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
     }
 
     if (source.type === "image") {
-      const res = await fetchWithTimeout(source.url, {});
+      const res = await fetchWithTimeout(source.url, {}, source.headers);
       const imageMediaType = resolveImageMediaType(res.headers.get("content-type"));
       if (!imageMediaType) {
         return { ok: false, error: `unsupported or missing image content-type for ${source.url}` };
@@ -163,6 +194,7 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
       const browser = await chromium.launch({ headless: true });
       try {
         const page = await browser.newPage();
+        if (source.headers) await page.setExtraHTTPHeaders(source.headers);
         // Use domcontentloaded (networkidle never fires on SPAs with constant background traffic),
         // then let client-side rendering settle before reading the DOM.
         await page.goto(source.url, { waitUntil: "domcontentloaded", timeout: 45000 });

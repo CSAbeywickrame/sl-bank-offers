@@ -38,7 +38,7 @@ export function OfferCard({ offer }: { offer: Offer }) {
           <h2 className="text-base font-semibold leading-snug text-neutral-900 transition-colors duration-150 group-hover:text-emerald-700">
             {offer.title}
           </h2>
-          <p className="mt-2 line-clamp-3 text-sm leading-6 text-neutral-500">
+          <p className="mt-2 line-clamp-3 text-sm leading-6 text-neutral-600">
             {offer.description}
           </p>
         </div>

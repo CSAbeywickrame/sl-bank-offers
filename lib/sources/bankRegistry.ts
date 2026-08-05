@@ -21,6 +21,7 @@ export interface RegistrySource {
   url: string;
   type: RegistrySourceType;
   crawl?: CrawlRecipe; // when set, the orchestrator crawls detail pages instead of extracting this page directly
+  headers?: Record<string, string>; // extra request headers this source requires (e.g. an API that needs a locale header)
 }
 
 export interface BankRegistryEntry {
@@ -157,21 +158,7 @@ export const bankRegistry: BankRegistryEntry[] = [
     // Whole site is behind a WAF that 307s plain HTTP; only a real browser gets through.
     sources: [{ url: "https://www.pabcbank.com/card-offers/", type: "dynamic_page" }]
   },
-  {
-    bankId: "standard-chartered",
-    enabled: true,
-    bank: {
-      id: "standard-chartered",
-      name: "Standard Chartered Sri Lanka",
-      shortName: "Standard Chartered",
-      websiteUrl: "https://www.sc.com/lk"
-    },
-    cards: [
-      { id: "standard-chartered-credit-cards", bankId: "standard-chartered", name: "Standard Chartered Credit Cards", network: "Visa / Mastercard" }
-    ],
-    defaultCardId: "standard-chartered-credit-cards",
-    sources: [{ url: "https://www.sc.com/lk/data/tgl/offers.json", type: "feed" }]
-  },
+  // standard-chartered removed 2026-08: Standard Chartered exited the Sri Lankan retail market.
   {
     bankId: "union-bank",
     enabled: true,
@@ -229,9 +216,11 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "sampath-premium-credit-cards", bankId: "sampath", name: "Sampath Visa Infinite, Visa Signature and Mastercard World Credit Cards", network: "Visa / Mastercard", tier: "Premium" }
     ],
     defaultCardId: "sampath-credit-cards",
-    // Structured JSON API (one call returns all offers). Parsed deterministically by feedMappers["sampath"]
-    // (no LLM). The page itself is a bot-blocked Nuxt SPA, so HTML scraping does not work.
-    sources: [{ url: "https://www.sampath.lk/api/card-promotions?page_number=1&size=300", type: "feed" }]
+    // Structured JSON API, parsed deterministically by feedMappers["sampath"] (no LLM). The API silently
+    // returns an empty `data` array unless a `locale` header is sent — not an error, just empty. Once
+    // sent, the bare url (no category/pagination query params) already returns every offer, so no
+    // per-category loop is needed. The page itself is a bot-blocked Nuxt SPA, so HTML scraping does not work.
+    sources: [{ url: "https://www.sampath.lk/api/card-promotions", type: "feed", headers: { locale: "en" } }]
   },
   {
     bankId: "dfcc",

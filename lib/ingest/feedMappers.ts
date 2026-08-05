@@ -30,7 +30,9 @@ function epochToDate(value: unknown): string | undefined {
 
 // Maps a Sampath API category + discount text to one of our offer categories.
 function sampathCategory(rawCategory: unknown, discountText: string): OfferCategory {
-  if (/instal?ment/i.test(discountText) || /0%\s*(interest|p\.?\s?a)/i.test(discountText)) return "installment";
+  // instal+ment matches both spellings: "instalment" (British, used by some banks) and
+  // "installment" (American, and the spelling our own taxonomy uses). `instal?ment` missed the latter.
+  if (/instal+ment/i.test(discountText) || /0%\s*(interest|p\.?\s?a)/i.test(discountText)) return "installment";
   if (/cash\s?back/i.test(discountText)) return "cashback";
   const map: Record<string, OfferCategory> = {
     dining: "dining",
@@ -38,9 +40,20 @@ function sampathCategory(rawCategory: unknown, discountText: string): OfferCateg
     travel_and_leisure: "travel",
     super_markets: "supermarket",
     online: "online",
-    fuel: "fuel"
+    fuel: "fuel",
+    // These Sampath tabs have no dedicated category in our taxonomy — mapped to "other" explicitly
+    // (rather than relying on the fallback below) so they're documented as known, not accidental.
+    electronics_and_furniture: "other",
+    premium_offers: "other",
+    health_and_insurance: "other",
+    fashion: "other",
+    visa_offers: "other",
+    mastercard_offers: "other",
+    other: "other"
   };
-  const key = typeof rawCategory === "string" ? rawCategory : "";
+  // The API is case-insensitive, so the stored row.category can be e.g. "Hotels" or
+  // "Electronics_and_Furniture" — normalize before lookup or it silently falls through to "other".
+  const key = typeof rawCategory === "string" ? rawCategory.trim().toLowerCase() : "";
   const mapped = map[key];
   return mapped && offerCategories.includes(mapped) ? mapped : "other";
 }

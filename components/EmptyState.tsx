@@ -13,7 +13,7 @@ export function EmptyState() {
       <h2 className="mt-4 text-lg font-semibold text-neutral-900">
         No offers found
       </h2>
-      <p className="mt-1.5 max-w-[360px] text-sm text-neutral-500">
+      <p className="mt-1.5 max-w-[360px] text-sm text-neutral-600">
         No offers match your current filters. Try adjusting the bank, category, or search term.
       </p>
       <Link href="/" className={buttonClasses({ variant: "accent" }) + " mt-5"}>

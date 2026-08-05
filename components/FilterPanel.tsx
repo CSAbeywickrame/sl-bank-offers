@@ -2,12 +2,16 @@
 
 import type { Route } from "next";
 import { useRouter, useSearchParams } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useMemo, useState } from "react";
 import { categories, getCategoryLabel } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
 import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
 import { buttonClasses } from "@/components/ui/button";
+import { usePopover } from "@/components/ui/popover";
+import { Check, ChevronDown, Search } from "@/components/ui/icon";
 import { FilterSummary, type FilterChipData } from "@/components/FilterSummary";
+import { FilterPresetControls, useFilterPresets } from "@/components/FilterPresets";
+import { isPresetSelectionEmpty, type PresetSelection, type ReconciledPreset } from "@/lib/offers/presets";
 
 interface FilterPanelProps {
   banks: Bank[];
@@ -23,8 +27,9 @@ interface FilterPanelProps {
   resultCount?: number;
 }
 
-const fieldClass = "h-10 w-full rounded-md border border-neutral-300 bg-white px-3 text-sm text-neutral-900";
-const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-neutral-500";
+export const fieldClass =
+  "h-10 w-full rounded-md border border-(--border-default) bg-(--surface-card) px-3 text-sm text-(--text-strong)";
+export const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-(--text-muted)";
 
 // Human-readable labels for each sort key, in display order
 const sortLabels: Record<SortKey, string> = {
@@ -44,35 +49,7 @@ interface MultiSelectFieldProps {
 
 // Dependency-free accessible multi-select: a toggle button that reveals a checkbox list panel
 function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle }: MultiSelectFieldProps) {
-  const [isOpen, setIsOpen] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    // Closes the panel when a mousedown happens outside the field container
-    function handleClickOutside(event: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
-        setIsOpen(false);
-      }
-    }
-
-    // Closes the panel on Escape and returns focus to the toggle button
-    function handleEscape(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setIsOpen(false);
-        buttonRef.current?.focus();
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    document.addEventListener("keydown", handleEscape);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      document.removeEventListener("keydown", handleEscape);
-    };
-  }, [isOpen]);
+  const { isOpen, setIsOpen, containerRef, triggerRef } = usePopover();
 
   const selectedLabels = options.filter((o) => selectedIds.includes(o.id)).map((o) => o.label);
   const summary =
@@ -88,21 +65,19 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
       <button
         type="button"
         id={id}
-        ref={buttonRef}
+        ref={triggerRef}
         onClick={() => setIsOpen((prev) => !prev)}
         aria-expanded={isOpen}
         className={`flex items-center justify-between ${fieldClass}`}
       >
         <span className="min-w-0 flex-1 truncate text-left">{summary}</span>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="shrink-0">
-          <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <ChevronDown size={12} />
       </button>
       {isOpen && (
         <div
           role="group"
           aria-label={label}
-          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg border border-neutral-300 bg-white p-2"
+          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg border border-(--border-default) bg-(--surface-card) p-2"
           style={{
             top: "100%",
             marginTop: "4px",
@@ -112,7 +87,7 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
           }}
         >
           {options.map((option) => (
-            <label key={option.id} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm text-neutral-900">
+            <label key={option.id} className="flex items-center gap-2 rounded px-2 py-1.5 text-sm text-(--text-strong)">
               <input type="checkbox" checked={selectedIds.includes(option.id)} onChange={() => onToggle(option.id)} />
               {option.label}
             </label>
@@ -123,23 +98,27 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
   );
 }
 
-// Shows the active-filter count next to the "Filters" / "Filter offers" label, hidden when count is 0
+// Compact active-filter count, shown only on the mobile "Filters" disclosure since the
+// desktop row communicates the same thing through the chips beneath it
 function FilterCountBadge({ count }: { count: number }) {
   if (count === 0) return null;
   return (
-    <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-emerald-700 px-1.5 text-xs font-semibold text-white">
+    <span
+      className="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-xs font-semibold"
+      style={{ background: "var(--action-accent-bg)", color: "var(--action-accent-fg)" }}
+    >
       {count}
     </span>
   );
 }
 
-// Shared "Clear all" text button used in both the desktop header and mobile toggle bar
+// Shared "Clear all" text button used in the tier 1 header row
 function ClearAllButton({ onClick }: { onClick: () => void }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="text-sm text-neutral-500 underline underline-offset-2 transition-colors"
+      className="text-sm text-(--text-muted) underline underline-offset-2 transition-colors"
     >
       Clear all
     </button>
@@ -170,12 +149,21 @@ export function FilterPanel({
   const activeFilterCount =
     selectedBankIds.length + selectedCategories.length + (selectedCardId ? 1 : 0) + (search ? 1 : 0);
 
-  // Wide-screen column count adapts when a locked page hides the Bank or Category field,
-  // so the remaining fields fill the row instead of leaving the search column empty.
-  const fieldGridClass =
-    lockedBankId || lockedCategory
-      ? "xl:grid-cols-[1fr_1fr_1fr_2fr]"
-      : "xl:grid-cols-[1fr_1fr_1fr_1fr_2fr]";
+  // Preset selection reflects the *effective* filter, folding in any dimension locked by the current page
+  const selection: PresetSelection = {
+    bankIds: lockedBankId ? [lockedBankId] : selectedBankIds,
+    categories: lockedCategory ? [lockedCategory] : selectedCategories,
+    cardId: selectedCardId || undefined,
+  };
+  const catalog = useMemo(() => ({ banks, cards }), [banks, cards]);
+  const {
+    isLoaded,
+    presets,
+    save,
+    remove,
+    clearAll: clearAllPresets,
+    markUsed,
+  } = useFilterPresets(catalog);
 
   // Builds a query string from the given filter updates and navigates to actionPath, resetting pagination
   function pushQuery(updates: Parameters<typeof buildFilterQueryString>[1]) {
@@ -219,6 +207,30 @@ export function FilterPanel({
     });
   }
 
+  // Returns whether a preset's card exists in the catalog and is in scope for the current locked bank, if any
+  function isCardInScope(reconciled: ReconciledPreset): boolean {
+    if (!reconciled.cardId) return true;
+    const card = cards.find((c) => c.id === reconciled.cardId);
+    if (!card) return false;
+    return !lockedBankId || card.bankId === lockedBankId;
+  }
+
+  // Applies a saved preset's filters, respecting locked dimensions, and marks the preset as just-used
+  function applyPreset(reconciled: ReconciledPreset) {
+    const cardId = isCardInScope(reconciled) ? reconciled.cardId ?? "" : "";
+    pushQuery({
+      ...(lockedBankId ? {} : { bankIds: reconciled.bankIds }),
+      ...(lockedCategory ? {} : { categories: reconciled.categories }),
+      cardId,
+      search: "",
+    });
+    markUsed(reconciled.preset.id, {
+      bankIds: reconciled.bankIds,
+      categories: reconciled.categories,
+      cardId: reconciled.cardId,
+    });
+  }
+
   const selectedCard = selectedCardId ? cards.find((c) => c.id === selectedCardId) : undefined;
   const chips: FilterChipData[] = [
     ...(lockedBankId ? [] : selectedBankIds.map((bankId) => ({
@@ -244,129 +256,174 @@ export function FilterPanel({
   ];
 
   return (
-    <div className="border-t border-b border-neutral-200 bg-white shadow-sm">
-      <div className="mx-auto max-w-7xl px-4 py-3">
-        <div className="hidden sm:flex sm:mb-3 items-center justify-between">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-neutral-900">Filter offers</span>
-            <FilterCountBadge count={activeFilterCount} />
+    <div className="relative z-10 mx-auto -mt-8 max-w-7xl px-4">
+      <div
+        className="rounded-xl border"
+        style={{
+          borderColor: "var(--border-subtle)",
+          background: "var(--surface-card)",
+          boxShadow: "2px 1px 10px #a2a2a2",
+        }}
+      >
+        {/* Tier 1 — the primary controls: bank, card, search, sort, plus the preset cluster */}
+        <div className="p-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
+            <button
+              type="button"
+              onClick={() => setIsFiltersOpen((prev) => !prev)}
+              aria-expanded={isFiltersOpen}
+              aria-controls="filter-fields"
+              className="flex items-center gap-2 text-sm font-semibold text-(--text-strong) sm:hidden"
+            >
+              Filters
+              <FilterCountBadge count={activeFilterCount} />
+              <ChevronDown size={12} className={`transition-transform ${isFiltersOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {/* Bank, card, search and sort are peers on one row; they collapse together below sm: */}
+            <div
+              id="filter-fields"
+              className={`${isFiltersOpen ? "flex" : "hidden"} w-full flex-wrap items-end gap-3 sm:flex sm:w-auto`}
+            >
+              {!lockedBankId && (
+                <div className="w-full sm:w-48">
+                  <MultiSelectField
+                    id="offer-bank-filter"
+                    label="Bank"
+                    allLabel="All banks"
+                    options={banks.map((bank) => ({ id: bank.id, label: bank.shortName }))}
+                    selectedIds={selectedBankIds}
+                    onToggle={toggleBank}
+                  />
+                </div>
+              )}
+
+              <div className="grid w-full gap-1 sm:w-48">
+                <label htmlFor="offer-card-filter" className={labelClass}>Card</label>
+                <select
+                  id="offer-card-filter"
+                  name="card"
+                  value={selectedCardId}
+                  onChange={(e) => pushFilter({ cardId: e.target.value })}
+                  className={fieldClass}
+                >
+                  <option value="">All cards</option>
+                  {availableCards.map((card) => {
+                    const bank = bankById[card.bankId];
+                    const bankLabel = cardScopeBankIds.length === 1 ? "" : `${bank?.shortName ?? card.bankId} · `;
+                    return (
+                      <option key={card.id} value={card.id}>{bankLabel}{card.name}</option>
+                    );
+                  })}
+                </select>
+              </div>
+
+              <div className="grid w-full gap-1 sm:w-64">
+                <label htmlFor="offer-search-filter" className={labelClass}>Search</label>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    const input = e.currentTarget.elements.namedItem("search") as HTMLInputElement;
+                    pushFilter({ search: input.value });
+                  }}
+                  className="flex gap-2"
+                >
+                  <input
+                    key={search}
+                    id="offer-search-filter"
+                    name="search"
+                    defaultValue={search}
+                    placeholder="Merchant, bank, offer…"
+                    className={`min-w-0 flex-1 ${fieldClass}`}
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Search"
+                    className={buttonClasses({ variant: "accent" }) + " shrink-0 px-3"}
+                  >
+                    <Search size={16} />
+                  </button>
+                </form>
+              </div>
+
+              <div className="grid w-full gap-1 sm:w-40">
+                <label htmlFor="offer-sort-filter" className={labelClass}>Sort</label>
+                <select
+                  id="offer-sort-filter"
+                  name="sort"
+                  value={selectedSort}
+                  onChange={(e) => pushQuery({ sort: e.target.value as SortKey })}
+                  className={fieldClass}
+                >
+                  {sortKeys.map((key) => (
+                    <option key={key} value={key}>{sortLabels[key]}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* Preset controls and "Clear all" travel together, pinned to the right */}
+            <div className="ml-auto flex flex-nowrap items-center gap-3">
+              <FilterPresetControls
+                presets={presets}
+                isLoaded={isLoaded}
+                selection={selection}
+                catalog={catalog}
+                canSave={activeFilterCount > 0 && !isPresetSelectionEmpty(selection)}
+                onApply={applyPreset}
+                onSave={save}
+                onDelete={remove}
+                onClearAll={clearAllPresets}
+              />
+              {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
+            </div>
           </div>
-          {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
-        </div>
 
-        <div className="mb-3 flex items-center justify-between sm:hidden">
-          <button
-            type="button"
-            onClick={() => setIsFiltersOpen((prev) => !prev)}
-            aria-expanded={isFiltersOpen}
-            aria-controls="filter-fields"
-            className="flex items-center gap-2"
-          >
-            <span className="text-sm font-semibold text-neutral-900">Filters</span>
-            <FilterCountBadge count={activeFilterCount} />
-            <svg
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-              fill="none"
-              aria-hidden="true"
-              className={`transition-transform ${isFiltersOpen ? "rotate-180" : ""}`}
-            >
-              <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
-          {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
-        </div>
-
-        <div
-          id="filter-fields"
-          className={`${isFiltersOpen ? "grid" : "hidden"} sm:grid grid-cols-1 gap-3 sm:grid-cols-2 ${fieldGridClass}`}
-        >
-          {!lockedBankId && (
-            <MultiSelectField
-              id="offer-bank-filter"
-              label="Bank"
-              allLabel="All banks"
-              options={banks.map((bank) => ({ id: bank.id, label: bank.shortName }))}
-              selectedIds={selectedBankIds}
-              onToggle={toggleBank}
-            />
+          {(chips.length > 0 || resultCount != null) && (
+            <div className="mt-3">
+              <FilterSummary resultCount={resultCount} chips={chips} />
+            </div>
           )}
+        </div>
 
-          <div className="grid gap-1">
-            <label htmlFor="offer-card-filter" className={labelClass}>Card</label>
-            <select
-              id="offer-card-filter"
-              name="card"
-              value={selectedCardId}
-              onChange={(e) => pushFilter({ cardId: e.target.value })}
-              className={fieldClass}
+        {/* Tier 2 — categories get the full panel width: wrapping on desktop, scrolling on mobile */}
+        {!lockedCategory && (
+          <div
+            className="relative rounded-b-xl border-t p-4"
+            style={{ background: "var(--surface-muted)", borderColor: "var(--border-subtle)" }}
+          >
+            <div
+              role="group"
+              aria-label="Category"
+              className="scrollbar-hide flex snap-x snap-mandatory gap-2 overflow-x-auto sm:flex-wrap sm:snap-none sm:overflow-visible"
             >
-              <option value="">All cards</option>
-              {availableCards.map((card) => {
-                const bank = bankById[card.bankId];
-                const bankLabel = cardScopeBankIds.length === 1 ? "" : `${bank?.shortName ?? card.bankId} · `;
+              {categories.map((category) => {
+                const isSelected = selectedCategories.includes(category.id);
                 return (
-                  <option key={card.id} value={card.id}>{bankLabel}{card.name}</option>
+                  <button
+                    key={category.id}
+                    type="button"
+                    aria-pressed={isSelected}
+                    onClick={() => toggleCategory(category.id)}
+                    className="inline-flex min-h-11 shrink-0 snap-start items-center gap-1.5 rounded-full border px-3.5 text-sm font-medium transition-colors duration-(--motion-fast) hover:brightness-95 active:brightness-90 sm:min-h-9"
+                    style={{
+                      background: isSelected ? "var(--action-accent-bg)" : "var(--surface-card)",
+                      color: isSelected ? "var(--action-accent-fg)" : "var(--text-body)",
+                      borderColor: isSelected ? "transparent" : "var(--border-default)",
+                    }}
+                  >
+                    {isSelected && <Check size={12} />}
+                    {category.label}
+                  </button>
                 );
               })}
-            </select>
-          </div>
-
-          {!lockedCategory && (
-            <MultiSelectField
-              id="offer-category-filter"
-              label="Category"
-              allLabel="All categories"
-              options={categories}
-              selectedIds={selectedCategories}
-              onToggle={toggleCategory}
+            </div>
+            {/* Fades the last pill on mobile so a cut-off row reads as scrollable, not broken */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 right-0 w-10 rounded-br-xl sm:hidden"
+              style={{ background: "linear-gradient(to left, var(--surface-muted), transparent)" }}
             />
-          )}
-
-          <div className="grid gap-1">
-            <label htmlFor="offer-sort-filter" className={labelClass}>Sort</label>
-            <select
-              id="offer-sort-filter"
-              name="sort"
-              value={selectedSort}
-              onChange={(e) => pushQuery({ sort: e.target.value as SortKey })}
-              className={fieldClass}
-            >
-              {sortKeys.map((key) => (
-                <option key={key} value={key}>{sortLabels[key]}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="grid gap-1">
-            <label htmlFor="offer-search-filter" className={labelClass}>Search</label>
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                const input = e.currentTarget.elements.namedItem("search") as HTMLInputElement;
-                pushFilter({ search: input.value });
-              }}
-              className="flex gap-2"
-            >
-              <input
-                key={search}
-                id="offer-search-filter"
-                name="search"
-                defaultValue={search}
-                placeholder="Merchant, bank, offer…"
-                className={`min-w-0 flex-1 ${fieldClass}`}
-              />
-              <button type="submit" className={buttonClasses({ variant: "accent" }) + " shrink-0 whitespace-nowrap"}>
-                Search
-              </button>
-            </form>
-          </div>
-        </div>
-
-        {(chips.length > 0 || resultCount != null) && (
-          <div className="mt-3">
-            <FilterSummary resultCount={resultCount} chips={chips} />
           </div>
         )}
       </div>
