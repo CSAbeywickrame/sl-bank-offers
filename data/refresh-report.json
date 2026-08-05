@@ -1,265 +1,275 @@
 {
-  "runAt": "2026-08-03T05:42:58.980Z",
+  "runAt": "2026-08-05T18:26:15.621Z",
   "tokensUsed": {
-    "input": 799663,
-    "output": 69945
+    "input": 200655,
+    "output": 160064
   },
   "banks": {
     "commercial-bank": {
-      "status": "fetch-failed",
+      "status": "updated",
       "sources": [
         "https://www.combank.lk/rewards-promotions"
       ],
-      "message": "HTTP 403"
-    },
-    "ndb": {
-      "status": "updated",
-      "sources": [
-        "https://www.ndbbank.com/cards/card-offers"
-      ],
-      "offersWritten": 39
-    },
-    "boc": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.boc.lk/personal-banking/card-offers"
-      ],
-      "message": "HTTP 403"
-    },
-    "peoples-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.peoplesbank.lk/special-offers/"
-      ],
-      "offersWritten": 230,
+      "offersWritten": 163,
       "assetFailures": [
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2026/07/Mr-Dissanayaka_L-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfKu6fvuVfPcqv67jeBf\"}"
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-your-favourite-softlogic-restaurants-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Solar_Crab.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfKxd1tqGuAgPD9rTC9Y\"}"
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-your-favourite-restaurant-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Orient-Hotel-Bandarawela.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfKzDwdfQe8FCKwq5bxU\"}"
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-cinnamon-red-colombo-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Joes_Unawatuna.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfKzuJz7XX92qEXFaDF1\"}"
+          "url": "https://www.combank.lk/rewards-promotion/food-restaurants/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Joes_Bentota.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfKzxppD8P8mmFfnSKHX\"}"
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-hunas-falls-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Hikkaduwa-Beach-Hotel.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL1RPEiP6ejfNyeiXe4\"}"
+          "url": "https://www.combank.lk/rewards-promotion/leisure/relax-at-your-favourite-holiday-destination-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/02/Mount-Lavinia-Hotel.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL1Uqbfh3GbF4e9Fmwq\"}"
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/unlock-great-deals-on-online-purchases-via-cargills-online-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Centauria-Lake.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL1uVvRfA5MfsybiokT\"}"
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-at-hemas-estore-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Centauria-Hill.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL1xpM1JS7LYoWrahv6\"}"
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-awaits-at-atlas-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Senani-Hotel.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL4GSZTN98bT5VFG68j\"}"
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-deals-with-tudolk-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Laya_Beach.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL6y6MvYRYTR1HAQmKc\"}"
+          "url": "https://www.combank.lk/rewards-promotion/online-shopping/great-online-salary-week-deals-at-tudolk-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/10/Laya-safari.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL82qNGVD1BdtKxBvMB\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-glomark-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/10/Fish-Co.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfL8omadDTN9uZegC5X1\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-cargills-food-city-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Oasis-Lounge-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLA557C7NfyABsqAk3b\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/get-10-cashback-at-selected-supermarkets-with-lankapay-jcb-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Gardenia-Coffee-Shop-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLA8PHhSMDxo16zyKBz\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-laugfs-super-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Hello-Beirut-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLCrZNca2vX2AHiEHps\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-deals-at-keells-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Boardwalk.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLDMjYkFg9ioqhon92X\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-fresh-deals-at-spar-supermarket-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/04/Blue-Orbit.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLDSEBA7vGnjRvek2VK\"}"
+          "url": "https://www.combank.lk/rewards-promotion/supermarket/enjoy-the-best-supermarket-fresh-deals-at-softlogic-glomark-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Ceylon-Curry.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLDXDJvScxfPWUhefzy\"}"
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/purchase-your-favourite-outfit-at-fabindia-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/10/Co.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLDkRYzMnVuuB34QMqk\"}"
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/unlock-exclusive-savings-at-marino-mall-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Pranzo.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLDxa3qNJ4qP9LRknGg\"}"
+          "url": "https://www.combank.lk/rewards-promotion/fashion-jewellery/purchase-your-favourite-outfit-at-spring-and-summer-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Thuna_Paha.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLEBae8RMZcRdKZcszx\"}"
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/glow-beyond-limit-at-christell-luxury-wellness-with-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Bakery.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLEWatNtSmLQUxWqoBd\"}"
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/embark-the-journey-of-holistic-healing-at-siddhalepa-clinic-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Kobe_japanese.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLF2uH7oAXgn1pBKv8j\"}"
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/embrace-the-wisdom-of-ayurveda-at-siddhalepa-hospital-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/03/ward-7.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLFt6DzVWgHUxJGmWTJ\"}"
+          "url": "https://www.combank.lk/rewards-promotion/healthcare/access-premium-medical-care-abroad-with-ease-with-combank-visa-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/10/Food-Studio.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLG9cNcicQgHnwj6ZSM\"}"
+          "url": "https://www.combank.lk/rewards-promotion/education/special-credit-card-easy-payment-plans-for-the-student-and-members-of-aicpa-and-cima/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/07/Ceylon-City-Mart.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLHCvLSkAv8pXxFq512\"}"
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-fitsair-using-combank-cedit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/03/pickme.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLHQZaLXYonZwDVFzkh\"}"
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-fitsair-and-combank-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Hunter.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLJgqtfnjkL1m3w3coF\"}"
+          "url": "https://www.combank.lk/rewards-promotion/travel/visit-your-favourite-holiday-destination-with-crazy-jets-and-combank-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2023/03/keels.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLJmo3Lkca8jJVjjZft\"}"
+          "url": "https://www.combank.lk/rewards-promotion/travel/step-into-smarter-bus-travel-with-ncg-express-using-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Spar.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLJwJHrY7Vez2oDo8Zp\"}"
+          "url": "https://www.combank.lk/rewards-promotion/travel/enjoy-an-exclusive-free-travel-insurance-for-combank-premium-and-platinum-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2022/03/Wheel_Service-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLKYqxBPhG7XkrNen4e\"}"
+          "url": "https://www.combank.lk/rewards-promotion/auto/fuel-your-journey-with-savings-on-mobil-engine-oil-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Toyota_Lanka-1.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLKcuY1rG3RZVedrk9d\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/visit-your-favourite-holiday-destination-with-fitsair-and-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2025/04/Findmyfare.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLLVjTUuq696HXyXzdR\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/relax-at-your-favourite-destination-from-aahaasa-collection-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2021/11/1.MRS_.-P.R.-MADURAWALA-1024x1024.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLRMqLfYseHyVq2afWd\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-best-supermarket-deals-at-spar-supermarket-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2021/11/8.Ms_.M.A.D.M.Karunarathna-1024x1024.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLSFx9oeHGK2kryKcP2\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/shop-duty-free-at-cdf-duty-free-now-and-pay-later-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2021/11/1.Mr_.K.B.Rajapaksha-1024x1024.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLSjGiF1qKo1rzDBUwk\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/exclusive-supermarket-deals-at-softlogic-glomark-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Ranjith-Kodithuwakku-1-1024x1024.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLSokbKsyQ67DBRMSXa\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-cinnamon-red-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
         },
         {
-          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Sudarshana-Ahangama_-1024x1024.jpg",
-          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CdfLTkjYVmXaHAi32zENw\"}"
+          "url": "https://www.combank.lk/rewards-promotion/premium-card-offers/enjoy-the-art-of-dining-at-hilton-colombo-with-combank-premium-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/pay-via-gpay-with-combank-visa-cards-get-rs-4000-cashback/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/the-journey-to-your-bts-concert-begins-here-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/switch-to-convenience-with-combank-automatic-bill-settlement-abs-facility/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/enjoy-the-most-exciting-movie-experience-at-scope-cinemas-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/laundry-made-easy-at-laundromat-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-singapore-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/shop-duty-free-at-cdf-duty-free-now-and-pay-later-with-combank-credit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-thailand-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-korea-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/enjoy-the-art-of-dining-in-indonesia-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/experience-seamless-worldwide-delivery-at-dhl-with-combank-credit-and-debit-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-malaysia-with-combank-visa-card/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/other-offers/embark-on-a-journey-to-japan-with-combank-visa-cards/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/rewards-promotion/q-payment-app-offers/enjoy-a-25-cashback-for-expressway-toll-payments-with-q-payment-app/",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/chat-c-1.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/right-arrow.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/right-arrow-white.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/awards/2019/award-2.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/check.png",
+          "reason": "HTTP 403"
+        },
+        {
+          "url": "https://www.combank.lk/assets/images/misc/cancel.png",
+          "reason": "HTTP 403"
         }
       ]
     },
-    "ntb": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.nationstrust.com/promotions"
-      ],
-      "message": "HTTP 403"
-    },
-    "pan-asia-bank": {
+    "boc": {
       "status": "updated",
       "sources": [
-        "https://www.pabcbank.com/card-offers/"
+        "https://www.boc.lk/personal-banking/card-offers"
       ],
       "offersWritten": 57
     },
-    "union-bank": {
+    "ntb": {
       "status": "updated",
       "sources": [
-        "https://www.unionb.com/credit-cards-offers/",
-        "https://www.unionb.com/credit-cards-offers/page/2/"
+        "https://www.nationstrust.com/promotions"
       ],
-      "offersWritten": 48
-    },
-    "cargills-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
-        "https://www.cargillsbank.com/products/mastercard-promotions/"
-      ],
-      "offersWritten": 51
+      "offersWritten": 798
     },
     "sampath": {
       "status": "skipped-empty",
       "sources": [
-        "https://www.sampath.lk/api/card-promotions?page_number=1&size=300"
+        "https://www.sampath.lk/api/card-promotions"
       ],
       "message": "content empty or below minimum length (consider source type 'dynamic_page')"
-    },
-    "dfcc": {
-      "status": "updated",
-      "sources": [
-        "https://www.dfcc.lk/cards/card-offers",
-        "https://www.dfcc.lk/cards/credit-card-offers",
-        "https://www.dfcc.lk/cards/cards/mastercard-offers",
-        "https://www.dfcc.lk/cards/cards/visa-offers"
-      ],
-      "offersWritten": 101
-    },
-    "seylan": {
-      "status": "updated",
-      "sources": [
-        "https://www.seylan.lk/promotions/cards?type[]=credit_card"
-      ],
-      "offersWritten": 275
-    },
-    "nsb": {
-      "status": "updated",
-      "sources": [
-        "https://www.nsb.lk/category/card-offers/",
-        "https://www.nsb.lk/category/card-offers/page/2/",
-        "https://www.nsb.lk/category/card-offers/page/3/"
-      ],
-      "offersWritten": 15
-    },
-    "hnb": {
-      "status": "updated",
-      "sources": [
-        "https://venus.hnb.lk/api/get_all_web_card_promos?page=1&limit=2000"
-      ],
-      "offersWritten": 785
     }
   }
 }
