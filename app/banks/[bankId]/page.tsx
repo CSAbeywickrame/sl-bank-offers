@@ -78,7 +78,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
           <div className="hero-dots" />
           <div className="hero-shine" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-12">
+        <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-20 sm:pb-24">
           <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
             <ol className="flex items-center gap-1.5">
               <li>

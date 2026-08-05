@@ -29,7 +29,7 @@
   /* Text */
   --text-strong: var(--neutral-900);
   --text-body: var(--neutral-700);
-  --text-muted: var(--neutral-500);
+  --text-muted: var(--neutral-600);
   --text-faint: var(--neutral-400);
   --text-on-inverse: var(--white);
   --text-on-inverse-muted: rgba(255,255,255,0.78);
@@ -68,6 +68,8 @@
   --hero-eyebrow-fg: var(--emerald-300);
   /* Motion */
   --motion-fast:150ms; --motion-med:220ms; --motion-slow:480ms;
+  /* Panel elevation — navy-tinted rather than pure black, so it sits in the palette */
+  --shadow-panel: 0 1px 2px rgb(11 31 51 / 6%), 0 12px 32px rgb(11 31 51 / 10%);
 }
 
 * {
@@ -98,6 +100,15 @@ a {
   outline: 2px solid #10b981;
   outline-offset: 2px;
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.32);
+}
+
+/* ── Filter panel: hides the category pill row's scrollbar, keyboard scroll still works ── */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
 }
 
 /* ── Hero animated background ───────────────────────────────── */
@@ -196,4 +207,9 @@ a {
   0%, 100% { transform: translateY(0) rotate(var(--r, 0deg)); }
   50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
 }
-@media (prefers-reduced-motion: reduce) { .sl-cc { animation: none !important; } }
+@media (prefers-reduced-motion: reduce) {
+  .sl-cc { animation: none !important; }
+  .hero-orb { animation: none !important; }
+  .hero-shine::after { animation: none !important; }
+  .hero-dot-pulse { animation: none !important; }
+}

@@ -1,16 +1,13 @@
 import { describe, expect, it } from "vitest";
 import {
   PRESETS_STORAGE_KEY,
-  PROMPT_DISMISSED_KEY,
   clearPresets,
   deletePreset,
-  dismissPresetPrompt,
+  findPresetMatchingSelection,
   isPresetSelectionEmpty,
   presetSummary,
-  presetToRecall,
   reconcilePreset,
   readPresets,
-  readPromptDismissedAt,
   savePreset,
   suggestPresetName,
   touchPreset,
@@ -218,18 +215,16 @@ describe("preset expiry", () => {
 });
 
 describe("clearPresets", () => {
-  it("empties the preset list and clears the dismissal timestamp", () => {
+  it("empties the preset list", () => {
     const storage = createMemoryStorage();
     const now = new Date("2026-06-01T00:00:00.000Z");
 
     savePreset(storage, { name: "Test", bankIds: [], categories: [] }, now);
-    dismissPresetPrompt(storage, now);
 
     const result = clearPresets(storage);
 
     expect(result).toEqual([]);
     expect(storage.getItem(PRESETS_STORAGE_KEY)).toBeNull();
-    expect(storage.getItem(PROMPT_DISMISSED_KEY)).toBeNull();
   });
 });
 
@@ -361,73 +356,51 @@ describe("isPresetSelectionEmpty", () => {
   });
 });
 
-describe("presetToRecall", () => {
+describe("findPresetMatchingSelection", () => {
   const preset: FilterPreset = {
     id: "p1",
     name: "Weekend deals",
-    bankIds: ["ntb"],
-    categories: ["dining"],
+    bankIds: ["ntb", "commercial"],
+    categories: ["dining", "fuel"],
+    cardId: "ntb-visa",
     createdAt: "2026-01-01T00:00:00.000Z"
   };
 
-  it("returns null when filters are already active", () => {
-    const now = new Date("2026-06-01T00:00:00.000Z");
-    expect(presetToRecall({ presets: [preset], catalog, hasActiveFilters: true, dismissedAt: null, now })).toBeNull();
-  });
-
-  it("returns null when there are no saved presets", () => {
-    const now = new Date("2026-06-01T00:00:00.000Z");
-    expect(presetToRecall({ presets: [], catalog, hasActiveFilters: false, dismissedAt: null, now })).toBeNull();
-  });
-
-  it("returns null when the prompt was dismissed less than 24h ago", () => {
-    const now = new Date("2026-06-01T10:00:00.000Z");
-    const dismissedAt = new Date(now.getTime() - 2 * 60 * 60 * 1000).toISOString();
-
-    expect(presetToRecall({ presets: [preset], catalog, hasActiveFilters: false, dismissedAt, now })).toBeNull();
-  });
-
-  it("returns a preset once the dismissal window has passed", () => {
-    const now = new Date("2026-06-01T10:00:00.000Z");
-    const dismissedAt = new Date(now.getTime() - 25 * 60 * 60 * 1000).toISOString();
-
-    const result = presetToRecall({ presets: [preset], catalog, hasActiveFilters: false, dismissedAt, now });
-    expect(result?.id).toBe("p1");
-  });
-
-  it("treats an unparseable dismissedAt as not dismissed", () => {
-    const now = new Date("2026-06-01T10:00:00.000Z");
-
-    const result = presetToRecall({ presets: [preset], catalog, hasActiveFilters: false, dismissedAt: "garbage", now });
-    expect(result?.id).toBe("p1");
-  });
-
-  it("returns null when every preset reconciles to empty, even once the dismissal window has passed", () => {
-    const now = new Date("2026-06-01T10:00:00.000Z");
-    const dismissedAt = new Date(now.getTime() - 25 * 60 * 60 * 1000).toISOString();
-    const emptyPreset: FilterPreset = {
-      id: "p2",
-      name: "Stale filters",
-      bankIds: ["hnb"],
-      categories: [],
-      createdAt: "2026-01-01T00:00:00.000Z"
+  it("finds an exact match regardless of array order", () => {
+    const selection: PresetSelection = {
+      bankIds: ["commercial", "ntb"],
+      categories: ["fuel", "dining"],
+      cardId: "ntb-visa"
     };
-
-    expect(presetToRecall({ presets: [emptyPreset], catalog, hasActiveFilters: false, dismissedAt, now })).toBeNull();
+    expect(findPresetMatchingSelection([preset], selection)?.id).toBe("p1");
   });
 
-  it("skips an empty preset in favour of the next non-empty one", () => {
-    const now = new Date("2026-06-01T00:00:00.000Z");
-    const emptyPreset: FilterPreset = {
-      id: "p2",
-      name: "Stale filters",
-      bankIds: ["hnb"],
-      categories: [],
-      createdAt: "2026-01-01T00:00:00.000Z"
+  it("does not match when cardId differs", () => {
+    const selection: PresetSelection = {
+      bankIds: ["ntb", "commercial"],
+      categories: ["dining", "fuel"],
+      cardId: "ntb-titanium"
     };
+    expect(findPresetMatchingSelection([preset], selection)).toBeUndefined();
+  });
 
-    const result = presetToRecall({ presets: [emptyPreset, preset], catalog, hasActiveFilters: false, dismissedAt: null, now });
-    expect(result?.id).toBe("p1");
+  it("does not match a subset selection", () => {
+    const selection: PresetSelection = {
+      bankIds: ["ntb"],
+      categories: ["dining", "fuel"],
+      cardId: "ntb-visa"
+    };
+    expect(findPresetMatchingSelection([preset], selection)).toBeUndefined();
+  });
+
+  it("treats undefined and empty-string cardId as equal", () => {
+    const noCardPreset: FilterPreset = { ...preset, id: "p2", cardId: undefined };
+    const selection: PresetSelection = { bankIds: ["ntb", "commercial"], categories: ["dining", "fuel"], cardId: "" };
+    expect(findPresetMatchingSelection([noCardPreset], selection)?.id).toBe("p2");
+  });
+
+  it("returns undefined for an empty preset list", () => {
+    expect(findPresetMatchingSelection([], { bankIds: [], categories: [] })).toBeUndefined();
   });
 });
 
@@ -453,16 +426,5 @@ describe("touchPreset and deletePreset", () => {
     const result = deletePreset(storage, saved.id, now);
 
     expect(result).toEqual([]);
-  });
-});
-
-describe("dismissPresetPrompt / readPromptDismissedAt", () => {
-  it("writes and reads the dismissal timestamp", () => {
-    const storage = createMemoryStorage();
-    const now = new Date("2026-06-01T00:00:00.000Z");
-
-    expect(readPromptDismissedAt(storage)).toBeNull();
-    dismissPresetPrompt(storage, now);
-    expect(readPromptDismissedAt(storage)).toBe(now.toISOString());
   });
 });

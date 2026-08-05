@@ -1,7 +1,6 @@
 import { expect, test, type Locator, type Page } from "@playwright/test";
 
 const PRESETS_KEY = "cardcompass:filter-presets";
-const DISMISSED_KEY = "cardcompass:preset-prompt-dismissed-at";
 const DAY_MS = 24 * 60 * 60 * 1000;
 
 interface StoredPreset {
@@ -22,9 +21,16 @@ function savedFiltersButton(page: Page) {
   return page.getByRole("button", { name: "Saved filters" }).filter({ visible: true });
 }
 
-// Returns the visible "Save these filters" trigger (see savedFiltersButton for why this is filtered)
-function saveTheseFiltersButton(page: Page) {
-  return page.getByRole("button", { name: "Save these filters" }).filter({ visible: true });
+// Returns the "Save these filters" row inside the "Saved filters" popover, opening the popover
+// first if it isn't already — "Save these filters" now lives inside the popover rather than
+// sitting directly in the header row, so it's never visible until the trigger is clicked.
+async function saveTheseFiltersButton(page: Page) {
+  const trigger = savedFiltersButton(page);
+  const button = savedFiltersGroup(page).getByRole("button", { name: "Save these filters" });
+  if (!(await button.isVisible())) {
+    await trigger.click();
+  }
+  return button;
 }
 
 // Returns the open "Saved filters" popover panel (only ever rendered once, by whichever instance is open)
@@ -77,18 +83,17 @@ function readStoredPresets(page: Page): Promise<StoredPreset[] | null> {
 
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(
-    ({ presetsKey, dismissedKey }) => {
+    ({ presetsKey }) => {
       window.localStorage.removeItem(presetsKey);
-      window.localStorage.removeItem(dismissedKey);
     },
-    { presetsKey: PRESETS_KEY, dismissedKey: DISMISSED_KEY }
+    { presetsKey: PRESETS_KEY }
   );
 });
 
 test("saves a preset from the UI and persists it to localStorage", async ({ page }) => {
   await page.goto("/?bank=ntb&bank=commercial-bank&category=dining");
 
-  await saveTheseFiltersButton(page).click();
+  await (await saveTheseFiltersButton(page)).click();
 
   const nameInput = page.getByLabel("Preset name");
   await expect(nameInput).not.toHaveValue("");
@@ -117,49 +122,6 @@ test("applies a preset from the dropdown", async ({ page }) => {
   await expect(page).toHaveURL(/bank=ntb/);
   await expect(page).toHaveURL(/bank=commercial-bank/);
   await expect(page).toHaveURL(/category=dining/);
-});
-
-test("shows the recall banner on a clean visit and applies it", async ({ page }) => {
-  const now = new Date().toISOString();
-  await seedPresets(page, [
-    { id: "p1", name: "My combo", bankIds: ["ntb", "commercial-bank"], categories: ["dining"], createdAt: now, lastUsedAt: now },
-  ]);
-  await page.goto("/");
-
-  const banner = page.getByText(/Welcome back/);
-  await expect(banner).toBeVisible();
-  await expect(banner).toContainText("My combo");
-
-  await page.getByRole("button", { name: "Apply" }).click();
-
-  await expect(page).toHaveURL(/bank=ntb/);
-  await expect(page).toHaveURL(/bank=commercial-bank/);
-  await expect(page).toHaveURL(/category=dining/);
-});
-
-test("hides the recall banner when filters are already active", async ({ page }) => {
-  const now = new Date().toISOString();
-  await seedPresets(page, [
-    { id: "p1", name: "My combo", bankIds: ["ntb", "commercial-bank"], categories: ["dining"], createdAt: now, lastUsedAt: now },
-  ]);
-  await page.goto("/?bank=ntb");
-
-  await expect(page.getByText(/Welcome back/)).not.toBeVisible();
-});
-
-test("dismissing the recall banner hides it and records the dismissal", async ({ page }) => {
-  const now = new Date().toISOString();
-  await seedPresets(page, [
-    { id: "p1", name: "My combo", bankIds: ["ntb", "commercial-bank"], categories: ["dining"], createdAt: now, lastUsedAt: now },
-  ]);
-  await page.goto("/");
-
-  await expect(page.getByText(/Welcome back/)).toBeVisible();
-  await page.getByRole("button", { name: "Dismiss" }).click();
-  await expect(page.getByText(/Welcome back/)).not.toBeVisible();
-
-  const dismissedAt = await page.evaluate((key) => window.localStorage.getItem(key), DISMISSED_KEY);
-  expect(dismissedAt).toBeTruthy();
 });
 
 test("deletes a single preset, leaving the other one in place", async ({ page }) => {

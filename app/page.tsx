@@ -94,7 +94,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
           <div className="hero-dots" />
           <div className="hero-shine" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-12">
+        <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-20 sm:pb-24">
           <div className="grid gap-8 min-[900px]:grid-cols-[minmax(0,1fr)_400px] min-[900px]:items-center">
             <div className="max-w-xl">
               {/* Eyebrow pill */}

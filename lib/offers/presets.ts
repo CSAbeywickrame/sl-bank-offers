@@ -2,10 +2,8 @@ import { getCategoryLabel, isOfferCategory } from "./categories";
 import type { Bank, Card, OfferCategory } from "./types";
 
 export const PRESETS_STORAGE_KEY = "cardcompass:filter-presets";
-export const PROMPT_DISMISSED_KEY = "cardcompass:preset-prompt-dismissed-at";
 export const MAX_PRESETS = 10;
 export const PRESET_TTL_MS = 60 * 24 * 60 * 60 * 1000;
-export const PROMPT_DISMISS_WINDOW_MS = 24 * 60 * 60 * 1000;
 
 export interface FilterPreset {
   id: string;
@@ -188,10 +186,9 @@ export function touchPreset(storage: PresetStorage, id: string, now: Date, selec
   return result;
 }
 
-// Wipes all saved presets and the prompt dismissal flag
+// Wipes all saved presets
 export function clearPresets(storage: PresetStorage): FilterPreset[] {
   storage.removeItem(PRESETS_STORAGE_KEY);
-  storage.removeItem(PROMPT_DISMISSED_KEY);
   return [];
 }
 
@@ -262,36 +259,27 @@ export function isPresetSelectionEmpty(selection: PresetSelection): boolean {
   return selection.bankIds.length === 0 && selection.categories.length === 0 && !selection.cardId;
 }
 
-// Picks the most recent non-empty preset to offer as a "recall your filters" prompt, honoring dismissal and active filters
-export function presetToRecall(options: {
-  presets: FilterPreset[];
-  catalog: OfferCatalog;
-  hasActiveFilters: boolean;
-  dismissedAt: string | null;
-  now: Date;
-}): FilterPreset | null {
-  const { presets, catalog, hasActiveFilters, dismissedAt, now } = options;
-
-  if (hasActiveFilters || presets.length === 0) {
-    return null;
+// True when two id lists contain the same values, ignoring order
+function sameIdSet(a: readonly string[], b: readonly string[]): boolean {
+  const setA = new Set(a);
+  const setB = new Set(b);
+  if (setA.size !== setB.size) return false;
+  for (const id of setA) {
+    if (!setB.has(id)) return false;
   }
-
-  if (dismissedAt) {
-    const dismissed = new Date(dismissedAt);
-    if (Number.isFinite(dismissed.getTime()) && now.getTime() - dismissed.getTime() < PROMPT_DISMISS_WINDOW_MS) {
-      return null;
-    }
-  }
-
-  return presets.find((preset) => !reconcilePreset(preset, catalog).isEmpty) ?? null;
+  return true;
 }
 
-// Records the moment the recall prompt was dismissed
-export function dismissPresetPrompt(storage: PresetStorage, now: Date): void {
-  storage.setItem(PROMPT_DISMISSED_KEY, now.toISOString());
-}
-
-// Reads back the recall prompt's dismissal timestamp, if any
-export function readPromptDismissedAt(storage: PresetStorage): string | null {
-  return storage.getItem(PROMPT_DISMISSED_KEY);
+// Returns the saved preset whose selection matches the active filters, if any
+export function findPresetMatchingSelection(
+  presets: FilterPreset[],
+  selection: PresetSelection
+): FilterPreset | undefined {
+  const targetCardId = selection.cardId ?? "";
+  return presets.find(
+    (preset) =>
+      sameIdSet(preset.bankIds, selection.bankIds) &&
+      sameIdSet(preset.categories, selection.categories) &&
+      (preset.cardId ?? "") === targetCardId
+  );
 }

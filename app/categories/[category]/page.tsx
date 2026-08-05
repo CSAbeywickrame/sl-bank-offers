@@ -79,7 +79,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
           <div className="hero-dots" />
           <div className="hero-shine" />
         </div>
-        <div className="relative mx-auto max-w-7xl px-4 py-12">
+        <div className="relative mx-auto max-w-7xl px-4 pt-12 pb-20 sm:pb-24">
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
             <div className="max-w-2xl">
               <p

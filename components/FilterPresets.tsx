@@ -1,14 +1,12 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type FormEvent, type KeyboardEvent } from "react";
 import {
   clearPresets,
   deletePreset,
-  dismissPresetPrompt,
+  findPresetMatchingSelection,
   presetSummary,
-  presetToRecall,
   readPresets,
-  readPromptDismissedAt,
   reconcilePreset,
   savePreset,
   suggestPresetName,
@@ -21,16 +19,15 @@ import {
 } from "@/lib/offers/presets";
 import { usePopover } from "@/components/ui/popover";
 import { buttonClasses } from "@/components/ui/button";
+import { Bookmark, Check, ChevronDown, Close } from "@/components/ui/icon";
 
 interface UseFilterPresetsResult {
   isLoaded: boolean;
   presets: ReconciledPreset[];
-  recall: ReconciledPreset | null;
   save: (name: string, selection: PresetSelection) => void;
   remove: (id: string) => void;
   clearAll: () => void;
   markUsed: (id: string, selection: PresetSelection) => void;
-  dismissRecall: () => void;
 }
 
 // Returns the browser's localStorage typed as PresetStorage, or null when running on the server
@@ -39,19 +36,17 @@ function getPresetStorage(): PresetStorage | null {
   return window.localStorage;
 }
 
-// Owns saved-filter-preset state: loads from localStorage after mount, exposes CRUD + recall
-export function useFilterPresets(catalog: OfferCatalog, hasActiveFilters: boolean): UseFilterPresetsResult {
+// Owns saved-filter-preset state: loads from localStorage after mount, exposes CRUD
+export function useFilterPresets(catalog: OfferCatalog): UseFilterPresetsResult {
   const [presets, setPresets] = useState<FilterPreset[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [dismissedAt, setDismissedAt] = useState<string | null>(null);
 
-  // Loads persisted presets and the recall-prompt dismissal timestamp once, after mount
+  // Loads persisted presets once, after mount
   useEffect(() => {
     const storage = getPresetStorage();
     if (!storage) return;
     const now = new Date();
     setPresets(readPresets(storage, now));
-    setDismissedAt(readPromptDismissedAt(storage));
     setIsLoaded(true);
   }, []);
 
@@ -69,12 +64,11 @@ export function useFilterPresets(catalog: OfferCatalog, hasActiveFilters: boolea
     setPresets(deletePreset(storage, id, new Date()));
   }
 
-  // Wipes every saved preset and refreshes state, syncing the dismissal flag storage also clears
+  // Wipes every saved preset and refreshes state
   function clearAll() {
     const storage = getPresetStorage();
     if (!storage) return;
     setPresets(clearPresets(storage));
-    setDismissedAt(null);
   }
 
   // Marks a preset as just-used, self-healing its selection, and refreshes state
@@ -84,30 +78,17 @@ export function useFilterPresets(catalog: OfferCatalog, hasActiveFilters: boolea
     setPresets(touchPreset(storage, id, new Date(), selection));
   }
 
-  // Records the recall prompt as dismissed, both in storage and in state, so it recomputes without a reload
-  function dismissRecall() {
-    const storage = getPresetStorage();
-    if (!storage) return;
-    const now = new Date();
-    dismissPresetPrompt(storage, now);
-    setDismissedAt(now.toISOString());
-  }
-
   // Reconciles every stored preset against the current catalog, dropping ids that no longer exist
   const reconciledPresets = useMemo(
     () => presets.map((preset) => reconcilePreset(preset, catalog)),
     [presets, catalog]
   );
 
-  // Recomputes which preset (if any) should be offered as a "welcome back" recall prompt
-  const recall = useMemo(() => {
-    if (!isLoaded) return null;
-    const candidate = presetToRecall({ presets, catalog, hasActiveFilters, dismissedAt, now: new Date() });
-    return candidate ? reconcilePreset(candidate, catalog) : null;
-  }, [presets, catalog, hasActiveFilters, dismissedAt, isLoaded]);
-
-  return { isLoaded, presets: reconciledPresets, recall, save, remove, clearAll, markUsed, dismissRecall };
+  return { isLoaded, presets: reconciledPresets, save, remove, clearAll, markUsed };
 }
+
+// Small uppercase section label, matching the labelClass idiom used across the filter panel
+const sectionLabelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-(--text-muted)";
 
 interface SavedFilterRowProps {
   reconciled: ReconciledPreset;
@@ -120,21 +101,23 @@ function SavedFilterRow({ reconciled, onApply, onDelete }: SavedFilterRowProps) 
   const { preset, isEmpty, missingCount } = reconciled;
 
   return (
-    <div className="flex items-center gap-2 rounded px-2 py-1.5">
+    <div className="flex items-center gap-2 px-2 py-1.5">
       <button
         type="button"
         disabled={isEmpty}
         onClick={() => onApply(reconciled)}
-        className={`min-w-0 flex-1 text-left ${isEmpty ? "text-neutral-400 cursor-not-allowed" : "text-neutral-900"}`}
+        className={`min-w-0 flex-1 text-left transition-colors ${
+          isEmpty ? "cursor-not-allowed text-(--text-muted)" : "text-(--text-strong) hover:text-(--text-body)"
+        }`}
       >
         <span className="block truncate text-sm font-medium">{preset.name}</span>
         {isEmpty ? (
-          <span className="block text-xs text-neutral-500">No longer available</span>
+          <span className="block text-xs text-(--text-muted)">No longer available</span>
         ) : (
           <>
-            <span className="block text-xs text-neutral-500">{presetSummary(reconciled)}</span>
+            <span className="block text-xs text-(--text-muted)">{presetSummary(reconciled)}</span>
             {missingCount > 0 && (
-              <span className="block text-xs text-neutral-500">
+              <span className="block text-xs text-(--text-muted)">
                 {missingCount} saved filter{missingCount === 1 ? "" : "s"} no longer available
               </span>
             )}
@@ -145,104 +128,53 @@ function SavedFilterRow({ reconciled, onApply, onDelete }: SavedFilterRowProps) 
         type="button"
         onClick={() => onDelete(preset.id)}
         aria-label={`Delete ${preset.name}`}
-        className="shrink-0 text-neutral-400 hover:text-neutral-600"
+        className="shrink-0 text-(--text-muted) transition-colors hover:text-(--text-strong) active:brightness-90"
       >
-        ×
+        <Close />
       </button>
     </div>
   );
 }
 
-interface SavedFiltersDropdownProps {
+interface SavedFiltersPopoverProps {
   presets: ReconciledPreset[];
+  canSave: boolean;
+  selection: PresetSelection;
+  catalog: OfferCatalog;
   onApply: (reconciled: ReconciledPreset) => void;
+  onSave: (name: string, selection: PresetSelection) => void;
   onDelete: (id: string) => void;
   onClearAll: () => void;
 }
 
-// Compact "Saved filters" dropdown: applies or deletes individual presets, or clears all of them
-function SavedFiltersDropdown({ presets, onApply, onDelete, onClearAll }: SavedFiltersDropdownProps) {
+// Single "Saved filters" popover: lists saved presets, hosts the save-current-filters flow, and clears all
+function SavedFiltersPopover({
+  presets,
+  canSave,
+  selection,
+  catalog,
+  onApply,
+  onSave,
+  onDelete,
+  onClearAll,
+}: SavedFiltersPopoverProps) {
   const { isOpen, setIsOpen, containerRef, triggerRef } = usePopover();
   const [isConfirmingClearAll, setIsConfirmingClearAll] = useState(false);
-
-  // Resets the "delete all" confirm step whenever the popover closes, for any reason
-  useEffect(() => {
-    if (!isOpen) setIsConfirmingClearAll(false);
-  }, [isOpen]);
-
-  // Applies a usable preset row and closes the popover
-  function handleApply(reconciled: ReconciledPreset) {
-    onApply(reconciled);
-    setIsOpen(false);
-  }
-
-  return (
-    <div className="grid gap-1" style={{ position: "relative" }} ref={containerRef}>
-      <button
-        type="button"
-        ref={triggerRef}
-        onClick={() => setIsOpen((prev) => !prev)}
-        aria-expanded={isOpen}
-        className="flex items-center gap-1 text-sm text-neutral-500"
-      >
-        Saved filters
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" className="shrink-0">
-          <path d="M2.5 4.5L6 8l3.5-3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
-      </button>
-      {isOpen && (
-        <div
-          role="group"
-          aria-label="Saved filters"
-          className="absolute left-0 z-10 min-w-[220px] rounded-lg border border-neutral-300 bg-white p-2"
-          style={{
-            top: "100%",
-            marginTop: "4px",
-            boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
-            maxHeight: "240px",
-            overflowY: "auto",
-          }}
-        >
-          {presets.map((reconciled) => (
-            <SavedFilterRow key={reconciled.preset.id} reconciled={reconciled} onApply={handleApply} onDelete={onDelete} />
-          ))}
-          <div className="mt-1 border-t border-neutral-200 pt-1">
-            {isConfirmingClearAll ? (
-              <div className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
-                <span className="text-neutral-700">Delete all {presets.length} saved filters?</span>
-                <span className="flex shrink-0 items-center gap-2">
-                  <button type="button" onClick={onClearAll} className="font-semibold text-red-600">Yes</button>
-                  <button type="button" onClick={() => setIsConfirmingClearAll(false)} className="text-neutral-500">Cancel</button>
-                </span>
-              </div>
-            ) : (
-              <button
-                type="button"
-                onClick={() => setIsConfirmingClearAll(true)}
-                className="w-full px-2 py-1 text-left text-xs text-red-600"
-              >
-                Delete all saved filters
-              </button>
-            )}
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-interface SaveFiltersButtonProps {
-  selection: PresetSelection;
-  catalog: OfferCatalog;
-  existingPresets: ReconciledPreset[];
-  onSave: (name: string, selection: PresetSelection) => void;
-}
-
-// "Save these filters" text button that expands into an inline name-entry form
-function SaveFiltersButton({ selection, catalog, existingPresets, onSave }: SaveFiltersButtonProps) {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isSavingNew, setIsSavingNew] = useState(false);
   const [confirmation, setConfirmation] = useState<string | null>(null);
   const confirmationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const matchingPreset = findPresetMatchingSelection(
+    presets.map((reconciled) => reconciled.preset),
+    selection
+  );
+
+  // Resets transient popover state (delete-all confirm, save form) whenever the popover closes
+  useEffect(() => {
+    if (!isOpen) {
+      setIsConfirmingClearAll(false);
+      setIsSavingNew(false);
+    }
+  }, [isOpen]);
 
   // Clears any pending confirmation timeout on unmount, so it can't set state after the component is gone
   useEffect(() => {
@@ -251,61 +183,174 @@ function SaveFiltersButton({ selection, catalog, existingPresets, onSave }: Save
     };
   }, []);
 
-  // Saves the trimmed preset name, shows a transient confirmation, then collapses back to the button
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  // Applies a usable preset row and closes the popover
+  function handleApply(reconciled: ReconciledPreset) {
+    onApply(reconciled);
+    setIsOpen(false);
+  }
+
+  // Saves the trimmed preset name, shows a transient confirmation, then collapses the save form
+  function handleSave(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const input = event.currentTarget.elements.namedItem("presetName") as HTMLInputElement;
     const name = input.value.trim();
     if (!name) return;
 
-    const existed = existingPresets.some(
+    const existed = presets.some(
       (reconciled) => reconciled.preset.name.trim().toLowerCase() === name.toLowerCase()
     );
 
     onSave(name, selection);
-    setIsEditing(false);
+    setIsSavingNew(false);
 
     if (confirmationTimeoutRef.current) clearTimeout(confirmationTimeoutRef.current);
     setConfirmation(existed ? `Updated “${name}”` : "Saved");
     confirmationTimeoutRef.current = setTimeout(() => setConfirmation(null), 2000);
   }
 
-  if (confirmation) {
-    return <span className="text-sm text-neutral-500">{confirmation}</span>;
+  // Cancels the save form on Escape. usePopover's document-level Escape listener lives on the
+  // same node React delegates to, so a plain stopPropagation() can't stop it firing too —
+  // stopImmediatePropagation() on the native event is what actually keeps the popover open.
+  function handleNameKeyDown(event: KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Escape") {
+      event.nativeEvent.stopImmediatePropagation();
+      setIsSavingNew(false);
+    }
   }
 
-  if (!isEditing) {
-    return (
-      <button
-        type="button"
-        onClick={() => setIsEditing(true)}
-        className="text-sm text-neutral-500 underline underline-offset-2"
-      >
-        Save these filters
-      </button>
-    );
-  }
+  const count = presets.length;
 
   return (
-    <form onSubmit={handleSubmit} className="flex items-center gap-2">
-      <input
-        type="text"
-        name="presetName"
-        aria-label="Preset name"
-        defaultValue={suggestPresetName(selection, catalog)}
-        autoFocus
-        onKeyDown={(event) => {
-          if (event.key === "Escape") setIsEditing(false);
-        }}
-        className="h-8 rounded-md border border-neutral-300 px-2 text-sm"
-      />
-      <button type="submit" className={buttonClasses({ variant: "accent", size: "sm" })}>
-        Save
+    <div className="grid gap-1" style={{ position: "relative" }} ref={containerRef}>
+      <button
+        type="button"
+        ref={triggerRef}
+        onClick={() => setIsOpen((prev) => !prev)}
+        aria-expanded={isOpen}
+        className="flex h-10 items-center gap-1.5 rounded-md border border-(--border-default) bg-(--surface-card) px-3 text-sm font-medium text-(--text-body) transition-colors hover:text-(--text-strong) active:brightness-90"
+      >
+        <Bookmark size={14} />
+        Saved filters
+        {count > 0 && (
+          <span
+            aria-hidden="true"
+            className="inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-(--action-accent-bg) px-1 text-[10px] font-semibold text-(--action-accent-fg)"
+          >
+            {count}
+          </span>
+        )}
+        <ChevronDown size={12} />
       </button>
-      <button type="button" onClick={() => setIsEditing(false)} className="text-sm text-neutral-500">
-        Cancel
-      </button>
-    </form>
+      {isOpen && (
+        <div
+          role="group"
+          aria-label="Saved filters"
+          className="absolute right-0 z-10 w-72 rounded-lg border border-(--border-default) bg-(--surface-card) p-2"
+          style={{
+            top: "100%",
+            marginTop: "4px",
+            boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
+            maxHeight: "320px",
+            overflowY: "auto",
+          }}
+        >
+          <p className={`${sectionLabelClass} px-2 pb-1 pt-0.5`}>Saved filters</p>
+
+          {presets.length === 0 ? (
+            <p className="px-2 py-3 text-sm text-(--text-muted)">No saved filters yet.</p>
+          ) : (
+            <div>
+              {presets.map((reconciled, index) => (
+                <div key={reconciled.preset.id} className={index > 0 ? "border-t border-(--border-subtle)" : undefined}>
+                  <SavedFilterRow reconciled={reconciled} onApply={handleApply} onDelete={onDelete} />
+                </div>
+              ))}
+            </div>
+          )}
+
+          {(canSave || matchingPreset) && (
+            <>
+              <div className="my-1 border-t border-(--border-subtle)" />
+              {confirmation ? (
+                <p className="px-2 py-2 text-sm text-(--text-muted)">{confirmation}</p>
+              ) : matchingPreset ? (
+                <p className="flex items-center gap-1.5 px-2 py-1.5 text-sm text-(--text-muted)">
+                  <Check size={14} />
+                  Saved as “{matchingPreset.name}”
+                </p>
+              ) : isSavingNew ? (
+                <form onSubmit={handleSave} className="grid gap-1.5 px-2 py-1.5">
+                  <label htmlFor="preset-name-input" className={sectionLabelClass}>
+                    Preset name
+                  </label>
+                  <input
+                    id="preset-name-input"
+                    type="text"
+                    name="presetName"
+                    defaultValue={suggestPresetName(selection, catalog)}
+                    autoFocus
+                    onKeyDown={handleNameKeyDown}
+                    className="h-9 w-full rounded-md border border-(--border-default) bg-(--surface-card) px-2 text-sm text-(--text-strong)"
+                  />
+                  <div className="mt-0.5 flex items-center gap-3">
+                    <button type="submit" className={buttonClasses({ variant: "accent", size: "sm" })}>
+                      Save
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsSavingNew(false)}
+                      className="text-sm text-(--text-muted) transition-colors hover:text-(--text-strong)"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsSavingNew(true)}
+                  className="w-full rounded-md px-2 py-1.5 text-left text-sm text-(--text-body) transition-colors hover:bg-(--surface-muted) hover:text-(--text-strong)"
+                >
+                  <span aria-hidden="true">+ </span>
+                  Save these filters
+                </button>
+              )}
+            </>
+          )}
+
+          {presets.length > 0 && (
+            <>
+              <div className="my-1 border-t border-(--border-subtle)" />
+              {isConfirmingClearAll ? (
+                <div className="flex items-center justify-between gap-2 px-2 py-1 text-xs">
+                  <span className="text-(--text-body)">Delete all {presets.length} saved filters?</span>
+                  <span className="flex shrink-0 items-center gap-2">
+                    <button type="button" onClick={onClearAll} className="font-semibold text-red-600 hover:text-red-700">
+                      Yes
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setIsConfirmingClearAll(false)}
+                      className="text-(--text-muted) hover:text-(--text-strong)"
+                    >
+                      Cancel
+                    </button>
+                  </span>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setIsConfirmingClearAll(true)}
+                  className="w-full rounded-md px-2 py-1.5 text-left text-xs text-red-600 transition-colors hover:bg-(--surface-muted) hover:text-red-700"
+                >
+                  Delete all saved filters
+                </button>
+              )}
+            </>
+          )}
+        </div>
+      )}
+    </div>
   );
 }
 
@@ -321,7 +366,8 @@ interface FilterPresetControlsProps {
   onClearAll: () => void;
 }
 
-// Inline header-row group: the "Saved filters" dropdown plus the "Save these filters" control
+// Single header-row control for saved filters: one "Saved filters" trigger that opens a popover
+// hosting the preset list, the save-current-filters flow, and delete-all
 export function FilterPresetControls({
   presets,
   isLoaded,
@@ -334,52 +380,18 @@ export function FilterPresetControls({
   onClearAll,
 }: FilterPresetControlsProps) {
   if (!isLoaded) return null;
+  if (presets.length === 0 && !canSave) return null;
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
-      {presets.length > 0 && (
-        <SavedFiltersDropdown presets={presets} onApply={onApply} onDelete={onDelete} onClearAll={onClearAll} />
-      )}
-      {canSave && (
-        <SaveFiltersButton selection={selection} catalog={catalog} existingPresets={presets} onSave={onSave} />
-      )}
-    </div>
-  );
-}
-
-interface FilterPresetBannerProps {
-  recall: ReconciledPreset | null;
-  onApply: (reconciled: ReconciledPreset) => void;
-  onDismiss: () => void;
-}
-
-// Slim full-width banner offering to reload the user's most recent saved filter selection
-export function FilterPresetBanner({ recall, onApply, onDismiss }: FilterPresetBannerProps) {
-  if (!recall) return null;
-
-  return (
-    <div className="flex items-center justify-between gap-3 rounded-md border border-neutral-200 bg-neutral-50 px-3 py-2 text-sm">
-      <span className="text-neutral-700">Welcome back — load “{recall.preset.name}”?</span>
-      <span className="flex shrink-0 items-center gap-2">
-        <button
-          type="button"
-          onClick={() => {
-            onApply(recall);
-            onDismiss();
-          }}
-          className={buttonClasses({ variant: "outline", size: "sm" })}
-        >
-          Apply
-        </button>
-        <button
-          type="button"
-          onClick={onDismiss}
-          aria-label="Dismiss"
-          className="text-neutral-400 hover:text-neutral-600"
-        >
-          ×
-        </button>
-      </span>
-    </div>
+    <SavedFiltersPopover
+      presets={presets}
+      canSave={canSave}
+      selection={selection}
+      catalog={catalog}
+      onApply={onApply}
+      onSave={onSave}
+      onDelete={onDelete}
+      onClearAll={onClearAll}
+    />
   );
 }
