@@ -37,12 +37,6 @@
       "websiteUrl": "https://www.pabcbank.com"
     },
     {
-      "id": "standard-chartered",
-      "name": "Standard Chartered Sri Lanka",
-      "shortName": "Standard Chartered",
-      "websiteUrl": "https://www.sc.com/lk"
-    },
-    {
       "id": "cargills-bank",
       "name": "Cargills Bank",
       "shortName": "Cargills Bank",
@@ -148,12 +142,6 @@
       "id": "pan-asia-bank-credit-cards",
       "bankId": "pan-asia-bank",
       "name": "Pan Asia Bank Credit Cards"
-    },
-    {
-      "id": "standard-chartered-credit-cards",
-      "bankId": "standard-chartered",
-      "name": "Standard Chartered Credit Cards",
-      "network": "Visa / Mastercard"
     },
     {
       "id": "cargills-bank-mastercard-credit-cards",

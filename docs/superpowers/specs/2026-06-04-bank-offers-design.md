@@ -23,7 +23,7 @@ The first version will be fully automated. If source quality proves inconsistent
 - Create a new standalone app inside `Bank-Offers`.
 - Collect offer data from Sri Lankan bank offer pages.
 - Start with banks including HNB, Commercial Bank of Ceylon, CDB, NDB, People's Bank, NSB, BOC, NTB, Sampath Bank, and DFCC.
-- Keep the source registry extensible for other banks such as Seylan, Union Bank, Pan Asia, Amana, HSBC, and Standard Chartered.
+- Keep the source registry extensible for other banks such as Seylan, Union Bank, Pan Asia, Amana, and HSBC.
 - Normalize scraped data into one shared offer format.
 - Automatically categorize offers.
 - Show a combined offers page with filters for bank and category.

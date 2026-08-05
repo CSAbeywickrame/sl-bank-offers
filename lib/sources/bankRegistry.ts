@@ -157,21 +157,7 @@ export const bankRegistry: BankRegistryEntry[] = [
     // Whole site is behind a WAF that 307s plain HTTP; only a real browser gets through.
     sources: [{ url: "https://www.pabcbank.com/card-offers/", type: "dynamic_page" }]
   },
-  {
-    bankId: "standard-chartered",
-    enabled: true,
-    bank: {
-      id: "standard-chartered",
-      name: "Standard Chartered Sri Lanka",
-      shortName: "Standard Chartered",
-      websiteUrl: "https://www.sc.com/lk"
-    },
-    cards: [
-      { id: "standard-chartered-credit-cards", bankId: "standard-chartered", name: "Standard Chartered Credit Cards", network: "Visa / Mastercard" }
-    ],
-    defaultCardId: "standard-chartered-credit-cards",
-    sources: [{ url: "https://www.sc.com/lk/data/tgl/offers.json", type: "feed" }]
-  },
+  // standard-chartered removed 2026-08: Standard Chartered exited the Sri Lankan retail market.
   {
     bankId: "union-bank",
     enabled: true,
@@ -231,7 +217,7 @@ export const bankRegistry: BankRegistryEntry[] = [
     defaultCardId: "sampath-credit-cards",
     // Structured JSON API (one call returns all offers). Parsed deterministically by feedMappers["sampath"]
     // (no LLM). The page itself is a bot-blocked Nuxt SPA, so HTML scraping does not work.
-    sources: [{ url: "https://www.sampath.lk/api/card-promotions?page_number=1&size=300", type: "feed" }]
+    sources: [{ url: "https://www.sampath.lk/api/card-promotions", type: "feed" }]
   },
   {
     bankId: "dfcc",

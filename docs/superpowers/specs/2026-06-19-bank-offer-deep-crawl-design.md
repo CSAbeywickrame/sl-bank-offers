@@ -41,7 +41,7 @@ Verified live (People's Bank):
 
 ## Non-goals
 
-- Rewriting feed/PDF banks (sampath, standard-chartered) — untouched.
+- Rewriting feed/PDF banks (sampath) — untouched.
 - People's debit-card offers — credit-card only this round (matches the registry card and the
   existing dataset). Debit is a later, additive change.
 - Wiring every static bank in this spec — only the shared engine + People's reference.
@@ -186,7 +186,7 @@ throttling.
 2. Wire People's recipe; validate as above against the existing dataset.
 3. Onboard the other static banks one recipe at a time (discover each topology live; most are
    flat listing→detail, `hops: []`).
-4. pan-asia stays `render: "dynamic"`; sampath/standard-chartered unchanged.
+4. pan-asia stays `render: "dynamic"`; sampath unchanged.
 
 ## Risks & mitigations
 

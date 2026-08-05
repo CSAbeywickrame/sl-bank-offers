@@ -205,13 +205,6 @@
       ],
       "offersWritten": 57
     },
-    "standard-chartered": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.sc.com/lk/data/tgl/offers.json"
-      ],
-      "message": "fetch failed for all sources: https://www.sc.com/lk/data/tgl/offers.json (HTTP 404)"
-    },
     "union-bank": {
       "status": "updated",
       "sources": [
