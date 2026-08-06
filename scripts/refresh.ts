@@ -5,7 +5,7 @@ import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib
 import { fetchAndStrip, hashContent, fetchRawHtml, type FetchResult } from "@/lib/ingest/fetchAndStrip";
 import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
-import { expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
+import { dedupeOffers, expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 
@@ -139,7 +139,7 @@ async function main(): Promise<void> {
           continue;
         }
         const currentCount = countBankOffers(seed, entry);
-        const dedupedOffers = dedupeById(activeOffers);
+        const dedupedOffers = dedupeOffers(activeOffers);
         const newCount = dedupedOffers.length;
         if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
           report.banks[entry.bankId] = {
@@ -336,7 +336,7 @@ async function main(): Promise<void> {
       // (likely a broken scrape). Keep existing rows, do NOT advance the hash, and fail the run so
       // the operator is alerted. Accept a real drop by re-running with SANITY_OVERRIDE=<bankId>.
       const currentCount = countBankOffers(seed, entry);
-      const dedupedOffers = dedupeById(activeOffers);
+      const dedupedOffers = dedupeOffers(activeOffers);
       const newCount = dedupedOffers.length;
       if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
         report.banks[entry.bankId] = {
@@ -399,13 +399,6 @@ function countBankOffers(seed: SeedData, entry: BankRegistryEntry): number {
     ...seed.cards.filter(c => c.bankId === entry.bankId).map(c => c.id)
   ]);
   return seed.offers.filter(o => cardIds.has(o.cardId)).length;
-}
-
-// Removes duplicate offers by id (last write wins).
-function dedupeById(offers: ScannedOffer[]): ScannedOffer[] {
-  const byId = new Map<string, ScannedOffer>();
-  for (const offer of offers) byId.set(offer.id, offer);
-  return [...byId.values()];
 }
 
 // Counts banks by status for the run summary.
