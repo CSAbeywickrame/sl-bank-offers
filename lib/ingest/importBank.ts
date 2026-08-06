@@ -107,3 +107,76 @@ export function reconcileOrphans(
     dropped,
   };
 }
+
+interface RichnessCandidate {
+  validUntil?: unknown;
+  validFrom?: unknown;
+  merchant?: unknown;
+  location?: unknown;
+  termsLink?: unknown;
+  description?: unknown;
+}
+
+// Normalizes a merchant/description string for duplicate matching: lowercase, collapse
+// non-alphanumeric runs to a single space, trim. Distinct from lib/ingest/textUtils.ts's
+// normalizeText, which handles unicode/accent normalization — a different job.
+function normalizeForDedupe(value: string | undefined): string {
+  return (value ?? "").toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+}
+
+// Scores how "rich" a candidate record is: one point per populated optional field. Excludes
+// `merchant` — it's part of the dedupe group key, so it's near-constant within a group and
+// would add no signal.
+function richnessScore(offer: RichnessCandidate): number {
+  return [offer.validUntil, offer.validFrom, offer.location, offer.termsLink].filter(Boolean).length;
+}
+
+// Picks the richer of two same-offer candidates (plus a description-length tiebreak);
+// the incumbent wins outright ties, giving a deterministic first-occurrence-wins result.
+function richerOffer<T extends RichnessCandidate>(incumbent: T, candidate: T): T {
+  const aDescription = typeof incumbent.description === "string" ? incumbent.description : "";
+  const bDescription = typeof candidate.description === "string" ? candidate.description : "";
+  const aScore = richnessScore(incumbent) + (aDescription.length > bDescription.length ? 1 : 0);
+  const bScore = richnessScore(candidate) + (bDescription.length > aDescription.length ? 1 : 0);
+  return bScore > aScore ? candidate : incumbent;
+}
+
+// Collapses duplicate offers. Runs two passes: exact id (the same offer re-imported), then
+// semantic (same card + identity anchor + description reached via different source URLs, which
+// mint different ids). The identity anchor is the merchant, falling back to the title when
+// merchant is absent: distinct offers frequently share a generic boilerplate description (e.g.
+// "25% OFF (Monday to Friday)") while the merchant name lives only in the title, so keying on
+// description alone would collapse those distinct offers into one and delete real data.
+export function dedupeOffers<
+  T extends { id: string; cardId: string; merchant?: string; title?: string; description?: string } & RichnessCandidate
+>(offers: T[]): T[] {
+  // Pass 1: dedup by id, first occurrence wins.
+  const byId = new Map<string, T>();
+  for (const offer of offers) {
+    if (!byId.has(offer.id)) byId.set(offer.id, offer);
+  }
+
+  // Pass 2: group survivors by cardId + normalized identity anchor (merchant, or title when
+  // merchant is absent) + normalized description, keeping the richest record per group. A
+  // group's output slot is the position of its first member.
+  const result: T[] = [];
+  const groupIndex = new Map<string, number>();
+  for (const offer of byId.values()) {
+    const normalizedAnchor = normalizeForDedupe(offer.merchant) || normalizeForDedupe(offer.title);
+    const normalizedDescription = normalizeForDedupe(offer.description);
+    if (!normalizedAnchor && !normalizedDescription) {
+      // No merchant, no title, AND no description to compare — no evidence of sameness, don't guess.
+      result.push(offer);
+      continue;
+    }
+    const key = `${offer.cardId}|${normalizedAnchor}|${normalizedDescription}`;
+    const existingIndex = groupIndex.get(key);
+    if (existingIndex === undefined) {
+      groupIndex.set(key, result.length);
+      result.push(offer);
+    } else {
+      result[existingIndex] = richerOffer(result[existingIndex], offer);
+    }
+  }
+  return result;
+}
