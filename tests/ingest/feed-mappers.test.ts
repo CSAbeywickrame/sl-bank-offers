@@ -7,6 +7,9 @@ const reviewDateIso = "2026-07-16";
 const entry = bankRegistry.find((b) => b.bankId === "hnb");
 if (!entry) throw new Error("hnb entry not found in bankRegistry");
 
+const sampathEntry = bankRegistry.find((b) => b.bankId === "sampath");
+if (!sampathEntry) throw new Error("sampath entry not found in bankRegistry");
+
 describe("feedMappers.hnb", () => {
 
   const fixture = {
@@ -123,6 +126,52 @@ describe("feedMappers.hnb", () => {
   it("throws when the response is truncated relative to total", () => {
     const truncated = { page: 1, limit: 1000, total: 819, totalPages: 1, data: fixture.data.slice(0, 3) };
     expect(() => feedMappers.hnb(JSON.stringify(truncated), entry, reviewDateIso)).toThrow();
+  });
+});
+
+describe("feedMappers.sampath", () => {
+
+  // Category values arrive from the live API in mixed case (Hotels, Electronics_and_Furniture,
+  // VISA_Offers, Other), so every lookup depends on the mapper normalizing case first.
+  const fixture = {
+    data: [
+      { id: 101, company_name: "Abans", short_discount: "10% off", category: "Electronics_and_Furniture", enable: true },
+      { id: 102, company_name: "Cinnamon Grand", short_discount: "20% off", category: "Hotels", enable: true },
+      { id: 103, company_name: "Some Insurer", short_discount: "0% Instalment Plan for 12 months", category: "health_and_insurance", enable: true },
+      { id: 104, company_name: "Test Hotel", short_discount: "15% off", category: "hotels", enable: true },
+      { id: 105, company_name: "Test Market", short_discount: "5% off", category: "super_markets", enable: true },
+      { id: 106, company_name: "Softlogic", short_discount: "0% Installment Plan for 24 months", category: "electronics_and_furniture", enable: true },
+      { id: 201, company_name: "Test Store", short_discount: "10% off", category: "Mastercard_Offers", enable: true },
+    ]
+  };
+
+  const offers = feedMappers.sampath(JSON.stringify(fixture), sampathEntry, reviewDateIso);
+
+  const categoryOf = (id: number) => offers.find((o) => o.id === `sampath-${id}`)?.category;
+
+  it("lowercases a mixed-case category before lookup (Electronics_and_Furniture -> other)", () => {
+    expect(categoryOf(101)).toBe("other");
+  });
+
+  it("lowercases a mixed-case category before lookup (Hotels -> travel)", () => {
+    expect(categoryOf(102)).toBe("travel");
+  });
+
+  it("keeps the installment text heuristic ahead of the category map", () => {
+    expect(categoryOf(103)).toBe("installment");
+  });
+
+  it("catches the American 'installment' spelling, not just British 'instalment'", () => {
+    expect(categoryOf(106)).toBe("installment");
+  });
+
+  it("still maps existing lowercase slugs correctly", () => {
+    expect(categoryOf(104)).toBe("travel");
+    expect(categoryOf(105)).toBe("supermarket");
+  });
+
+  it("maps the Mastercard_Offers category to other", () => {
+    expect(categoryOf(201)).toBe("other");
   });
 });
 

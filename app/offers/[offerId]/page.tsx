@@ -150,7 +150,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
           style={{ alignContent: "start" }}
         >
           <h2 className="text-[18px] font-semibold text-neutral-900">Official links</h2>
-          <p className="text-sm leading-6 text-neutral-500">
+          <p className="text-sm leading-6 text-neutral-600">
             Use the official bank source to confirm the latest eligibility, dates, and exclusions before using the offer.
           </p>
           <a

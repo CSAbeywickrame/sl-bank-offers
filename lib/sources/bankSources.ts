@@ -86,14 +86,6 @@ export const bankSources: BankSource[] = [
     ]
   },
   {
-    bankId: "standard-chartered",
-    bankName: "Standard Chartered Sri Lanka",
-    shortName: "Standard Chartered",
-    enabled: true,
-    sourceType: "feed",
-    urls: ["https://www.sc.com/lk/data/tgl/offers.json"]
-  },
-  {
     bankId: "sampath",
     bankName: "Sampath Bank",
     shortName: "Sampath",

@@ -1,3 +1,5 @@
+import { Close } from "@/components/ui/icon";
+
 export type FilterChipData = { id: string; label: string; onRemove: () => void };
 
 interface FilterSummaryProps {
@@ -23,9 +25,9 @@ function FilterChip({ label, onRemove }: FilterChipProps) {
         type="button"
         onClick={onRemove}
         aria-label={`Remove ${label} filter`}
-        className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/[0.08] text-[11px] leading-none text-inherit transition-colors hover:bg-black/15"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/[0.08] text-inherit transition-colors hover:bg-black/15"
       >
-        ✕
+        <Close size={12} />
       </button>
     </span>
   );

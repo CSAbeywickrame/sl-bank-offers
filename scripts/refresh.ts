@@ -181,12 +181,18 @@ async function main(): Promise<void> {
       }
 
       // Gate 2: empty / too-short content keeps existing rows and flags the bank (no tokens).
+      // Feed sources are exempt from the length check: MIN_CONTENT_CHARS is a heuristic for "an HTML
+      // page failed to render", but fetchAndStrip already validates a feed payload parses as JSON, so a
+      // short-but-valid response (e.g. a legitimately empty category like Sampath's "fuel") is real data,
+      // not a failure. A total collapse across all sources is still caught downstream by the sanity gate.
       const tooThin = fetched.some(({ source, result }) =>
         source.type === "pdf"
           ? !result.pdfBytes || result.pdfBytes.length === 0
           : source.type === "image"
             ? !result.imageBytes || result.imageBytes.length === 0
-            : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
+            : source.type === "feed"
+              ? false
+              : (result.strippedText ?? "").length < MIN_CONTENT_CHARS
       );
       if (tooThin) {
         report.banks[entry.bankId] = {
@@ -219,12 +225,21 @@ async function main(): Promise<void> {
 
       // Changed content -> produce offers. Banks with a deterministic feed mapper (structured JSON API)
       // skip Claude entirely (no key, no budget, no tokens); all others use the Claude extractor.
-      const offers: ScannedOffer[] = [];
+      let offers: ScannedOffer[] = [];
       const mapper = feedMappers[entry.bankId];
       if (mapper) {
         for (const { result } of fetched) {
           offers.push(...mapper(result.strippedText ?? "", entry, reviewDateIso));
         }
+        // The same promo can appear under several category tabs (e.g. a Sampath offer listed under both
+        // "hotels" and "premium_offers"); dedup by id, keeping the first occurrence, so a multi-source
+        // feed bank never produces duplicate rows for one promo.
+        const seenIds = new Set<string>();
+        offers = offers.filter((offer) => {
+          if (seenIds.has(offer.id)) return false;
+          seenIds.add(offer.id);
+          return true;
+        });
       } else {
         // Claude path needs an API key and respects the per-run budget cap. Keep rows + retry if unavailable.
         if (!client || extractedCount >= maxBanks) {

@@ -137,12 +137,12 @@ export default async function CategoriesPage() {
                     <p className="text-[18px] font-semibold text-neutral-900">
                       {category.label}
                     </p>
-                    <p className="mt-2 text-sm leading-[1.6] text-neutral-500">
+                    <p className="mt-2 text-sm leading-[1.6] text-neutral-600">
                       {categoryDescriptions[category.id]}
                     </p>
                   </div>
                   <div className="mt-6 flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-500">
+                    <span className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-600">
                       {count} active offer{count !== 1 ? "s" : ""}
                     </span>
                     <span className="text-sm font-semibold text-emerald-700" aria-hidden="true">
