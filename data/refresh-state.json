@@ -1,8 +1,8 @@
 {
-  "lastRunAt": "2026-08-10T03:55:41.494Z",
+  "lastRunAt": "2026-08-17T02:59:43.961Z",
   "banks": {
     "peoples-bank": {
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z",
       "details": {
         "https://www.peoplesbank.lk/promotion/sungreen-resort-spa-habarana-40-off-credit/": "89b0391bfbe713f21187d3b8e3afa200194650bc",
         "https://www.peoplesbank.lk/promotion/amaara-sky-hotel-kandy-30-off-credit/": "8e547717058dd35e26fcbfb3dfd1baa0f79f5378",
@@ -89,6 +89,7 @@
         "https://www.peoplesbank.lk/promotion/dine-restaurant-radisson-hotel-kandy-40-off-credit/": "b9a55a04e9706388d720c63724856957289a6e44",
         "https://www.peoplesbank.lk/promotion/london-grill-at-cinnamon-grand-colombo-30-off-credit/": "3132342c85dd13ae08d5e52eab2ccc719b3e1d9d",
         "https://www.peoplesbank.lk/promotion/tea-tang-30-off-credit/": "5cb0b071070fb536f205dbe133201a29e9088d2b",
+        "https://www.peoplesbank.lk/promotion/bamboo-boy-ccc-kimono-ccc-wide-eyes-ccc-hotel-manoli-ccc-primo-ccc-30-off-credit/": "f8dec5fca3ae9098aec28b2c4211cb57a6e7376f",
         "https://www.peoplesbank.lk/promotion/chinese-dragon-cafe-20-off-credit/": "e344ed301531a51e436c4b56f116036b285f39e1",
         "https://www.peoplesbank.lk/promotion/royal-thai-at-cinnamon-lakeside-colombo/": "6133f4362fc19c78b2d314e6bcf7c33202485d44",
         "https://www.peoplesbank.lk/promotion/long-feng-at-cinnamon-lakeside-colombo/": "0f1c14e5a3e34a649c455930e80383515bea49f6",
@@ -99,7 +100,10 @@
         "https://www.peoplesbank.lk/promotion/vistas-rooftop-bar-at-nh-collection-colombo-25-off-credit/": "b62d03febfdc654016d9740d6593bee428ba0b80",
         "https://www.peoplesbank.lk/promotion/adithyaa-at-nh-collection-colombo-25-off-credit/": "581d104f0ab4413fe41d7a260e43d8ca8a18369f",
         "https://www.peoplesbank.lk/promotion/thai-rasa-at-nh-collection-colombo-25-off-credit/": "c046bc5e47fc7c4a7cd1dd1acd20728d093277fd",
+        "https://www.peoplesbank.lk/promotion/layards-wharf-by-food-studio-at-havelock-city-mall-20-off-credit/": "bdc9846cec1676a6e7ff93ba6338128891b1c753",
+        "https://www.peoplesbank.lk/promotion/food-studio-at-ogf-20-off-credit/": "37f105ac4ac36a2da390ae66d08a4208b7c0034f",
         "https://www.peoplesbank.lk/promotion/hello-beirut-by-lebanon-chef-one-ocean-food-harbor-at-port-city-colombo-25-off-credit/": "805940375a05064c71a55b07cd1a56eef8401115",
+        "https://www.peoplesbank.lk/promotion/food-studio-at-arcade-primo-smashy-20-off-credit/": "79f2e53d0640202b0262dac8399102576fcf163e",
         "https://www.peoplesbank.lk/promotion/indian-affair-20-off-credit/": "0c2bea2335c317d7dd8ca3504224b397cd3a5ff1",
         "https://www.peoplesbank.lk/promotion/fullr-20-off-credit/": "bfa59207fd7eb9f475362dd1ca7107931199e927",
         "https://www.peoplesbank.lk/promotion/solo-bowl-20-off-credit/": "e3d525db37d6b32b2126e9e4baddcfdf3d9ccf91",
@@ -159,6 +163,7 @@
         "https://www.peoplesbank.lk/promotion/toyota-lanka-up-to-42-5-off-credit/": "8a38398ed796e734afe5d4203f1994a83ca40417",
         "https://www.peoplesbank.lk/promotion/www-crazyjets-com-25-off-credit/": "2a9f2ce9996f917f130aba1de74115472ba1400e",
         "https://www.peoplesbank.lk/promotion/www-findmyfare-com-15-off-credit/": "4c1752a12b69aa29fc2931766be4969ce69d7857",
+        "https://www.peoplesbank.lk/promotion/keells-thursday-savings-offer-10-off-credit-card/": "12a863fcbfdff87547d9edb76447fd088e8dfafb",
         "https://www.peoplesbank.lk/promotion/singapore-visa-offers/": "e3a8dbd68709d3e5bd80548c1daec31cbbb2a5d2",
         "https://www.peoplesbank.lk/promotion/visa-offers/": "b5c4dc1baaa6a797183d5d63340cadbeec187182",
         "https://www.peoplesbank.lk/promotion/visa-concierge-offers-2026/": "e7164b05cd5c5af0547e21434a92c28fe4680194",
@@ -231,6 +236,7 @@
         "https://www.peoplesbank.lk/roastoth/2026/03/Vistas.jpg": "304fb4cf968b8e161d18f88e158d291dc48769b6",
         "https://www.peoplesbank.lk/roastoth/2026/03/Adityaa.jpg": "54c798b524b66a72daa97f3f9ebd33e85610458e",
         "https://www.peoplesbank.lk/roastoth/2026/03/Thai-Rasa.jpg": "b7ce44e6ea6dc001947413662521ec96d2529845",
+        "https://www.peoplesbank.lk/roastoth/2026/05/Primo-Smashy.jpg": "56cd3daf450d840c331ebe1b6dd1d2f29de0882a",
         "https://www.peoplesbank.lk/roastoth/2024/03/Indian_Affair.jpg": "5aa6a1d534afdebf4a4d7f03c5ce10d1901d3fb5",
         "https://www.peoplesbank.lk/roastoth/2022/03/Fullr.jpg": "73e936597f2b84d0a98c85b8753fb2fd3f7defa3",
         "https://www.peoplesbank.lk/roastoth/2024/03/Solo_Bowl.jpg": "f43a925776671a7f7514df46835d8dbe69df4c4c",
@@ -256,6 +262,7 @@
         "https://www.peoplesbank.lk/roastoth/2026/06/Siddhalepa_Hospital.jpg": "4a87285a09d42f3fda5a77f30224f77c2e7af062",
         "https://www.peoplesbank.lk/roastoth/2026/06/Siddhalepa-Clinic.jpg": "6b172bc216ab5a414097e2d7ef0a445375bbf1e2",
         "https://www.peoplesbank.lk/roastoth/2026/07/findmyfare.com-July.pdf": "3be415e1d54be6d57f5c3f9158abda5f3d087a79",
+        "https://www.peoplesbank.lk/roastoth/2026/08/VISA-X-Keells-Terms-Conditions.pdf": "561dbde7e44bfabf838af84de055725568b111c4",
         "https://www.peoplesbank.lk/roastoth/2026/06/Singapoor-Offers.pdf": "d28febdfe668690426a3276b657df6a6cd7fb430",
         "https://www.peoplesbank.lk/roastoth/2024/10/Singapore_Offers.jpg": "be79a209637eb1e74c257be9ac62e6bc80a456e3",
         "https://www.peoplesbank.lk/roastoth/2026/01/Visa-Product-Benefits-Deck-2026.pdf": "6a896dd164cb43841eeddd2e3a0c3f95ffcea59f",
@@ -538,9 +545,10 @@
       }
     },
     "seylan": {
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z",
       "details": {
         "https://www.seylan.lk/promotions/cards/shoes-accessories/helanka/": "aa4441ac70ea354a78d3df50861915f485ff0460",
+        "https://www.seylan.lk/atlas-my-shop-1/": "fafd6cd8acda876e108edaef4128236e17cd9823",
         "https://www.seylan.lk/burning-bird-rotisserie-1/": "d84d6f77f1c1efda647c11906621b2bf7b2dcb03",
         "https://www.seylan.lk/pearl-bay-1/": "b3101d67851f9a51be10e7469a1825382be1b487",
         "https://www.seylan.lk/find-my-fare-1/": "e454fc4f477b5c5067d9c7863bc8a92d19f4454a",
@@ -592,6 +600,8 @@
         "https://www.seylan.lk/semage-co-pvt-ltd-1/": "893b513563bebc742a3d95f18455c35ce4103c74",
         "https://www.seylan.lk/talkative-parents-1/": "b5364ecad88500875697fb0cf229ce292690a58c",
         "https://www.seylan.lk/american-education-center-ltd-1/": "5c05b38d06d67654161933843e93993f6f505eaf",
+        "https://www.seylan.lk/mount-randholee-resort-and-spa-1/": "a822c088db2ed73dc25569bf99d465f6c33ccc90",
+        "https://www.seylan.lk/slam-power-solutions-pvtltd-1/": "c4fd64cd85ee4a844f7f5d0cdb488abac8a87b0e",
         "https://www.seylan.lk/grand-udawalawe-safari-1/": "4f9f7183537d73e3a737277c36e10aa713797faf",
         "https://www.seylan.lk/luminex-bookshops-1/": "c910704b529d7e5687ad4b8e4e7e26070e377a3b",
         "https://www.seylan.lk/earls-regent-kandy-1/": "fb4e326c04597c736711792386bf153457644ce8",
@@ -607,13 +617,12 @@
         "https://www.seylan.lk/promotions/cards/dining/cafe-maitland-by-mount-lavinia-hotel/": "8b2f59bac56033f9f974c87840f5a93da734942b",
         "https://www.seylan.lk/club-bentota-1/": "c5c50b091782ecfa57e4c1c6d64b6515ab665a9d",
         "https://www.seylan.lk/mak-lubricants-2/": "f95056890bfb308ca5881b902521e32e2d941acf",
-        "https://www.seylan.lk/buymelk-1/": "9a76db9727a888aed20fb3e2896e0bd167b867d3",
+        "https://www.seylan.lk/buymelk-1/": "09545d82530219e8f2069ea437f32daa27efe9a3",
         "https://www.seylan.lk/rooter-1/": "3c528c8e5d28a5b7e25fb96ea6261f56ecd78074",
         "https://www.seylan.lk/junktion-1/": "45fb6fbc4bbe394a7cb7a02d914e900415938e54",
         "https://www.seylan.lk/promotions/cards/supermarket/spar/": "46ff088f400a1c3da83a52f555b7353dfc04d990",
         "https://www.seylan.lk/wattura-resort/": "e1b9e24d07d9d24c8833be106e5348c5bd75ef67",
         "https://www.seylan.lk/dinidu-jewellery-1/": "6516c710bb71547ec9c1aa31140d36374d803ef5",
-        "https://www.seylan.lk/promotions/cards/leisure/thilanka-hotel-kandy/": "c68428953178e429fec0a0c99c94cbab578cf1b6",
         "https://www.seylan.lk/jie-jie-beach-hotel-panadura-1/": "5a458cd36f4e2ae22c8de3bf16163bf91a84ba0f",
         "https://www.seylan.lk/hikkaduwa-beach-hotel-1/": "143192eb0842c2d83271d431f19793ba76c89150",
         "https://www.seylan.lk/avenra-beach-hotel-hikkaduwa-1/": "d1f7325d7282757c762ede16f8c342dcad61d857",
@@ -638,7 +647,7 @@
         "https://www.seylan.lk/edwards-collection-luxury-villas-sri-lanka-1/": "478145a6ccf32b280d375923aec74e22e357c6f2",
         "https://www.seylan.lk/valentino-italy-1/": "2c8e0eaa8241adf5392c73c63982600a2c68d474",
         "https://www.seylan.lk/ruwini-jayarathne-jewelry-pvt-limited-1/": "4b02f0cf7812d167a953fbffd6d56bc6d5001bac",
-        "https://www.seylan.lk/promotions/cards/online-deals/buy-abans/": "2c53133ac533c527418f2d1ffb481c8caef20c15",
+        "https://www.seylan.lk/promotions/cards/online-deals/buy-abans/": "d16167bf6302d8a95ab01763be95db244c13e266",
         "https://www.seylan.lk/singapore-center-1/": "622780364bc21857bc66f167b4942399b21a5a69",
         "https://www.seylan.lk/global-vinyl-pvt-ltd-1/": "49efdd76ac7296effd8712afd6852afbfa3d06d4",
         "https://www.seylan.lk/my-dentist-pvt-ltd-1/": "94580bf975d217092a6ac7f486eb832a59a66141",
@@ -646,7 +655,7 @@
         "https://www.seylan.lk/siem-galle-campus-1/": "349fa80eb2da381d25621701930be14b069ded63",
         "https://www.seylan.lk/promotions/cards/wellness/quantum-fitness/": "78835fc35517c547ea707bb722f5d16df5f94565",
         "https://www.seylan.lk/promotions/cards/travel/seylan-cards-partnering-with-classic-travel/": "8ff9f7e4fa2756443e27424db534b8904007ef06",
-        "https://www.seylan.lk/supplement-vaultlk-1/": "50436804ceef02b4c01a1b9929a30fc364f142a5",
+        "https://www.seylan.lk/supplement-vaultlk-1/": "596bb33f199b28d5d14327547774eaab2f6b1964",
         "https://www.seylan.lk/pushpika-de-silva-jewelry-pvt-ltd-1/": "721ea14870935b2713c0a3bf973fae8c30c7a6cc",
         "https://www.seylan.lk/chatham-luxury-watches-1/": "fb2213e02bba530b2616b4291a75112a2e1a6758",
         "https://www.seylan.lk/achievers-international-campus-1/": "0552449b7ad19e1683868d93fa0a7533a070fba8",
@@ -660,10 +669,10 @@
         "https://www.seylan.lk/ceylon-furniture-1/": "e016bfe458d888aaaf2040afd20a5040a05d6bc4",
         "https://www.seylan.lk/promotions/cards/comfort/arpico-supercentre-2/": "1af37be1a8867c27ce75476016d729c6118f4afb",
         "https://www.seylan.lk/siddhalepa-ayurveda-hospital-1/": "27a26c7b3cf312a95af847dca82b2bf1d294a15d",
-        "https://www.seylan.lk/promotions/cards/online-deals/cosmeticslk/": "7aff7daa9d29c6c0b50d50cdf24d2d252f0b318d",
+        "https://www.seylan.lk/promotions/cards/online-deals/cosmeticslk/": "df1d25ac7e211e9223aafbfc86121c4ac959464c",
         "https://www.seylan.lk/futureworld-lanka-pvt-ltd-1/": "617432db6274d5402a2c33d2a4d855695b7cde8c",
         "https://www.seylan.lk/ceylon-travel-technology-pvt-ltd-1/": "fb0ed47d2c3e80511e74d899b3350dc2ab45b568",
-        "https://www.seylan.lk/tudolk-1/": "5a1526e53212b517dfbefab30b836ea3f0c1ac08",
+        "https://www.seylan.lk/tudolk-1/": "362794865a082de99a3d8206152018d60e5f4cb4",
         "https://www.seylan.lk/assetline-insurance-brokers-pvt-ltd-1/": "d30e187006143b6fade3d0fc0f0dde3ace58bbc5",
         "https://www.seylan.lk/joes-resorts-1/": "1fc664f080412ac651d15fb8c9a587a7974b5ce9",
         "https://www.seylan.lk/promotions/cards/eye-care/vision-care/": "807c5ffe3fe9930b10201a1dc8cb7ae106bfcf21",
@@ -696,7 +705,7 @@
       }
     },
     "nsb": {
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z",
       "details": {
         "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/": "37a6b7e4af83ed4aed4e6a2c6e9ca50b86f44f21",
         "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/": "d471b27ea21756c088ba7b08b7bd063ec6c879ae",
@@ -750,32 +759,32 @@
       }
     },
     "ndb": {
-      "hash": "0119faadc0bd0c350b455658fc5f6fee8f0dc96a",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "1b5828370a7f728314a0478496a4050df6495f14",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "pan-asia-bank": {
-      "hash": "d784dfbf3daefc7327ed6177c6254fa9991b76b9",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "6c49e11cc0aff9a992ee5b45b650a17c57e856c4",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "union-bank": {
-      "hash": "bb77489f7f895534d2e30b16dbd1561cfabe5f4b",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "89cd8882685368b9a77ce8043599bd30f39a4718",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "cargills-bank": {
-      "hash": "8f9d0a7f6acf237fe52bacaf7343834721d2868a",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "48b2a89946ff12ef0ea6b240f35a8592ad9a01eb",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "sampath": {
-      "hash": "94abdf1a4d445a71084bb368f2ebeb217f6ca07c",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "0166df298b59d25f04665d652f899d80e20e4b05",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "dfcc": {
-      "hash": "19f79901689061c1b434bc7703ee86906398bdc5",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "8be4a1b6838e511f0098d4d36e94647e96dc994a",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     },
     "hnb": {
-      "hash": "84335a1db0151149aeadf85c81a138d6f2b681b9",
-      "lastUpdatedAt": "2026-08-10T03:55:41.494Z"
+      "hash": "4678c2ccda9e43f4dcb70b1509919ee20ca6b5ce",
+      "lastUpdatedAt": "2026-08-17T02:59:43.961Z"
     }
   }
 }
