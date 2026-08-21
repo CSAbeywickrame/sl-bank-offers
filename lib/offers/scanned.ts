@@ -70,7 +70,7 @@ export function assertScannedOffer(value: unknown): asserts value is ScannedOffe
   assertEnrichmentFields(value);
 }
 
-function assertScannedOfferCatalog(value: unknown): asserts value is ScannedOfferCatalog {
+export function assertScannedOfferCatalog(value: unknown): asserts value is ScannedOfferCatalog {
   if (!isRecord(value) || typeof value.version !== "number" || typeof value.updatedAt !== "string" || !Array.isArray(value.offers)) {
     throw new Error("Scanned offer catalog must include version, updatedAt, and offers.");
   }

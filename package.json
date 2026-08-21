@@ -13,6 +13,7 @@
     "test:e2e": "playwright test",
     "refresh:fresh": "tsx scripts/refresh.ts",
     "refresh:fresh-local": "node --env-file=.env.local --import tsx scripts/refresh.ts",
+    "migrate:catalog": "node --env-file=.env.local --import tsx scripts/migrate-catalog.ts",
     "sync:scanned": "tsx scripts/sync-scanned-offers.ts"
   },
   "dependencies": {
