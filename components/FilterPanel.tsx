@@ -140,7 +140,7 @@ export function FilterPanel({
 }: FilterPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isFiltersOpen, setIsFiltersOpen] = useState(false);
+  const [isFiltersOpen, setIsFiltersOpen] = useState(true);
 
   const cardScopeBankIds = lockedBankId ? [lockedBankId] : selectedBankIds;
   const availableCards =
