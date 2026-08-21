@@ -89,7 +89,7 @@ function optionalString(value: unknown): string | undefined {
   return trimmed.length > 0 ? trimmed : undefined;
 }
 
-// Builds a stable, unique id from bankId + title + sourceUrl (mirrors extractHtmlOffers).
+// Builds a stable, unique id from bankId + title + sourceUrl.
 function buildId(bankId: string, title: string, sourceUrl: string): string {
   const hash = crypto.createHash("sha1").update(`${bankId}|${title}|${sourceUrl}`).digest("hex").slice(0, 12);
   return `${bankId}-${hash}`;
