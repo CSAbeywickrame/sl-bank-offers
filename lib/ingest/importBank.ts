@@ -1,5 +1,6 @@
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 import { syncScannedOffers } from "@/lib/offers/scanned";
+import { enrichOffer } from "@/lib/ingest/enrich";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 
 // True if the offer has not expired as of reviewDateIso (no validUntil => always active).
@@ -19,10 +20,26 @@ export function importBankOffers(
   seed: SeedData,
   catalog: ScannedOfferCatalog,
 ): { seed: SeedData; catalog: ScannedOfferCatalog } {
+  // "Date added" per offer id, from the rows this import is about to replace.
+  const priorFirstSeen = new Map<string, string>();
+  for (const offer of catalog.offers) {
+    if (offer.bankId === entry.bankId) {
+      priorFirstSeen.set(offer.id, offer.firstSeenAt ?? offer.lastReviewedAt);
+    }
+  }
+  // Enrichment belongs here rather than in each producer: every refresh path (LLM extraction,
+  // deterministic feed mappers, crawl reuse) funnels through this function, so none can skip it.
+  // firstSeenAt is restored from the replaced row for the same reason the map above exists — the
+  // per-bank batch replace below drops the old rows outright, which would otherwise reset every
+  // offer's "date added" to today on each weekly refresh.
+  const importedOffers: ScannedOffer[] = offers.map(offer => ({
+    ...enrichOffer(offer),
+    firstSeenAt: offer.firstSeenAt ?? priorFirstSeen.get(offer.id) ?? reviewDateIso,
+  }));
   const nextCatalog: ScannedOfferCatalog = {
     ...catalog,
     updatedAt: reviewDateIso,
-    offers: [...catalog.offers.filter(o => o.bankId !== entry.bankId), ...offers],
+    offers: [...catalog.offers.filter(o => o.bankId !== entry.bankId), ...importedOffers],
   };
   const nextBanks = seed.banks.some(b => b.id === entry.bank.id)
     ? seed.banks

@@ -2,7 +2,8 @@ import crypto from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { activeOfferCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { isBrowsableCategory } from "@/lib/offers/categories";
 import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 
 export const EXTRACTION_MODEL = "claude-haiku-4-5-20251001";
@@ -48,7 +49,10 @@ const OFFER_SCHEMA = {
         required: ["title", "category", "description", "termsLink", "sourceUrl"],
         properties: {
           title: { type: "string" },
-          category: { type: "string", enum: [...offerCategories] },
+          // Pinned to the categories in use today, not the migration superset: until the taxonomy
+          // migration lands, a model-assigned "hotels"/"fashion" row would be unreachable from the
+          // category filters and index.
+          category: { type: "string", enum: [...activeOfferCategories] },
           description: { type: "string" },
           merchant: { type: "string" },
           validFrom: { type: "string" },
@@ -75,9 +79,11 @@ const SYSTEM_PROMPT = [
   "- If the content contains no offers, return an empty `offers` array."
 ].join("\n");
 
-// Returns true when value is one of the allowed offer categories.
+// Coerces the model's category to one the site can actually browse. Pinned to the active list, not
+// the schema superset, for the same reason the tool schema above is: a migration vertical that slips
+// through would render on a card but be unreachable from the filter and the category index.
 function toCategory(value: unknown): OfferCategory {
-  return offerCategories.includes(value as OfferCategory) ? (value as OfferCategory) : "other";
+  return typeof value === "string" && isBrowsableCategory(value) ? value : "other";
 }
 
 // Returns a trimmed string when value is a non-empty string, otherwise undefined.

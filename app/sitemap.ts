@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getBanks } from "@/lib/offers/banks";
+import { categories } from "@/lib/offers/categories";
 import { getAllOffers } from "@/lib/offers/repository";
-import { offerCategories } from "@/lib/offers/types";
 import { siteUrl } from "@/lib/site-config";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -15,8 +15,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  const categoryEntries: MetadataRoute.Sitemap = offerCategories.map((cat) => ({
-    url: `${siteUrl}/categories/${cat}`,
+  // Only the categories the site actually lists — the taxonomy superset includes verticals that no
+  // offer carries yet, and submitting empty pages to search engines helps nobody.
+  const categoryEntries: MetadataRoute.Sitemap = categories.map((category) => ({
+    url: `${siteUrl}/categories/${category.id}`,
     changeFrequency: "daily",
     priority: 0.7,
   }));

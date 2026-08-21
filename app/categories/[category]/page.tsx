@@ -8,7 +8,7 @@ import { OfferPagination } from "@/components/OfferPagination";
 import { StatTile } from "@/components/StatTile";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
-import { getCategoryLabel, isOfferCategory } from "@/lib/offers/categories";
+import { getCategoryLabel, isBrowsableCategory } from "@/lib/offers/categories";
 import { filterOffers } from "@/lib/offers/filter";
 import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
@@ -23,7 +23,7 @@ interface CategoryPageProps {
 
 export async function generateMetadata({ params }: CategoryPageProps): Promise<Metadata> {
   const { category: categoryParam } = await params;
-  if (!isOfferCategory(categoryParam)) return {};
+  if (!isBrowsableCategory(categoryParam)) return {};
 
   const label = getCategoryLabel(categoryParam);
   const title = `${label} Credit Card Offers in Sri Lanka`;
@@ -41,7 +41,7 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
 export default async function CategoryPage({ params, searchParams }: CategoryPageProps) {
   const { category: categoryParam } = await params;
 
-  if (!isOfferCategory(categoryParam)) {
+  if (!isBrowsableCategory(categoryParam)) {
     notFound();
   }
 

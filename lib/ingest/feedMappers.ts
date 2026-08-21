@@ -2,7 +2,8 @@ import * as cheerio from "cheerio";
 import { categorizeOfferText } from "@/lib/ingest/categorize";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { isBrowsableCategory } from "@/lib/offers/categories";
 
 /**
  * Deterministic mappers for banks that expose a structured JSON API.
@@ -55,7 +56,9 @@ function sampathCategory(rawCategory: unknown, discountText: string): OfferCateg
   // "Electronics_and_Furniture" — normalize before lookup or it silently falls through to "other".
   const key = typeof rawCategory === "string" ? rawCategory.trim().toLowerCase() : "";
   const mapped = map[key];
-  return mapped && offerCategories.includes(mapped) ? mapped : "other";
+  // Active list, not the schema superset: a migration vertical here would be unreachable from the
+  // category filter until the data migrates onto it.
+  return mapped && isBrowsableCategory(mapped) ? mapped : "other";
 }
 
 interface SampathRaw {
