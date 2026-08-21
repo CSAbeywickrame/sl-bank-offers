@@ -1,13 +1,55 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import type { Bank, Card, ScannedOffer, ScannedOfferCatalog, SeedData } from "./types";
-import { offerCategories } from "./types";
+import { cardKinds, cardNetworks, cardTierValues, offerCategories, offerTypes, weekdays } from "./types";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
 }
 
-function assertScannedOffer(value: unknown): asserts value is ScannedOffer {
+// Absent passes; a present value must be a string.
+function isOptionalString(value: unknown): boolean {
+  return value === undefined || typeof value === "string";
+}
+
+// Absent passes; a present value must be a finite number above zero, at most max (Infinity = uncapped).
+function isOptionalAmount(value: unknown, max: number): boolean {
+  return value === undefined || (typeof value === "number" && Number.isFinite(value) && value > 0 && value <= max);
+}
+
+// Absent passes; a present value must be one of the allowed values.
+function isOptionalMember(value: unknown, allowed: readonly string[]): boolean {
+  return value === undefined || (typeof value === "string" && allowed.includes(value));
+}
+
+// Absent passes; a present value must be an array whose every entry is an allowed value.
+function isOptionalMemberArray(value: unknown, allowed: readonly string[]): boolean {
+  return value === undefined || (Array.isArray(value) && value.every((entry) => typeof entry === "string" && allowed.includes(entry)));
+}
+
+// Validates the optional enrichment fields. Deliberately lenient about absence: rows written
+// before enrichment existed carry none of these, and loading the catalog must not require a
+// re-scrape of every bank to backfill them.
+function assertEnrichmentFields(value: Record<string, unknown>): void {
+  if (
+    !isOptionalAmount(value.discountPct, 100) ||
+    !isOptionalAmount(value.minSpend, Number.POSITIVE_INFINITY) ||
+    !isOptionalAmount(value.maxDiscountAmount, Number.POSITIVE_INFINITY) ||
+    !isOptionalMember(value.offerType, offerTypes) ||
+    !isOptionalMemberArray(value.validDays, weekdays) ||
+    !isOptionalMemberArray(value.cardNetworks, cardNetworks) ||
+    !isOptionalMemberArray(value.cardTypes, cardKinds) ||
+    !isOptionalMemberArray(value.cardTiers, cardTierValues) ||
+    !isOptionalString(value.discountLabel) ||
+    !isOptionalString(value.eligibilityNote) ||
+    !isOptionalString(value.imageUrl) ||
+    !isOptionalString(value.firstSeenAt)
+  ) {
+    throw new Error("Scanned offer enrichment fields must be well-formed when present: amounts positive, percentages above 0 and at most 100, and enum values from the offer schema.");
+  }
+}
+
+export function assertScannedOffer(value: unknown): asserts value is ScannedOffer {
   if (
     !isRecord(value) ||
     typeof value.id !== "string" ||
@@ -24,6 +66,8 @@ function assertScannedOffer(value: unknown): asserts value is ScannedOffer {
   ) {
     throw new Error("Scanned offer entries must include bank, card, category, terms, source, and review metadata.");
   }
+
+  assertEnrichmentFields(value);
 }
 
 function assertScannedOfferCatalog(value: unknown): asserts value is ScannedOfferCatalog {

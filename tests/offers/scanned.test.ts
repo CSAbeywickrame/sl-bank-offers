@@ -1,6 +1,69 @@
 import { describe, expect, it } from "vitest";
-import { syncScannedOffers } from "@/lib/offers/scanned";
+import { assertScannedOffer, syncScannedOffers } from "@/lib/offers/scanned";
 import type { SeedData } from "@/lib/offers/types";
+
+// A raw catalog row, typed loosely so malformed enrichment values can be asserted on.
+const rawOffer = (overrides: Record<string, unknown> = {}): unknown => ({
+  id: "test-bank-blue-orbit",
+  bankId: "test-bank",
+  cardId: "test-bank-credit-cards",
+  title: "25% off at Blue Orbit",
+  category: "dining",
+  description: "25% off for credit cardholders",
+  termsLink: "https://example.com/offer",
+  sourceUrl: "https://example.com/offer",
+  lastReviewedAt: "2026-08-21T00:00:00.000Z",
+  status: "active",
+  ...overrides
+});
+
+describe("scanned offer enrichment validation", () => {
+  it("accepts a row that carries every enrichment field", () => {
+    expect(() =>
+      assertScannedOffer(
+        rawOffer({
+          offerType: "discount",
+          discountPct: 25,
+          discountLabel: "25% off",
+          minSpend: 5000,
+          maxDiscountAmount: 1250,
+          validDays: ["mon", "fri"],
+          cardNetworks: ["visa", "mastercard"],
+          cardTypes: ["credit"],
+          cardTiers: ["platinum"],
+          eligibilityNote: "Credit cards only",
+          imageUrl: "https://example.com/offer.jpg",
+          firstSeenAt: "2026-01-01T00:00:00.000Z"
+        })
+      )
+    ).not.toThrow();
+  });
+
+  it("accepts a row that carries none of them, so pre-enrichment rows stay loadable", () => {
+    expect(() => assertScannedOffer(rawOffer())).not.toThrow();
+  });
+
+  it("rejects a zero discount percentage", () => {
+    expect(() => assertScannedOffer(rawOffer({ discountPct: 0 }))).toThrow(/enrichment fields/);
+  });
+
+  it("rejects a discount percentage above 100", () => {
+    expect(() => assertScannedOffer(rawOffer({ discountPct: 150 }))).toThrow(/enrichment fields/);
+  });
+
+  it("rejects a day that is not a weekday value", () => {
+    expect(() => assertScannedOffer(rawOffer({ validDays: ["funday"] }))).toThrow(/enrichment fields/);
+  });
+
+  it("rejects non-positive amounts and unknown enum values", () => {
+    expect(() => assertScannedOffer(rawOffer({ minSpend: 0 }))).toThrow(/enrichment fields/);
+    expect(() => assertScannedOffer(rawOffer({ maxDiscountAmount: -100 }))).toThrow(/enrichment fields/);
+    expect(() => assertScannedOffer(rawOffer({ offerType: "freebie" }))).toThrow(/enrichment fields/);
+    expect(() => assertScannedOffer(rawOffer({ cardNetworks: ["visa", "rupay"] }))).toThrow(/enrichment fields/);
+    expect(() => assertScannedOffer(rawOffer({ cardTypes: "credit" }))).toThrow(/enrichment fields/);
+    expect(() => assertScannedOffer(rawOffer({ firstSeenAt: 20260101 }))).toThrow(/enrichment fields/);
+  });
+});
 
 describe("scanned offer catalog", () => {
   it("upserts scanned offers without dropping unrelated seed records", () => {
