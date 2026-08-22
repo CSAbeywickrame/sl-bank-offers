@@ -31,8 +31,9 @@ function epochToDate(value: unknown): string | undefined {
 
 // Maps a Sampath API category tab to one of our verticals. How the offer pays out is no longer
 // decided here — that is `offerType`, parsed from the text in lib/ingest/enrich.ts — so an
-// instalment plan keeps whatever vertical its tab says it belongs to.
-function sampathCategory(rawCategory: unknown, discountText: string): OfferCategory {
+// instalment plan keeps whatever vertical its tab says it belongs to. Tabs that name a card
+// network rather than a vertical fall through to the text rules below.
+function sampathCategory(rawCategory: unknown, offerText: string): OfferCategory {
   const map: Record<string, OfferCategory> = {
     dining: "dining",
     hotels: "hotels",
@@ -57,8 +58,10 @@ function sampathCategory(rawCategory: unknown, discountText: string): OfferCateg
   const mapped = map[key];
   if (mapped && mapped !== "other" && isOfferCategory(mapped)) return mapped;
   // The tab said nothing useful about the vertical, so read it out of the offer text instead —
-  // "premium offers" and the card-network tabs are full of real dining and hotel offers.
-  return categorizeOfferText(discountText);
+  // "premium offers" and the card-network tabs are full of real dining and hotel offers. The
+  // caller passes merchant and description as well as the discount, because `short_discount` on
+  // its own is a bare "20% Discount" on almost every live row and names no vertical at all.
+  return categorizeOfferText(offerText);
 }
 
 interface SampathRaw {
@@ -100,7 +103,7 @@ function mapSampath(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso
     const title = discount && merchant ? `${discount} at ${merchant}` : merchant || discount || description.slice(0, 80);
     if (!title) continue;
 
-    const category = sampathCategory(row.category, discount);
+    const category = sampathCategory(row.category, `${merchant} ${discount} ${description}`);
     const sourceUrl = typeof row.category === "string" ? `${pageUrl}?firstTab=${row.category}` : pageUrl;
 
     const offer: ScannedOffer = {

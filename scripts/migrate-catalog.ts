@@ -1,4 +1,4 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { enrichOffer } from "@/lib/ingest/enrich";
@@ -163,8 +163,13 @@ function readJson<T>(path: string, fallback: T): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
+// Write via a temp file and rename. The checkpoint is rewritten after every batch, and a crash
+// partway through a plain write would truncate the very file resumability depends on — turning an
+// interruption into a full, re-paid restart. rename is atomic on the same filesystem.
 function writeJson(path: string, value: unknown): void {
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  const tmp = `${path}.tmp`;
+  writeFileSync(tmp, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  renameSync(tmp, path);
 }
 
 function envNumber(name: string, fallback: number): number {
