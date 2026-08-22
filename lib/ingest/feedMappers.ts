@@ -3,7 +3,7 @@ import { categorizeOfferText } from "@/lib/ingest/categorize";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
 import { type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
-import { isBrowsableCategory } from "@/lib/offers/categories";
+import { isOfferCategory } from "@/lib/offers/categories";
 
 /**
  * Deterministic mappers for banks that expose a structured JSON API.
@@ -29,25 +29,25 @@ function epochToDate(value: unknown): string | undefined {
   return d.toISOString().slice(0, 10);
 }
 
-// Maps a Sampath API category + discount text to one of our offer categories.
-function sampathCategory(rawCategory: unknown, discountText: string): OfferCategory {
-  // instal+ment matches both spellings: "instalment" (British, used by some banks) and
-  // "installment" (American, and the spelling our own taxonomy uses). `instal?ment` missed the latter.
-  if (/instal+ment/i.test(discountText) || /0%\s*(interest|p\.?\s?a)/i.test(discountText)) return "installment";
-  if (/cash\s?back/i.test(discountText)) return "cashback";
+// Maps a Sampath API category tab to one of our verticals. How the offer pays out is no longer
+// decided here — that is `offerType`, parsed from the text in lib/ingest/enrich.ts — so an
+// instalment plan keeps whatever vertical its tab says it belongs to. Tabs that name a card
+// network rather than a vertical fall through to the text rules below.
+function sampathCategory(rawCategory: unknown, offerText: string): OfferCategory {
   const map: Record<string, OfferCategory> = {
     dining: "dining",
-    hotels: "travel",
+    hotels: "hotels",
     travel_and_leisure: "travel",
     super_markets: "supermarket",
     online: "online",
     fuel: "fuel",
-    // These Sampath tabs have no dedicated category in our taxonomy — mapped to "other" explicitly
-    // (rather than relying on the fallback below) so they're documented as known, not accidental.
-    electronics_and_furniture: "other",
+    // Sampath tabs that now have a real vertical of their own.
+    electronics_and_furniture: "electronics",
+    health_and_insurance: "health",
+    fashion: "fashion",
+    // Still no vertical: these tabs describe who qualifies (card network, premium tier), not what
+    // is being sold, so the text rules below get a chance before falling back to "other".
     premium_offers: "other",
-    health_and_insurance: "other",
-    fashion: "other",
     visa_offers: "other",
     mastercard_offers: "other",
     other: "other"
@@ -56,9 +56,12 @@ function sampathCategory(rawCategory: unknown, discountText: string): OfferCateg
   // "Electronics_and_Furniture" — normalize before lookup or it silently falls through to "other".
   const key = typeof rawCategory === "string" ? rawCategory.trim().toLowerCase() : "";
   const mapped = map[key];
-  // Active list, not the schema superset: a migration vertical here would be unreachable from the
-  // category filter until the data migrates onto it.
-  return mapped && isBrowsableCategory(mapped) ? mapped : "other";
+  if (mapped && mapped !== "other" && isOfferCategory(mapped)) return mapped;
+  // The tab said nothing useful about the vertical, so read it out of the offer text instead —
+  // "premium offers" and the card-network tabs are full of real dining and hotel offers. The
+  // caller passes merchant and description as well as the discount, because `short_discount` on
+  // its own is a bare "20% Discount" on almost every live row and names no vertical at all.
+  return categorizeOfferText(offerText);
 }
 
 interface SampathRaw {
@@ -100,7 +103,7 @@ function mapSampath(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso
     const title = discount && merchant ? `${discount} at ${merchant}` : merchant || discount || description.slice(0, 80);
     if (!title) continue;
 
-    const category = sampathCategory(row.category, discount);
+    const category = sampathCategory(row.category, `${merchant} ${discount} ${description}`);
     const sourceUrl = typeof row.category === "string" ? `${pageUrl}?firstTab=${row.category}` : pageUrl;
 
     const offer: ScannedOffer = {

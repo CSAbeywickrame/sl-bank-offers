@@ -1,34 +1,40 @@
 import { describe, expect, it } from "vitest";
-import { categories, isBrowsableCategory, isOfferCategory } from "@/lib/offers/categories";
-import { activeOfferCategories } from "@/lib/offers/types";
+import { categories, getCategoryLabel, isOfferCategory } from "@/lib/offers/categories";
+import { offerCategories, offerTypes } from "@/lib/offers/types";
 
-describe("category guards during the taxonomy migration", () => {
-  it("accepts a migration vertical as a valid schema value", () => {
-    expect(isOfferCategory("hotels")).toBe(true);
-    expect(isOfferCategory("electronics")).toBe(true);
-  });
-
-  // The category route uses this as its 404 guard. Answering 200 with canonical and OpenGraph
-  // metadata for a vertical that holds no offers invites those pages into the index, and leaving
-  // them out of the sitemap does not keep them out.
-  it("does not treat a migration vertical as browsable", () => {
-    expect(isBrowsableCategory("hotels")).toBe(false);
-    expect(isBrowsableCategory("electronics")).toBe(false);
-  });
-
-  it("treats every category in use today as both valid and browsable", () => {
-    for (const category of activeOfferCategories) {
+describe("the offer taxonomy", () => {
+  it("accepts every vertical it ships", () => {
+    for (const category of offerCategories) {
       expect(isOfferCategory(category)).toBe(true);
-      expect(isBrowsableCategory(category)).toBe(true);
     }
   });
 
-  it("rejects a value that is not a category at all", () => {
+  it("rejects a value that is not a category", () => {
     expect(isOfferCategory("groceries")).toBe(false);
-    expect(isBrowsableCategory("groceries")).toBe(false);
+    expect(isOfferCategory("")).toBe(false);
   });
 
-  it("lists exactly the browsable categories in the UI", () => {
-    expect(categories.map((category) => category.id)).toEqual([...activeOfferCategories]);
+  // The split is the point of the taxonomy: a category says what is being bought, an offerType
+  // says how it pays out. If a mechanic ever reappears as a category, browsing "hotels" starts
+  // returning payment plans again.
+  it("keeps payout mechanics out of the categories", () => {
+    for (const mechanic of ["installment", "cashback", "bogo"]) {
+      expect(isOfferCategory(mechanic)).toBe(false);
+      expect(offerTypes).toContain(mechanic);
+    }
+  });
+
+  it("separates hotels from travel", () => {
+    expect(isOfferCategory("hotels")).toBe(true);
+    expect(isOfferCategory("travel")).toBe(true);
+    expect(getCategoryLabel("hotels")).toBe("Hotels & Resorts");
+    expect(getCategoryLabel("travel")).toBe("Travel & Airlines");
+  });
+
+  it("gives every category a label and lists them all in the UI", () => {
+    expect(categories.map((category) => category.id)).toEqual([...offerCategories]);
+    for (const category of categories) {
+      expect(category.label.length).toBeGreaterThan(0);
+    }
   });
 });

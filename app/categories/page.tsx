@@ -3,25 +3,32 @@ import Link from "next/link";
 import { JsonLd } from "@/components/JsonLd";
 import { StatTile } from "@/components/StatTile";
 import { categories } from "@/lib/offers/categories";
+import type { OfferCategory } from "@/lib/offers/types";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { siteName, siteUrl } from "@/lib/site-config";
 
-const categoryDescriptions: Record<string, string> = {
-  dining: "Restaurant, cafe, and food delivery discounts.",
-  fuel: "Savings on fuel station spend and transport-related deals.",
+// One line per vertical. Keyed by OfferCategory so a new category cannot ship without copy —
+// `Record<OfferCategory, string>` makes the compiler ask for it.
+const categoryDescriptions: Record<OfferCategory, string> = {
+  hotels: "Room rates, resort stays, and half- and full-board packages.",
+  dining: "Restaurant, cafe, bar, and food delivery discounts.",
+  home: "Furniture, homeware, and everything for fitting out a house.",
+  travel: "Flights, tours, airport services, and travel bookings.",
+  health: "Hospitals, pharmacies, labs, and salon and gym memberships.",
+  fashion: "Clothing, footwear, jewellery, and accessories.",
+  electronics: "Phones, computers, cameras, and home appliances.",
+  automotive: "Vehicle servicing, spare parts, tyres, and car care.",
   supermarket: "Grocery and supermarket discounts across major chains.",
-  travel: "Airline, hotel, and travel booking promotions.",
-  online: "E-commerce and digital shopping savings.",
-  installment: "Easy payment plans and 0% installment offers.",
-  cashback: "Statement credit and cashback-driven promotions.",
-  bogo: "Buy-one-get-one and companion-style offers.",
-  other: "Seasonal and general promotions outside the main categories.",
+  leisure: "Cinemas, events, sports, books, and days out with the family.",
+  online: "E-commerce marketplaces and app-only savings.",
+  fuel: "Savings on fuel station spend.",
+  other: "Insurance, telecom, education, and promotions outside the verticals.",
 };
 
 export const metadata: Metadata = {
   title: "All Offer Categories",
   description:
-    "Browse every credit card offer category tracked by SL Card Offers, from dining and fuel to travel, cashback, installments, and more.",
+    "Browse every Sri Lankan card offer by category — hotels, dining, supermarkets, electronics, health, travel, and more.",
   openGraph: {
     title: "All Offer Categories",
     description:
@@ -114,7 +121,7 @@ export default async function CategoriesPage() {
                 All <span style={{ color: "var(--hero-highlight)" }}>Offer Categories</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
-                Jump into dining, fuel, travel, cashback, installments, and every other category tracked across Sri Lankan bank cards.
+                Jump into hotels, dining, supermarkets, electronics, health, and every other category tracked across Sri Lankan bank cards.
               </p>
             </div>
             <StatTile value={categories.length} label="categories tracked" className="min-w-[180px]" />

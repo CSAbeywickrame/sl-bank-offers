@@ -132,3 +132,55 @@ describe("importBankOffers enrichment", () => {
     expect(incoming).toEqual(snapshot);
   });
 });
+
+// The feed banks (HNB, Sampath) are rebuilt from scratch on every refresh by a regex categorizer,
+// so an unchanged offer is re-derived rather than remembered. Without this, the weekly refresh
+// silently reverted the one-time model classification on roughly two thirds of their 915 rows.
+describe("importBankOffers category durability for feed banks", () => {
+  const feedEntry: BankRegistryEntry = {
+    ...entry,
+    bankId: "hnb",
+    bank: { id: "hnb", name: "Hatton National Bank PLC", shortName: "HNB", websiteUrl: "https://www.hnb.lk" },
+    cards: [{ id: "hnb-credit-cards", bankId: "hnb", name: "HNB Credit Cards" }],
+    defaultCardId: "hnb-credit-cards"
+  };
+  const feedOffer = (overrides: Partial<ScannedOffer> = {}): ScannedOffer =>
+    scannedOffer({ id: "hnb-3692", bankId: "hnb", cardId: "hnb-credit-cards", ...overrides });
+
+  it("keeps the stored category when a feed bank re-imports an offer it already has", () => {
+    const stored = feedOffer({ category: "fashion" });
+    const { catalog } = importBankOffers(
+      feedEntry,
+      [feedOffer({ category: "other" })],
+      REVIEW_DATE,
+      emptySeed,
+      catalogWith([stored])
+    );
+    expect(importedOffer(catalog, "hnb-3692").category).toBe("fashion");
+  });
+
+  it("takes the incoming category for an offer the feed bank has never seen", () => {
+    const { catalog } = importBankOffers(
+      feedEntry,
+      [feedOffer({ id: "hnb-9999", category: "hotels" })],
+      REVIEW_DATE,
+      emptySeed,
+      catalogWith([])
+    );
+    expect(importedOffer(catalog, "hnb-9999").category).toBe("hotels");
+  });
+
+  // Crawl banks re-extract from the page itself, so a changed category is new information rather
+  // than a worse re-derivation, and must be allowed through.
+  it("lets a non-feed bank update the category of an offer it already has", () => {
+    const stored = scannedOffer({ category: "dining" });
+    const { catalog } = importBankOffers(
+      entry,
+      [scannedOffer({ category: "hotels" })],
+      REVIEW_DATE,
+      emptySeed,
+      catalogWith([stored])
+    );
+    expect(importedOffer(catalog, "test-bank-blue-orbit").category).toBe("hotels");
+  });
+});
