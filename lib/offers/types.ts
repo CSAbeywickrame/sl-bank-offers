@@ -1,13 +1,25 @@
-// The categories the app emits and renders today (extraction prompt, filter pills, category pages).
-export const activeOfferCategories = ["dining", "fuel", "supermarket", "travel", "online", "installment", "cashback", "bogo", "other"] as const;
-
-// Verticals staged for the taxonomy migration. Valid schema values already, so importers and
-// enrichment can be built against them, but no offer carries one until the data migrates.
-const migrationOfferCategories = ["hotels", "fashion", "electronics", "health", "home", "automotive", "leisure"] as const;
-
-// Superset during the taxonomy migration: today's categories followed by the staged verticals.
-// Shrinks back to a single taxonomy once the offer data migrates onto the new verticals.
-export const offerCategories = [...activeOfferCategories, ...migrationOfferCategories] as const;
+// What an offer is FOR — the merchant's vertical. Ordered by catalog size so the filter and the
+// category index lead with what most offers actually are.
+//
+// How an offer pays out lives in `offerTypes` below, never here: an interest-free plan at an
+// electronics store is `electronics` + `installment`. Keeping the two apart is what lets a shopper
+// browse "hotels" without wading through every payment plan, and is why `installment`, `cashback`
+// and `bogo` are no longer categories.
+export const offerCategories = [
+  "hotels",
+  "dining",
+  "home",
+  "travel",
+  "health",
+  "fashion",
+  "electronics",
+  "automotive",
+  "supermarket",
+  "leisure",
+  "online",
+  "fuel",
+  "other"
+] as const;
 
 export type OfferCategory = (typeof offerCategories)[number];
 

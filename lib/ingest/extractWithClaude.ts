@@ -2,8 +2,8 @@ import crypto from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { activeOfferCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
-import { isBrowsableCategory } from "@/lib/offers/categories";
+import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { isOfferCategory } from "@/lib/offers/categories";
 import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 
 export const EXTRACTION_MODEL = "claude-haiku-4-5-20251001";
@@ -52,7 +52,7 @@ const OFFER_SCHEMA = {
           // Pinned to the categories in use today, not the migration superset: until the taxonomy
           // migration lands, a model-assigned "hotels"/"fashion" row would be unreachable from the
           // category filters and index.
-          category: { type: "string", enum: [...activeOfferCategories] },
+          category: { type: "string", enum: [...offerCategories] },
           description: { type: "string" },
           merchant: { type: "string" },
           validFrom: { type: "string" },
@@ -83,7 +83,7 @@ const SYSTEM_PROMPT = [
 // the schema superset, for the same reason the tool schema above is: a migration vertical that slips
 // through would render on a card but be unreachable from the filter and the category index.
 function toCategory(value: unknown): OfferCategory {
-  return typeof value === "string" && isBrowsableCategory(value) ? value : "other";
+  return typeof value === "string" && isOfferCategory(value) ? value : "other";
 }
 
 // Returns a trimmed string when value is a non-empty string, otherwise undefined.
