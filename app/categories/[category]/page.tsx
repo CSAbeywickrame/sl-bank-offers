@@ -70,7 +70,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
       <JsonLd data={breadcrumbJsonLd} />
       <section
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "var(--text-on-inverse)" }}
       >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
@@ -88,25 +88,25 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
                   background: "var(--hero-eyebrow-bg)",
                   border: "1px solid var(--hero-eyebrow-bg)",
                   color: "var(--hero-eyebrow-fg)",
-                  borderRadius: "9999px",
+                  borderRadius: "var(--radius-pill)",
                   padding: "4px 12px",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "var(--ls-wide)",
                 }}
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "var(--radius-pill)", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Category
               </p>
               <h1
                 className="mt-4 font-bold"
-                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
                 {getCategoryLabel(categoryParam)}{" "}
                 <span style={{ color: "var(--hero-highlight)" }}>Card Offers</span>
               </h1>
-              <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+              <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
                 Browse {getCategoryLabel(categoryParam).toLowerCase()} offers across Sri Lankan banks.
               </p>
             </div>

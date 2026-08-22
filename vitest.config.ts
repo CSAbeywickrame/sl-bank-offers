@@ -1,5 +1,7 @@
 import { defineConfig } from "vitest/config";
 
+const projectRoot = new URL(".", import.meta.url).pathname;
+
 export default defineConfig({
   test: {
     environment: "node",
@@ -8,7 +10,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      "@": new URL(".", import.meta.url).pathname
+      // next/font/google is a bundler macro; swap in a stub so app/layout.tsx can be imported
+      "next/font/google": `${projectRoot}tests/stubs/next-font-google.ts`,
+      "@": projectRoot
     }
   }
 });

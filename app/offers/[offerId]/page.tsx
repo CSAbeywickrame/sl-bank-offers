@@ -74,29 +74,35 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
       <div style={{ display: "grid", gap: "16px" }}>
         <Link
-          className="inline-flex items-center gap-1 text-sm font-semibold text-emerald-700 hover:underline"
+          className="inline-flex items-center gap-1 text-sm font-semibold text-(--text-link) hover:underline"
           href="/"
         >
           ← Back to all offers
         </Link>
 
         {/* Dark hero panel */}
-        <div className="rounded-xl bg-navy-900" style={{ padding: "32px 28px" }}>
+        <div className="rounded-xl bg-(--surface-inverse)" style={{ padding: "32px 28px" }}>
           <div className="flex flex-wrap gap-2">
-            <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-white">
+            <span className="rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-(--text-on-inverse)">
               {offer.bankName}
             </span>
-            <span className="rounded-full bg-[rgba(16,185,129,0.18)] px-3 py-1 text-xs font-semibold text-[var(--emerald-300)]">
+            <span
+              className="rounded-full px-3 py-1 text-xs font-semibold text-(--hero-highlight)"
+              style={{ background: "var(--hero-eyebrow-bg)" }}
+            >
               {getCategoryLabel(offer.category)}
             </span>
           </div>
           <h1
-            className="mt-4 font-semibold text-white"
-            style={{ fontSize: "30px", lineHeight: 1.15, letterSpacing: "-0.02em" }}
+            className="mt-4 font-semibold text-(--text-on-inverse)"
+            style={{ fontSize: "var(--fs-h1)", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
           >
             {offer.title}
           </h1>
-          <p className="mt-4 max-w-3xl text-sm" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+          <p
+            className="mt-4 max-w-3xl text-sm"
+            style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}
+          >
             {offer.description}
           </p>
         </div>
@@ -104,53 +110,53 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
         {/* Details card */}
-        <article className="rounded-xl border border-neutral-200 bg-white p-6 shadow-sm">
-          <h2 className="text-[18px] font-semibold text-neutral-900">Offer details</h2>
+        <article className="rounded-xl border border-(--border-subtle) bg-(--surface-card) p-6 shadow-sm">
+          <h2 className="text-lg font-semibold text-(--text-strong)">Offer details</h2>
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
             <div>
-              <dt className="font-semibold text-neutral-900">Bank</dt>
-              <dd className="mt-1 text-neutral-700">{offer.bankName}</dd>
+              <dt className="font-semibold text-(--text-strong)">Bank</dt>
+              <dd className="mt-1 text-(--text-body)">{offer.bankName}</dd>
             </div>
             {offer.cardName && (
               <div>
-                <dt className="font-semibold text-neutral-900">Eligible card</dt>
-                <dd className="mt-1 text-neutral-700">{offer.cardName}</dd>
+                <dt className="font-semibold text-(--text-strong)">Eligible card</dt>
+                <dd className="mt-1 text-(--text-body)">{offer.cardName}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold text-neutral-900">Category</dt>
-              <dd className="mt-1 text-neutral-700">{getCategoryLabel(offer.category)}</dd>
+              <dt className="font-semibold text-(--text-strong)">Category</dt>
+              <dd className="mt-1 text-(--text-body)">{getCategoryLabel(offer.category)}</dd>
             </div>
             {offer.merchant && (
               <div>
-                <dt className="font-semibold text-neutral-900">Merchant</dt>
-                <dd className="mt-1 text-neutral-700">{offer.merchant}</dd>
+                <dt className="font-semibold text-(--text-strong)">Merchant</dt>
+                <dd className="mt-1 text-(--text-body)">{offer.merchant}</dd>
               </div>
             )}
             {offer.location && (
               <div>
-                <dt className="font-semibold text-neutral-900">Location</dt>
-                <dd className="mt-1 text-neutral-700">{offer.location}</dd>
+                <dt className="font-semibold text-(--text-strong)">Location</dt>
+                <dd className="mt-1 text-(--text-body)">{offer.location}</dd>
               </div>
             )}
             <div>
-              <dt className="font-semibold text-neutral-900">Valid until</dt>
-              <dd className="mt-1 text-neutral-700">{formatDate(offer.validUntil)}</dd>
+              <dt className="font-semibold text-(--text-strong)">Valid until</dt>
+              <dd className="mt-1 text-(--text-body)">{formatDate(offer.validUntil)}</dd>
             </div>
             <div>
-              <dt className="font-semibold text-neutral-900">Last checked</dt>
-              <dd className="mt-1 text-neutral-700">{formatDate(offer.lastCheckedAt)}</dd>
+              <dt className="font-semibold text-(--text-strong)">Last checked</dt>
+              <dd className="mt-1 text-(--text-body)">{formatDate(offer.lastCheckedAt)}</dd>
             </div>
           </dl>
         </article>
 
         {/* Official links sidebar */}
         <aside
-          className="grid gap-4 rounded-xl border border-neutral-200 bg-neutral-100 p-6"
+          className="grid gap-4 rounded-xl border border-(--border-subtle) bg-(--surface-muted) p-6"
           style={{ alignContent: "start" }}
         >
-          <h2 className="text-[18px] font-semibold text-neutral-900">Official links</h2>
-          <p className="text-sm leading-6 text-neutral-600">
+          <h2 className="text-lg font-semibold text-(--text-strong)">Official links</h2>
+          <p className="text-sm leading-(--lh-relaxed) text-(--text-muted)">
             Use the official bank source to confirm the latest eligibility, dates, and exclusions before using the offer.
           </p>
           <a

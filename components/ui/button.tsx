@@ -15,6 +15,11 @@ function joinClasses(...classes: Array<string | false | undefined>): string {
   return classes.filter(Boolean).join(" ");
 }
 
+// Primary and accent buttons lift 1px with a soft shadow on hover — a small, professional
+// bit of motion. Disabled buttons and reduced-motion users stay flat.
+const liftClasses =
+  "hover:-translate-y-px hover:shadow-md disabled:hover:translate-y-0 disabled:hover:shadow-none motion-reduce:hover:translate-y-0";
+
 // Builds the Tailwind class string for a button-styled element (button, link, or anchor)
 export function buttonClasses({
   variant = "primary",
@@ -23,13 +28,17 @@ export function buttonClasses({
   className,
 }: ButtonClassesArgs): string {
   const base =
-    "inline-flex items-center justify-center rounded-md font-semibold transition-colors duration-150 disabled:opacity-50 disabled:cursor-not-allowed";
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md font-semibold leading-none transition-[background-color,box-shadow,transform,color] duration-(--motion-fast) ease-out disabled:opacity-50 disabled:cursor-not-allowed";
 
   const variantClasses: Record<ButtonVariant, string> = {
-    primary: "bg-navy-900 text-white hover:bg-navy-800",
-    accent: "bg-emerald-700 text-white hover:bg-emerald-800",
-    outline: "bg-white text-emerald-700 border border-emerald-700 hover:bg-emerald-50",
-    ghost: "text-[var(--text-body)] hover:bg-neutral-100",
+    // Dark navy — the "View details" CTA on the offer card
+    primary: `bg-(--action-primary-bg) text-(--action-primary-fg) hover:bg-(--action-primary-bg-hover) ${liftClasses}`,
+    // Emerald accent — search / confirm CTAs
+    accent: `bg-(--action-accent-bg) text-(--action-accent-fg) hover:bg-(--action-accent-bg-hover) ${liftClasses}`,
+    // Outlined emerald — the "View at bank" secondary CTA
+    outline: "bg-(--surface-card) text-(--text-link) border border-(--text-link) hover:bg-emerald-50",
+    // Quiet neutral — toolbar / tertiary
+    ghost: "border border-transparent text-(--text-body) hover:bg-(--surface-muted)",
   };
 
   const sizeClasses: Record<ButtonSize, string> = {

@@ -56,14 +56,31 @@ The visual language is **Navy & Emerald**:
 - **Neutrals** — a faintly green-tinted gray ramp.
 - **Type** — Hanken Grotesk across the whole product.
 
-Tokens live in **`tailwind.config.ts`** (color scales, radii, shadows) and the `:root`
-block of **`app/globals.css`** (semantic aliases: `--action-primary-bg`, `--offer-rule`,
-`--badge-*` tones, `--hero-*`, etc.). Components consume tokens via Tailwind utility
-classes (`bg-navy-900`, `text-emerald-700`) or `var(--token)` arbitrary values — avoid
-new hardcoded hex.
+The `:root` block of **`app/globals.css`** is the full token set: raw colour scales,
+semantic aliases (`--text-*`, `--surface-*`, `--border-*`, `--action-*`, `--badge-*`,
+`--hero-*`, `--offer-rule`), the type scale (`--fs-*`, `--lh-*`, `--ls-*`, `--fw-*`),
+the 4px spacing scale (`--space-*`), radii, shadows, layout and control heights, and a
+`[data-theme="dark"]` block that re-points only the semantic aliases. **`tailwind.config.ts`**
+mirrors the colour scales, radii and shadows so the matching utility classes exist.
+
+Prefer the **semantic** token in components — `bg-(--action-primary-bg)`,
+`text-(--text-muted)`, `border-(--border-subtle)` — over a raw scale step
+(`bg-navy-900`), so a theme swap only has to re-point the aliases. Never add new
+hardcoded hex.
+
+Hanken Grotesk is loaded with `next/font` in `app/layout.tsx`, which self-hosts it and
+exposes it as `--font-hanken-grotesk`; `--font-sans` points at that variable, so
+components only ever read one font token. Do not add a Google Fonts `@import`.
+
+Shared primitives live in **`components/ui/`**: `button.tsx` (`buttonClasses()` shared by
+`<button>`, `<Link>` and `<a>`), `badge.tsx`, `field.tsx` (`Input`, `Select`, `fieldClass`,
+`labelClass`), `icon.tsx` and `popover.tsx`.
 
 **Source of truth:** `design-spec/SL-Card-Offers-DesignSystem-export.md`.
 
-> Note: `design-spec/README.md` and the loose `design-spec/tokens/*.css` describe an
-> earlier **Emerald & Gold** (forest-green, Inter) split. Those are **stale** and have
-> been superseded by the export doc above — do not use them as reference.
+> Note: `design-spec/README.md`, `design-spec/styles.css`, the loose
+> `design-spec/tokens/*.css` and `design-spec/ui_kits/` describe an earlier
+> **Emerald & Gold** (forest-green `#08271c`, Inter) split. Those are **stale** and have
+> been superseded by the export doc above — do not use them as reference. They are the
+> only remaining `--brand-forest` / forest-green source in the repo; re-export the
+> folder from the design project to clear it.

@@ -58,7 +58,7 @@ export default async function BanksPage() {
 
       <section
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "var(--text-on-inverse)" }}
       >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
@@ -68,15 +68,15 @@ export default async function BanksPage() {
           <div className="hero-shine" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-12">
-          <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "var(--text-on-inverse-muted)" }}>
             <ol className="flex items-center gap-1.5">
               <li>
-                <Link href="/" className="hover:underline" style={{ color: "rgba(255,255,255,0.65)" }}>
+                <Link href="/" className="hover:underline" style={{ color: "var(--text-on-inverse-muted)" }}>
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li className="font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>Banks</li>
+              <li className="font-medium" style={{ color: "var(--text-on-inverse)" }}>Banks</li>
             </ol>
           </nav>
           <div className="grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
@@ -87,25 +87,25 @@ export default async function BanksPage() {
                   background: "var(--hero-eyebrow-bg)",
                   border: "1px solid var(--hero-eyebrow-bg)",
                   color: "var(--hero-eyebrow-fg)",
-                  borderRadius: "9999px",
+                  borderRadius: "var(--radius-pill)",
                   padding: "4px 12px",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "var(--ls-wide)",
                 }}
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "var(--radius-pill)", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Sri Lankan credit card offers
               </p>
               <h1
                 className="mt-4 font-bold"
-                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
                 Banks with{" "}
                 <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
               </h1>
-              <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+              <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
                 Browse active credit card promotions by bank. Select a bank to see all its current offers.
               </p>
             </div>
