@@ -17,7 +17,7 @@ interface FilterChipProps {
 function FilterChip({ label, onRemove }: FilterChipProps) {
   return (
     <span
-      className="inline-flex items-center gap-1.5 rounded-full pl-3 pr-1.5 py-1 text-[13px] font-semibold"
+      className="inline-flex items-center gap-1.5 whitespace-nowrap rounded-full py-1 pl-3 pr-1.5 text-[13px] font-semibold"
       style={{ background: "var(--badge-bank-bg)", color: "var(--badge-bank-fg)" }}
     >
       {label}
@@ -25,7 +25,7 @@ function FilterChip({ label, onRemove }: FilterChipProps) {
         type="button"
         onClick={onRemove}
         aria-label={`Remove ${label} filter`}
-        className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/[0.08] text-inherit transition-colors hover:bg-black/15"
+        className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/[0.08] text-inherit transition-colors duration-(--motion-fast) hover:bg-black/15"
       >
         <Close size={12} />
       </button>
@@ -40,8 +40,8 @@ export function FilterSummary({ resultCount, resultLabel = "offers", chips }: Fi
   return (
     <div className="flex flex-wrap items-center gap-2.5">
       {resultCount != null && (
-        <p className="m-0 text-sm text-[var(--text-body)]">
-          <b className="font-bold text-[var(--text-strong)]">
+        <p className="m-0 text-sm text-(--text-body)">
+          <b className="font-bold text-(--text-strong)">
             {resultCount.toLocaleString()} {resultLabel}
           </b>
         </p>

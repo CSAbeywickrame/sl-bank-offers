@@ -1,5 +1,5 @@
 const base: React.CSSProperties = {
-  position: "absolute", width: 250, height: 152, borderRadius: 16,
+  position: "absolute", width: 250, height: 152, borderRadius: "var(--radius-xl)",
   boxShadow: "0 24px 48px rgba(0,0,10,.45)", color: "#fff", boxSizing: "border-box",
   padding: "16px 18px", display: "flex", flexDirection: "column", justifyContent: "space-between",
 };
@@ -23,7 +23,7 @@ export function HeroCardStack() {
         <div style={{ fontSize: 10, letterSpacing: ".14em", opacity: .7 }}>BANK · GOLD</div>
         <div style={{ width: 30, height: 22, borderRadius: 5, background: "linear-gradient(135deg, #e8d28a, #b99530)" }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>5299 •• 8845 2210</span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>5299 •• 8845 2210</span>
         </div>
       </div>
 
@@ -42,7 +42,7 @@ export function HeroCardStack() {
         <div style={{ fontSize: 10, letterSpacing: ".14em", opacity: .7 }}>PREMIUM</div>
         <div style={{ width: 30, height: 22, borderRadius: 5, background: "linear-gradient(135deg, #e8d28a, #b99530)" }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>5412 •• 3412 3456</span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>5412 •• 3412 3456</span>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export function HeroCardStack() {
         </div>
         <div style={{ width: 32, height: 24, borderRadius: 5, background: "linear-gradient(135deg, #e8d28a, #b99530)" }} />
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-          <span style={{ fontFamily: "ui-monospace, monospace", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>1234 5678 •••• 3456</span>
+          <span style={{ fontFamily: "var(--font-mono)", fontSize: 14, letterSpacing: 1.2, fontWeight: 700 }}>1234 5678 •••• 3456</span>
           <span style={{ fontWeight: 800, fontStyle: "italic", fontSize: 15 }}>VISA</span>
         </div>
       </div>

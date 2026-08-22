@@ -1,75 +1,325 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600&display=swap');
 @import "tailwindcss";
 @config "../tailwind.config.ts";
 
-:root {
-  /* Emerald (brand / primary action) */
-  --emerald-50:#ecfdf5; --emerald-100:#d1fae5; --emerald-200:#a7f3d0; --emerald-300:#6ee7b7; --emerald-400:#34d399; --emerald-500:#10b981; --emerald-600:#059669; --emerald-700:#047857; --emerald-800:#065f46; --emerald-900:#064e3b; --emerald-950:#03281d;
-  /* Navy (hero / graphic accent field) */
-  --navy-50:#eaf0f8; --navy-100:#cfdcee; --navy-200:#9fbadd; --navy-300:#6ea8ff; --navy-400:#3d6dc4; --navy-500:#234c8f; --navy-600:#163664; --navy-700:#10294e; --navy-800:#0d2137; --navy-900:#0b1f33; --navy-950:#071523;
-  /* Gold (rewards / premium accent — decorative & large only) */
-  --gold-50:#fbf7ea; --gold-100:#f6ecc9; --gold-200:#edd99b; --gold-300:#e1c46e; --gold-400:#d4af5f; --gold-500:#c99a2e; --gold-600:#a87d1f; --gold-700:#856115; --gold-800:#5f4510;
-  /* Neutral (green-tinted gray) */
-  --neutral-50:#f4f9f6; --neutral-100:#e9f1ec; --neutral-200:#dde7e1; --neutral-300:#c4d3cb; --neutral-400:#95a89e; --neutral-500:#6a7d73; --neutral-600:#51635a; --neutral-700:#3b4a43; --neutral-800:#25322c; --neutral-900:#16201b; --neutral-950:#0c1410;
-  --white:#ffffff;
-  /* Amber / Red / Green semantic accents */
-  --amber-50:#fffbeb; --amber-100:#fef3c7; --amber-700:#b45309; --amber-800:#92400e;
-  --red-50:#fef2f2; --red-100:#fee2e2; --red-600:#dc2626; --red-700:#b91c1c;
-  --green-50:#f0fdf4; --green-100:#dcfce7; --green-700:#15803d;
+/* ============================================================
+   SL Card Offers — design tokens
+   Ported from the "SL Card Offers" Claude Design project
+   (tokens/colors.css, tokens/typography.css, tokens/spacing.css).
 
-  /* Fonts */
-  --font-sans: 'Hanken Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+   Direction: "Navy & Emerald" (light default, dark-ready).
+   A deep navy hero/header-accent field gives the site a more
+   graphic, premium first impression; emerald stays the brand's
+   primary action colour everywhere (buttons, links, focus).
+   Gold is a small rewards/premium accent (chip glyph, footer
+   rule, premium badge — never small body text). Neutrals are a
+   faintly green-tinted gray ramp so the surface reads cohesive
+   rather than clinical blue-gray.
+
+   Accessibility: every text/background and action pairing in the
+   SEMANTIC ALIASES block meets WCAG AA (>=4.5:1 body, >=3:1 large
+   text & UI). Ratios are annotated inline — preserve them.
+
+   The font is loaded through next/font in app/layout.tsx, which
+   exposes the family as --font-hanken-grotesk; --font-sans points
+   at it so every component keeps reading one token.
+   ============================================================ */
+
+:root {
+  /* ---- Emerald (brand / primary) ---- */
+  --emerald-50: #ecfdf5;
+  --emerald-100: #d1fae5;
+  --emerald-200: #a7f3d0;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: #10b981;
+  --emerald-600: #059669;
+  --emerald-700: #047857; /* primary interactive — white text = 5.5:1 AA */
+  --emerald-800: #065f46;
+  --emerald-900: #064e3b;
+  --emerald-950: #03281d;
+
+  /* ---- Navy (hero / graphic accent field) ---- */
+  --navy-50: #eaf0f8;
+  --navy-100: #cfdcee;
+  --navy-200: #9fbadd;
+  --navy-300: #6ea8ff; /* hero dot texture / decorative highlight only */
+  --navy-400: #3d6dc4;
+  --navy-500: #234c8f;
+  --navy-600: #163664;
+  --navy-700: #10294e;
+  --navy-800: #0d2137; /* hero gradient — top-left stop */
+  --navy-900: #0b1f33; /* hero gradient — base / header accent */
+  --navy-950: #071523;
+
+  /* ---- Gold (rewards / premium accent — decorative & large only) ---- */
+  --gold-50: #fbf7ea;
+  --gold-100: #f6ecc9;
+  --gold-200: #edd99b;
+  --gold-300: #e1c46e;
+  --gold-400: #d4af5f;
+  --gold-500: #c99a2e; /* card top-rule, fills */
+  --gold-600: #a87d1f;
+  --gold-700: #856115; /* gold text on gold-50 = AA */
+  --gold-800: #5f4510;
+
+  /* ---- Neutral (green-tinted gray) ---- */
+  --neutral-50: #f4f9f6;
+  --neutral-100: #e9f1ec;
+  --neutral-200: #dde7e1;
+  --neutral-300: #c4d3cb;
+  --neutral-400: #95a89e; /* placeholder / decorative — not for essential text */
+  --neutral-500: #6a7d73; /* meta — 4.6:1 on white (AA normal) */
+  --neutral-600: #51635a; /* secondary body — 6.6:1 */
+  --neutral-700: #3b4a43; /* body — 9:1 */
+  --neutral-800: #25322c;
+  --neutral-900: #16201b; /* strong text — 15:1 */
+  --neutral-950: #0c1410;
+  --white: #ffffff;
+
+  /* ---- Brand anchors ---- */
+  --brand-navy: var(--navy-900); /* hero / graphic accent field */
+  --brand-emerald: var(--emerald-700);
+  --brand-gold: var(--gold-500);
+  --brand-ink: var(--neutral-900); /* alias: text logo fallback */
+
+  /* ---- Amber (kept for "category" warmth) ---- */
+  --amber-50: #fffbeb;
+  --amber-100: #fef3c7;
+  --amber-700: #b45309;
+  --amber-800: #92400e;
+
+  /* ---- Red (expiry / destructive) ---- */
+  --red-50: #fef2f2;
+  --red-100: #fee2e2;
+  --red-600: #dc2626;
+  --red-700: #b91c1c;
+
+  /* ---- Green (success — distinct from emerald-brand) ---- */
+  --green-50: #f0fdf4;
+  --green-100: #dcfce7;
+  --green-700: #15803d;
+
+  /* ============================================================
+     SEMANTIC ALIASES — light theme (default).
+     Components reach for THESE; a theme swap only re-points them.
+     ============================================================ */
 
   /* Surfaces */
   --bg-page: var(--neutral-50);
   --surface-card: var(--white);
   --surface-muted: var(--neutral-100);
   --surface-sunken: var(--neutral-200);
-  --surface-inverse: var(--navy-900);
+  --surface-inverse: var(--navy-900); /* hero / footer / dark primary CTA */
+  /* Repo addition: the card surface at 90%, for the sticky header that page content
+     blurs through. Kept as its own token rather than a color-mix() of --surface-card,
+     because the build's CSS minifier collapses color-mix() back to an opaque fallback. */
+  --surface-translucent: rgba(255, 255, 255, 0.9);
+
   /* Text */
-  --text-strong: var(--neutral-900);
-  --text-body: var(--neutral-700);
-  --text-muted: var(--neutral-600);
-  --text-faint: var(--neutral-400);
+  --text-strong: var(--neutral-900); /* 15:1 */
+  --text-body: var(--neutral-700); /* 9:1 */
+  --text-muted: var(--neutral-500); /* 4.6:1 */
+  --text-faint: var(--neutral-400); /* decorative only */
   --text-on-inverse: var(--white);
-  --text-on-inverse-muted: rgba(255,255,255,0.78);
-  --text-link: var(--emerald-700);
+  --text-on-inverse-muted: rgba(255, 255, 255, 0.78);
+  --text-link: var(--emerald-700); /* 5.5:1 */
   --text-link-hover: var(--emerald-800);
+
   /* Borders */
   --border-subtle: var(--neutral-200);
   --border-default: var(--neutral-300);
   --border-strong: var(--neutral-400);
   --border-focus: var(--emerald-500);
-  /* Primary action — deep navy */
+
+  /* Primary action — deep navy "View details" */
   --action-primary-bg: var(--navy-900);
   --action-primary-bg-hover: var(--navy-800);
   --action-primary-fg: var(--white);
-  /* Accent action — emerald */
+
+  /* Accent action — emerald (search / confirm) */
   --action-accent-bg: var(--emerald-700);
   --action-accent-bg-hover: var(--emerald-800);
   --action-accent-fg: var(--white);
+
   /* Focus ring */
-  --ring-focus: rgba(16,185,129,0.32);
-  /* Signature offer top-rule: navy → emerald */
+  --ring-focus: color-mix(in srgb, var(--emerald-500) 32%, transparent);
+
+  /* Signature card top-rule */
   --offer-rule: linear-gradient(90deg, var(--navy-800), var(--emerald-600));
+
   /* Badge tones */
-  --badge-bank-bg:#e3f1ea; --badge-bank-fg:var(--emerald-800); --badge-bank-ring:var(--emerald-100);
-  --badge-category-bg:var(--amber-50); --badge-category-fg:var(--amber-800); --badge-category-ring:var(--amber-100);
-  --badge-expiry-bg:var(--red-50); --badge-expiry-fg:var(--red-700); --badge-expiry-ring:var(--red-100);
-  --badge-premium-bg:var(--gold-50); --badge-premium-fg:var(--gold-800); --badge-premium-ring:var(--gold-200);
-  --badge-neutral-bg:var(--neutral-100); --badge-neutral-fg:var(--neutral-700); --badge-neutral-ring:var(--neutral-200);
-  --badge-success-bg:var(--green-50); --badge-success-fg:var(--green-700); --badge-success-ring:var(--green-100);
-  /* Hero accents (on navy band) */
+  --badge-bank-bg: #e3f1ea;
+  --badge-bank-fg: var(--emerald-800);
+  --badge-bank-ring: var(--emerald-100);
+  --badge-category-bg: var(--amber-50);
+  --badge-category-fg: var(--amber-800);
+  --badge-category-ring: var(--amber-100);
+  --badge-expiry-bg: var(--red-50);
+  --badge-expiry-fg: var(--red-700);
+  --badge-expiry-ring: var(--red-100);
+  --badge-premium-bg: var(--gold-50);
+  --badge-premium-fg: var(--gold-800);
+  --badge-premium-ring: var(--gold-200);
+  --badge-neutral-bg: var(--neutral-100);
+  --badge-neutral-fg: var(--neutral-700);
+  --badge-neutral-ring: var(--neutral-200);
+  /* Repo addition: the design system's Badge reads the raw green scale for its
+     "success" tone; these aliases keep every tone on one --badge-*-{bg,fg,ring}
+     shape so the Badge component can interpolate the tone name. */
+  --badge-success-bg: var(--green-50);
+  --badge-success-fg: var(--green-700);
+  --badge-success-ring: var(--green-100);
+
+  /* Hero accents (on navy gradient band) */
   --hero-bg: var(--navy-900);
   --hero-bg-2: var(--navy-800);
-  --hero-dot: rgba(110,168,255,0.16);
+  --hero-dot: rgba(110, 168, 255, 0.16); /* --navy-300 tint, small dot grid */
   --hero-highlight: var(--emerald-300);
-  --hero-eyebrow-bg: rgba(16,185,129,0.14);
+  --hero-eyebrow-bg: rgba(16, 185, 129, 0.14);
   --hero-eyebrow-fg: var(--emerald-300);
-  /* Motion */
-  --motion-fast:150ms; --motion-med:220ms; --motion-slow:480ms;
-  /* Panel elevation — navy-tinted rather than pure black, so it sits in the palette */
+
+  /* ---- Typography ----
+     Hanken Grotesk across the whole product (body + headings) and across
+     marketing/print, so the brand looks like one family everywhere. The serif
+     wordmark in the logo is a fixed lockup image, NOT a UI typeface — never
+     set serif type in the interface. */
+  --font-sans: var(--font-hanken-grotesk), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+
+  /* Type scale (px) — display sizes are for the dark hero band */
+  --fs-display: 48px; /* h1 hero, md:text-5xl */
+  --fs-h1: 30px; /* page titles, text-3xl */
+  --fs-h2: 20px; /* section heads, text-xl */
+  --fs-h3: 18px; /* card / sub heads, text-lg */
+  --fs-title: 16px; /* offer title, text-base */
+  --fs-body: 14px; /* body, text-sm — the workhorse size */
+  --fs-caption: 12px; /* meta / labels, text-xs */
+
+  /* Line heights */
+  --lh-tight: 1.15;
+  --lh-snug: 1.35;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.7;
+
+  /* Letter spacing */
+  --ls-tight: -0.02em; /* large headings (tracking-tight) */
+  --ls-normal: 0;
+  --ls-wide: 0.04em; /* uppercase eyebrow labels */
+  --ls-wider: 0.08em;
+
+  /* ---- Spacing scale (4px base) ---- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Radius — soft, friendly, consistent with the production cards */
+  --radius-sm: 6px; /* inputs, small chips (rounded-md) */
+  --radius-md: 8px; /* buttons, selects (rounded-lg) */
+  --radius-lg: 12px; /* cards (rounded-xl) */
+  --radius-xl: 16px; /* feature panels (rounded-2xl) */
+  --radius-pill: 9999px; /* badges, status dots */
+
+  /* Shadows — subtle, lift on hover only */
+  --shadow-sm: 0 1px 2px 0 rgb(15 23 42 / 0.05);
+  --shadow-md: 0 4px 12px -2px rgb(15 23 42 / 0.1), 0 2px 6px -2px rgb(15 23 42 / 0.06);
+  --shadow-lg: 0 12px 28px -6px rgb(15 23 42 / 0.16);
+  /* Repo addition: navy-tinted panel elevation for the filter bar and popovers,
+     so a floating panel sits in the palette rather than casting neutral gray. */
   --shadow-panel: 0 1px 2px rgb(11 31 51 / 6%), 0 12px 32px rgb(11 31 51 / 10%);
+
+  /* Layout */
+  --container-max: 1280px; /* max-w-7xl */
+  --container-pad: 16px; /* px-4 */
+  --header-h: 64px; /* sticky header height */
+
+  /* Control heights */
+  --control-h: 40px; /* inputs & selects (h-10) */
+  --control-h-lg: 44px; /* primary CTAs (h-11), 44px min touch target */
+
+  /* Animation intensity */
+  --motion-fast: 150ms;
+  --motion-med: 220ms;
+  --motion-slow: 480ms;
+}
+
+/* ============================================================
+   DARK THEME — opt in with <html data-theme="dark"> (or any
+   ancestor). Light is the shipped default; this is the scaffold
+   for the planned dark mode. Raw scales above are shared; only
+   the semantic aliases flip.
+   ============================================================ */
+[data-theme="dark"] {
+  --bg-page: #07130d;
+  --surface-card: #0f1f17;
+  --surface-muted: #132a20;
+  --surface-sunken: #18352789;
+  --surface-inverse: #0a1a2b;
+  --surface-translucent: rgba(15, 31, 23, 0.9); /* --surface-card at 90% */
+
+  --text-strong: #e9f4ee;
+  --text-body: #c3d4ca;
+  --text-muted: #8fa89a;
+  --text-faint: #6a7d73;
+  --text-on-inverse: #ffffff;
+  --text-on-inverse-muted: rgba(255, 255, 255, 0.74);
+  --text-link: var(--emerald-300);
+  --text-link-hover: var(--emerald-200);
+
+  --border-subtle: #1f3329;
+  --border-default: #2a4438;
+  --border-strong: #3a5849;
+  --border-focus: var(--emerald-400);
+
+  --action-primary-bg: var(--emerald-500);
+  --action-primary-bg-hover: var(--emerald-400);
+  --action-primary-fg: #04130d;
+
+  --action-accent-bg: var(--emerald-500);
+  --action-accent-bg-hover: var(--emerald-400);
+  --action-accent-fg: #04130d;
+
+  --ring-focus: color-mix(in srgb, var(--emerald-400) 40%, transparent);
+
+  --offer-rule: linear-gradient(90deg, var(--navy-300), var(--emerald-400));
+
+  --badge-bank-bg: #123026;
+  --badge-bank-fg: #5fd6ad;
+  --badge-bank-ring: #1f4536;
+  --badge-category-bg: #3a2e12;
+  --badge-category-fg: #e2c074;
+  --badge-category-ring: #4d3d18;
+  --badge-expiry-bg: #3a1717;
+  --badge-expiry-fg: #f7a5a5;
+  --badge-expiry-ring: #4d2222;
+  --badge-premium-bg: #3a2f12;
+  --badge-premium-fg: #e2c074;
+  --badge-premium-ring: #4d3d18;
+  --badge-neutral-bg: #18352789;
+  --badge-neutral-fg: #c3d4ca;
+  --badge-neutral-ring: #2a4438;
+  --badge-success-bg: #123026;
+  --badge-success-fg: #5fd6ad;
+  --badge-success-ring: #1f4536;
+
+  --hero-bg: #071523;
+  --hero-bg-2: #0d2137;
+  --hero-dot: rgba(110, 168, 255, 0.14);
+  --hero-highlight: var(--emerald-300);
+  --hero-eyebrow-bg: rgba(16, 185, 129, 0.16);
+  --hero-eyebrow-fg: var(--emerald-300);
 }
 
 * {
@@ -87,7 +337,7 @@ body {
   min-height: 100vh;
   background: var(--bg-page);
   color: var(--text-strong);
-  font-family: 'Hanken Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -97,9 +347,9 @@ a {
 }
 
 *:focus-visible {
-  outline: 2px solid #10b981;
+  outline: 2px solid var(--border-focus);
   outline-offset: 2px;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.32);
+  box-shadow: 0 0 0 3px var(--ring-focus);
 }
 
 /* ── Filter panel: hides the category pill row's scrollbar, keyboard scroll still works ── */
@@ -114,7 +364,7 @@ a {
 /* ── Hero animated background ───────────────────────────────── */
 .hero-orb {
   position: absolute;
-  border-radius: 9999px;
+  border-radius: var(--radius-pill);
   filter: blur(90px);
   pointer-events: none;
   will-change: transform;
@@ -145,11 +395,12 @@ a {
   animation: hero-drift-c 15s ease-in-out infinite;
   animation-delay: -8s;
 }
+/* The design system's minute dot-grid texture: --hero-dot on a 13px grid */
 .hero-dots {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(circle, rgba(110, 168, 255, 0.10) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background-image: radial-gradient(var(--hero-dot) 1px, transparent 1px);
+  background-size: 13px 13px;
   pointer-events: none;
 }
 .hero-shine {
@@ -208,6 +459,7 @@ a {
   50% { transform: translateY(-10px) rotate(var(--r, 0deg)); }
 }
 @media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
   .sl-cc { animation: none !important; }
   .hero-orb { animation: none !important; }
   .hero-shine::after { animation: none !important; }

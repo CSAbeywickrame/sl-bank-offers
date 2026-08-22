@@ -7,6 +7,7 @@ import { categories, getCategoryLabel } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
 import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
 import { buttonClasses } from "@/components/ui/button";
+import { fieldClass, Input, labelClass, Select } from "@/components/ui/field";
 import { usePopover } from "@/components/ui/popover";
 import { Check, ChevronDown, Search } from "@/components/ui/icon";
 import { FilterSummary, type FilterChipData } from "@/components/FilterSummary";
@@ -26,10 +27,6 @@ interface FilterPanelProps {
   lockedCategory?: OfferCategory;
   resultCount?: number;
 }
-
-export const fieldClass =
-  "h-10 w-full rounded-md border border-(--border-default) bg-(--surface-card) px-3 text-sm text-(--text-strong)";
-export const labelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-(--text-muted)";
 
 // Human-readable labels for each sort key, in display order
 const sortLabels: Record<SortKey, string> = {
@@ -71,17 +68,16 @@ function MultiSelectField({ id, label, allLabel, options, selectedIds, onToggle 
         className={`flex items-center justify-between ${fieldClass}`}
       >
         <span className="min-w-0 flex-1 truncate text-left">{summary}</span>
-        <ChevronDown size={12} />
+        <ChevronDown size={16} className="text-(--text-muted)" />
       </button>
       {isOpen && (
         <div
           role="group"
           aria-label={label}
-          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg border border-(--border-default) bg-(--surface-card) p-2"
+          className="absolute left-0 right-0 z-10 grid gap-1 rounded-lg border border-(--border-default) bg-(--surface-card) p-2 shadow-md"
           style={{
             top: "100%",
-            marginTop: "4px",
-            boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
+            marginTop: "var(--space-1)",
             maxHeight: "240px",
             overflowY: "auto",
           }}
@@ -118,7 +114,7 @@ function ClearAllButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="text-sm text-(--text-muted) underline underline-offset-2 transition-colors"
+      className="text-[13px] font-bold text-(--text-link) transition-colors duration-(--motion-fast) hover:text-(--text-link-hover)"
     >
       Clear all
     </button>
@@ -258,12 +254,8 @@ export function FilterPanel({
   return (
     <div className="relative z-10 mx-auto -mt-8 max-w-7xl px-4">
       <div
-        className="rounded-xl border"
-        style={{
-          borderColor: "var(--border-subtle)",
-          background: "var(--surface-card)",
-          boxShadow: "2px 1px 10px #a2a2a2",
-        }}
+        className="rounded-xl border border-(--border-subtle) bg-(--surface-card)"
+        style={{ boxShadow: "var(--shadow-panel)" }}
       >
         {/* Tier 1 — the primary controls: bank, card, search, sort, plus the preset cluster */}
         <div className="p-4">
@@ -300,12 +292,11 @@ export function FilterPanel({
 
               <div className="grid w-full gap-1 sm:w-48">
                 <label htmlFor="offer-card-filter" className={labelClass}>Card</label>
-                <select
+                <Select
                   id="offer-card-filter"
                   name="card"
                   value={selectedCardId}
                   onChange={(e) => pushFilter({ cardId: e.target.value })}
-                  className={fieldClass}
                 >
                   <option value="">All cards</option>
                   {availableCards.map((card) => {
@@ -315,10 +306,10 @@ export function FilterPanel({
                       <option key={card.id} value={card.id}>{bankLabel}{card.name}</option>
                     );
                   })}
-                </select>
+                </Select>
               </div>
 
-              <div className="grid w-full gap-1 sm:w-64">
+              <div className="grid w-full gap-1 sm:w-72">
                 <label htmlFor="offer-search-filter" className={labelClass}>Search</label>
                 <form
                   onSubmit={(e) => {
@@ -328,37 +319,34 @@ export function FilterPanel({
                   }}
                   className="flex gap-2"
                 >
-                  <input
+                  <Input
                     key={search}
                     id="offer-search-filter"
                     name="search"
                     defaultValue={search}
                     placeholder="Merchant, bank, offer…"
-                    className={`min-w-0 flex-1 ${fieldClass}`}
+                    iconLeft={<Search size={16} />}
                   />
-                  <button
-                    type="submit"
-                    aria-label="Search"
-                    className={buttonClasses({ variant: "accent" }) + " shrink-0 px-3"}
-                  >
-                    <Search size={16} />
+                  {/* The design system pairs a magnifier inside the field with a labelled
+                      emerald submit button; the label is clearer than a second magnifier. */}
+                  <button type="submit" className={buttonClasses({ variant: "accent", className: "shrink-0" })}>
+                    Search
                   </button>
                 </form>
               </div>
 
               <div className="grid w-full gap-1 sm:w-40">
                 <label htmlFor="offer-sort-filter" className={labelClass}>Sort</label>
-                <select
+                <Select
                   id="offer-sort-filter"
                   name="sort"
                   value={selectedSort}
                   onChange={(e) => pushQuery({ sort: e.target.value as SortKey })}
-                  className={fieldClass}
                 >
                   {sortKeys.map((key) => (
                     <option key={key} value={key}>{sortLabels[key]}</option>
                   ))}
-                </select>
+                </Select>
               </div>
             </div>
 

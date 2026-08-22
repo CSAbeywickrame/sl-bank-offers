@@ -68,7 +68,7 @@ export default async function CategoriesPage() {
 
       <section
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "var(--text-on-inverse)" }}
       >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
@@ -78,15 +78,15 @@ export default async function CategoriesPage() {
           <div className="hero-shine" />
         </div>
         <div className="relative mx-auto max-w-7xl px-4 py-12">
-          <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "rgba(255,255,255,0.5)" }}>
+          <nav aria-label="Breadcrumb" className="mb-6 text-xs" style={{ color: "var(--text-on-inverse-muted)" }}>
             <ol className="flex items-center gap-1.5">
               <li>
-                <Link href="/" className="hover:underline" style={{ color: "rgba(255,255,255,0.65)" }}>
+                <Link href="/" className="hover:underline" style={{ color: "var(--text-on-inverse-muted)" }}>
                   Home
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
-              <li className="font-medium" style={{ color: "rgba(255,255,255,0.85)" }}>
+              <li className="font-medium" style={{ color: "var(--text-on-inverse)" }}>
                 Categories
               </li>
             </ol>
@@ -99,21 +99,21 @@ export default async function CategoriesPage() {
                   background: "var(--hero-eyebrow-bg)",
                   border: "1px solid var(--hero-eyebrow-bg)",
                   color: "var(--hero-eyebrow-fg)",
-                  borderRadius: "9999px",
+                  borderRadius: "var(--radius-pill)",
                   padding: "4px 12px",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "var(--ls-wide)",
                 }}
               >
                 <span
                   className="hero-dot-pulse"
-                  style={{ width: "6px", height: "6px", borderRadius: "9999px", background: "currentColor", display: "inline-block", flexShrink: 0 }}
+                  style={{ width: "6px", height: "6px", borderRadius: "var(--radius-pill)", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
                 Browse offer types
               </p>
-              <h1 className="mt-4 font-bold" style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}>
+              <h1 className="mt-4 font-bold" style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}>
                 All <span style={{ color: "var(--hero-highlight)" }}>Offer Categories</span>
               </h1>
-              <p className="mt-4 text-base" style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}>
+              <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
                 Jump into dining, fuel, travel, cashback, installments, and every other category tracked across Sri Lankan bank cards.
               </p>
             </div>
@@ -130,22 +130,22 @@ export default async function CategoriesPage() {
               <li key={category.id}>
                 <Link
                   href={`/categories/${category.id}`}
-                  className="group flex h-full flex-col justify-between rounded-lg border border-neutral-200 bg-white px-5 py-[18px] shadow-sm transition-all duration-150 hover:border-neutral-300 hover:shadow-md"
+                  className="group flex h-full flex-col justify-between rounded-lg border border-(--border-subtle) bg-(--surface-card) px-5 py-[18px] shadow-sm transition-[box-shadow,border-color,transform] duration-(--motion-fast) ease-out hover:-translate-y-0.5 hover:border-(--border-default) hover:shadow-md motion-reduce:hover:translate-y-0"
                   aria-label={`${category.label} — ${count} active offer${count !== 1 ? "s" : ""}`}
                 >
                   <div>
-                    <p className="text-[18px] font-semibold text-neutral-900">
+                    <p className="text-lg font-semibold text-(--text-strong)">
                       {category.label}
                     </p>
-                    <p className="mt-2 text-sm leading-[1.6] text-neutral-600">
+                    <p className="mt-2 text-sm leading-[1.6] text-(--text-muted)">
                       {categoryDescriptions[category.id]}
                     </p>
                   </div>
-                  <div className="mt-6 flex items-center justify-between">
-                    <span className="text-xs font-semibold uppercase tracking-[0.08em] text-neutral-600">
+                  <div className="mt-6 flex items-center justify-between gap-3">
+                    <span className="text-xs font-semibold uppercase tracking-(--ls-wider) text-(--text-muted)">
                       {count} active offer{count !== 1 ? "s" : ""}
                     </span>
-                    <span className="text-sm font-semibold text-emerald-700" aria-hidden="true">
+                    <span className="whitespace-nowrap text-sm font-semibold text-(--text-link)" aria-hidden="true">
                       View →
                     </span>
                   </div>
