@@ -16112,6 +16112,2595 @@
     "hnb-3903": {
       "category": "other",
       "offerType": "installment"
+    },
+    "hnb-853": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-878": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-874": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-872": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-857": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-879": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1060": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1531": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1080": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3389": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1792": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-945": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-918": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-954": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-1086": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1534": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-368": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-2448": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-2534": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-2364": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1766": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-295": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-322": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-2932": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-375": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-446": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-453": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-608": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-662": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-738": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-741": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-752": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-756": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-801": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-809": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-828": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-838": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-848": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-859": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-860": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-861": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-876": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3323": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-884": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-886": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3700": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-902": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-904": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-905": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-912": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3915": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-3978": {
+      "category": "leisure",
+      "offerType": "installment",
+      "discountPct": 15
+    },
+    "hnb-3989": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-2595": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3445": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3446": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3447": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3448": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3449": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3450": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3467": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3468": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3469": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3471": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3472": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3474": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3475": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3476": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3478": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3479": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-2369": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 25,
+      "minSpend": 4000
+    },
+    "hnb-2374": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 10,
+      "minSpend": 5000,
+      "validDays": [
+        "thu"
+      ]
+    },
+    "hnb-1253": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 25,
+      "minSpend": 7500
+    },
+    "hnb-3839": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 25,
+      "minSpend": 4000
+    },
+    "hnb-1254": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 15,
+      "minSpend": 7500
+    },
+    "hnb-3948": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 25,
+      "minSpend": 4000
+    },
+    "hnb-2522": {
+      "category": "other",
+      "offerType": "discount",
+      "cardNetworks": [
+        "visa"
+      ]
+    },
+    "hnb-628": {
+      "category": "other",
+      "offerType": "discount",
+      "discountPct": 35,
+      "eligibilityNote": "Walk-in customers only"
+    },
+    "hnb-3928": {
+      "category": "other",
+      "offerType": "discount"
+    },
+    "hnb-3981": {
+      "category": "supermarket",
+      "offerType": "discount",
+      "discountPct": 10,
+      "minSpend": 7500,
+      "cardNetworks": [
+        "visa"
+      ]
+    },
+    "dfcc-a1501c7bbd91": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 5
+    },
+    "dfcc-6cf6c06c5382": {
+      "category": "dining",
+      "offerType": "other",
+      "discountLabel": "Complimentary Bo.lan gift set valued THB 1,200"
+    },
+    "dfcc-31b6c1a54fa2": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "dfcc-f907cb5ef7dc": {
+      "category": "other",
+      "offerType": "discount",
+      "discountLabel": "THB 500 discount",
+      "minSpend": 5000
+    },
+    "dfcc-06cd7d226a05": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "dfcc-bd230c84b069": {
+      "category": "fashion",
+      "offerType": "other",
+      "discountLabel": "Central gift voucher worth THB 200",
+      "minSpend": 4000
+    },
+    "dfcc-894436d6fc6c": {
+      "category": "health",
+      "offerType": "discount",
+      "discountLabel": "Special savings for spa packages"
+    },
+    "dfcc-625d2caa62d9": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "dfcc-e33acdfed1a7": {
+      "category": "travel",
+      "offerType": "discount",
+      "discountLabel": "Special savings at Lotte Duty Free Singapore"
+    },
+    "dfcc-c4d67dd36c4c": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "dfcc-171eb2d3a987": {
+      "category": "travel",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "dfcc-f86f5b702e25": {
+      "category": "other",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "dfcc-ce91b4e3beb2": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "dfcc-edfd89206f2c": {
+      "category": "health",
+      "offerType": "discount",
+      "discountLabel": "THB 200 discount",
+      "minSpend": 2000
+    },
+    "dfcc-da9ac88be5e1": {
+      "category": "health",
+      "offerType": "discount",
+      "discountLabel": "Savings at Oasis Spa"
+    },
+    "dfcc-3ef48de0fa3c": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "dfcc-0214c11eb230": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "dfcc-28c7fbfdb632": {
+      "category": "hotels",
+      "offerType": "bogo",
+      "discountLabel": "Stay 3 Nights Pay for 2"
+    },
+    "dfcc-8280c790840a": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "dfcc-68e8731a1b23": {
+      "category": "hotels",
+      "offerType": "other"
+    },
+    "dfcc-e7c59e26ec87": {
+      "category": "hotels",
+      "offerType": "other"
+    },
+    "dfcc-a8bbf0ac8900": {
+      "category": "hotels",
+      "offerType": "other"
+    },
+    "dfcc-add6049037ee": {
+      "category": "travel",
+      "offerType": "other"
+    },
+    "dfcc-5a29255b56db": {
+      "category": "dining",
+      "offerType": "other",
+      "discountLabel": "Complimentary Wine"
+    },
+    "dfcc-db57acee5a4d": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "dfcc-c48002106c33": {
+      "category": "travel",
+      "offerType": "discount"
+    },
+    "dfcc-372685e7ce5b": {
+      "category": "travel",
+      "offerType": "discount"
+    },
+    "dfcc-6c5f1fbe757f": {
+      "category": "dining",
+      "offerType": "other"
+    },
+    "dfcc-8881eb948848": {
+      "category": "travel",
+      "offerType": "other"
+    },
+    "dfcc-cef1e2f4645f": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 5
+    },
+    "hnb-609": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-2928": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-888": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-835": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-887": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-873": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-883": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-866": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-867": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-858": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-193": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-69": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-834": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2452": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-58": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2384": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-1421": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-664": {
+      "category": "dining",
+      "offerType": "other"
+    },
+    "hnb-3874": {
+      "category": "hotels",
+      "offerType": "other"
+    },
+    "hnb-3856": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3857": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3860": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3861": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3851": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3852": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3849": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3850": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3847": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3848": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3858": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-3859": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "fri"
+      ]
+    },
+    "hnb-1280": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-60": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-854": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3770": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2701": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3065": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3322": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3362": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3724": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3736": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-51": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2377": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-2378": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3865": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3893": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "minSpend": 5000
+    },
+    "hnb-2529": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 50,
+      "minSpend": 4000
+    },
+    "hnb-3929": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3930": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-2431": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 50,
+      "minSpend": 4000
+    },
+    "hnb-3956": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15,
+      "minSpend": 3000
+    },
+    "hnb-3957": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 10,
+      "minSpend": 3000
+    },
+    "hnb-856": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "thu"
+      ]
+    },
+    "hnb-1367": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "tue"
+      ]
+    },
+    "hnb-1366": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "validDays": [
+        "mon"
+      ]
+    },
+    "hnb-3996": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 20,
+      "minSpend": 5000
+    },
+    "hnb-3997": {
+      "category": "dining",
+      "offerType": "discount",
+      "discountPct": 15,
+      "minSpend": 5000
+    },
+    "hnb-3992": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 20,
+      "discountLabel": "Special discount for entrance charges + 20% off on membership charges"
+    },
+    "hnb-3638": {
+      "category": "other",
+      "offerType": "installment",
+      "eligibilityNote": "Insurance, Hospital, Educational & Airline transactions"
+    },
+    "hnb-1152": {
+      "category": "travel",
+      "offerType": "other",
+      "cardNetworks": [
+        "visa"
+      ],
+      "eligibilityNote": "Visa Cardholders"
+    },
+    "hnb-1153": {
+      "category": "travel",
+      "offerType": "other",
+      "cardNetworks": [
+        "mastercard"
+      ],
+      "eligibilityNote": "Mastercard Cardholders"
+    },
+    "hnb-1154": {
+      "category": "other",
+      "offerType": "other",
+      "cardNetworks": [
+        "visa"
+      ]
+    },
+    "hnb-2188": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 15,
+      "minSpend": 10000
+    },
+    "hnb-1316": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-1636": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-1648": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-818": {
+      "category": "hotels",
+      "offerType": "installment"
+    },
+    "hnb-2536": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-2539": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-894": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-896": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-897": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-898": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-899": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-901": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-903": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-906": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-908": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-910": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-913": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-915": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-917": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-1194": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-1228": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1607": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-1694": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-1727": {
+      "category": "supermarket",
+      "offerType": "installment",
+      "minSpend": 10000
+    },
+    "hnb-1746": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-1868": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3623": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-2451": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2559": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2570": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-2575": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-2579": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-2591": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-2968": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3058": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3062": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3063": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3064": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3318": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3319": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3349": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3364": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3381": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3382": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3393": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3417": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3439": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3661": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3663": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3672": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3675": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 50
+    },
+    "hnb-3679": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3691": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3694": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3701": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3734": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3738": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3743": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3744": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3780": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 50
+    },
+    "hnb-3782": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3786": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3787": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3797": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3798": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3821": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3826": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3624": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3625": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3626": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3627": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3628": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3629": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3630": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3631": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3633": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3635": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-3637": {
+      "category": "travel",
+      "offerType": "installment"
+    },
+    "hnb-3793": {
+      "category": "other",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3632": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3634": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-1033": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-3891": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 20,
+      "discountLabel": "20% off on selected items"
+    },
+    "hnb-3892": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 15,
+      "discountLabel": "15% off on selected items"
+    },
+    "hnb-3920": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-3933": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 20,
+      "discountLabel": "20% off on selected items"
+    },
+    "hnb-3934": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 15,
+      "discountLabel": "15% off on selected items"
+    },
+    "hnb-3938": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-3950": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3951": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3982": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3983": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3984": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3991": {
+      "category": "fashion",
+      "offerType": "installment"
+    },
+    "hnb-3959": {
+      "category": "hotels",
+      "offerType": "discount"
+    },
+    "hnb-3960": {
+      "category": "hotels",
+      "offerType": "discount"
+    },
+    "hnb-3961": {
+      "category": "hotels",
+      "offerType": "discount"
+    },
+    "hnb-728": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2183": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2401": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-2425": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2426": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-2427": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-2444": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2445": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2449": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2450": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3840": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3870": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3871": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3883": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3884": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3887": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3890": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 50
+    },
+    "hnb-3894": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3897": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3898": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3899": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3907": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3908": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3909": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3916": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3917": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3918": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 25
+    },
+    "hnb-3923": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3926": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3927": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 45
+    },
+    "hnb-3931": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 35
+    },
+    "hnb-3946": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3949": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3955": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3963": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 50
+    },
+    "hnb-3964": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3968": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-3987": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-4000": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-447": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-64": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-811": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-96": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-107": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-133": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-198": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-202": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-206": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-220": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-227": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-229": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-238": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-241": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-243": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-244": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-246": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-247": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-248": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-249": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-250": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-252": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-253": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-255": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-256": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-257": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-258": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-309": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-314": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-336": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-404": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-408": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-417": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-419": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-442": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-532": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-551": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-579": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-584": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-633": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-636": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-673": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-839": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-840": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-841": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-1630": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-1773": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-761": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-126": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-3689": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-3712": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-1003": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1004": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1005": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1007": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1008": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1009": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1011": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1012": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-996": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1014": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1016": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1017": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1018": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1019": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1020": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1021": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1023": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1029": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1030": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1031": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1032": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1034": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1035": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1038": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1039": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1040": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1041": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1042": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1044": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1045": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1046": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1047": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1049": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1050": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1052": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1053": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1054": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1055": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1056": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1069": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3636": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3639": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-3737": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3766": {
+      "category": "other",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3771": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-3869": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-3911": {
+      "category": "online",
+      "offerType": "installment",
+      "discountPct": 10
+    },
+    "hnb-3912": {
+      "category": "online",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3986": {
+      "category": "electronics",
+      "offerType": "installment",
+      "discountPct": 15
+    },
+    "hnb-3549": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3640": {
+      "category": "health",
+      "offerType": "installment",
+      "discountPct": 10
+    },
+    "hnb-3543": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3554": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3555": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3558": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3559": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3586": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3593": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3605": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3606": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3607": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3608": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3609": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3610": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3611": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3612": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3613": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-3585": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1015": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3799": {
+      "category": "home",
+      "offerType": "installment",
+      "discountPct": 35
+    },
+    "hnb-3835": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1010": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1013": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1036": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1037": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1043": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-2632": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-452": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-825": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1002": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1070": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1071": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1073": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1074": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1076": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1078": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1081": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1083": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1085": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1089": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1091": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1092": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1094": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1096": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1097": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1098": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1099": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1100": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1102": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1103": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1104": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1105": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1106": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1107": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1121": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1123": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1124": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1125": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1126": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1127": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1128": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1129": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1130": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1131": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1132": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1133": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1207": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1317": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1352": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1487": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1268": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-3728": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3729": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3751": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 40
+    },
+    "hnb-3802": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountPct": 5
+    },
+    "hnb-3854": {
+      "category": "automotive",
+      "offerType": "discount",
+      "discountLabel": "Special discount for selected items"
+    },
+    "hnb-3825": {
+      "category": "travel",
+      "offerType": "discount",
+      "discountPct": 50
+    },
+    "hnb-1508": {
+      "category": "online",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-2435": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-2457": {
+      "category": "online",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-946": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1589": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1590": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1591": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1592": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1593": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1594": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1596": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1598": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1599": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1600": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1602": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-1603": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-1604": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-1606": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-1611": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1612": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1613": {
+      "category": "automotive",
+      "offerType": "installment"
+    },
+    "hnb-1614": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1615": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1617": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1618": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-1619": {
+      "category": "health",
+      "offerType": "installment"
+    },
+    "hnb-1595": {
+      "category": "online",
+      "offerType": "installment"
+    },
+    "hnb-2159": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-2515": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-1397": {
+      "category": "electronics",
+      "offerType": "installment"
+    },
+    "hnb-3321": {
+      "category": "leisure",
+      "offerType": "installment"
+    },
+    "hnb-3338": {
+      "category": "other",
+      "offerType": "installment"
+    },
+    "hnb-3444": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-2510": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-2785": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-2908": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3443": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3594": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3595": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3596": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3598": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3599": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3600": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3601": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3602": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3603": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3604": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3697": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3718": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1110": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1111": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1112": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1113": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1114": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1115": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1116": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1117": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1118": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1108": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1109": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-1119": {
+      "category": "home",
+      "offerType": "installment"
+    },
+    "hnb-3921": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3922": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3924": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3925": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3953": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3954": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3969": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3970": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3971": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3972": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-3993": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3994": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3998": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3999": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 10
+    },
+    "hnb-4002": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-4003": {
+      "category": "fashion",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-4004": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 30
+    },
+    "hnb-4005": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3760": {
+      "category": "hotels",
+      "offerType": "other"
+    },
+    "hnb-2375": {
+      "category": "dining",
+      "offerType": "other",
+      "cardNetworks": [
+        "visa"
+      ],
+      "cardTiers": [
+        "infinite"
+      ]
+    },
+    "hnb-3880": {
+      "category": "fashion",
+      "offerType": "other"
+    },
+    "hnb-3910": {
+      "category": "health",
+      "offerType": "discount",
+      "discountPct": 15
+    },
+    "hnb-3975": {
+      "category": "leisure",
+      "offerType": "discount",
+      "discountPct": 20
+    },
+    "hnb-3952": {
+      "category": "hotels",
+      "offerType": "discount",
+      "discountPct": 50
     }
   }
 }
