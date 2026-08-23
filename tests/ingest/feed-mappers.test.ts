@@ -91,7 +91,9 @@ describe("feedMappers.hnb", () => {
     expect(offer?.sourceUrl).toBe("https://www.hnb.lk/card-promotion/search/3692");
     expect(offer?.termsLink).toBe("https://www.hnb.lk/card-promotion/search/3692");
     expect(offer?.validUntil).toBe("2026-08-31");
-    expect(offer?.category).toBe("installment");
+    // "...selected Jewellery ... 0% installment at Aminra Jewellers": the vertical is what is on
+    // sale, and the instalment plan is carried by offerType instead.
+    expect(offer?.category).toBe("fashion");
     expect(offer?.bankId).toBe("hnb");
     expect(offer?.status).toBe("active");
   });
@@ -149,28 +151,29 @@ describe("feedMappers.sampath", () => {
 
   const categoryOf = (id: number) => offers.find((o) => o.id === `sampath-${id}`)?.category;
 
-  it("lowercases a mixed-case category before lookup (Electronics_and_Furniture -> other)", () => {
-    expect(categoryOf(101)).toBe("other");
+  it("lowercases a mixed-case category before lookup (Electronics_and_Furniture -> electronics)", () => {
+    expect(categoryOf(101)).toBe("electronics");
   });
 
-  it("lowercases a mixed-case category before lookup (Hotels -> travel)", () => {
-    expect(categoryOf(102)).toBe("travel");
+  it("lowercases a mixed-case category before lookup (Hotels -> hotels)", () => {
+    expect(categoryOf(102)).toBe("hotels");
   });
 
-  it("keeps the installment text heuristic ahead of the category map", () => {
-    expect(categoryOf(103)).toBe("installment");
-  });
-
-  it("catches the American 'installment' spelling, not just British 'instalment'", () => {
-    expect(categoryOf(106)).toBe("installment");
+  // Payout mechanics are offerType now. An instalment plan sold by an insurer is health; one sold
+  // by an electronics retailer is electronics. The plan itself is never the category.
+  it("gives an instalment offer the vertical of what is being bought", () => {
+    expect(categoryOf(103)).toBe("health");
+    expect(categoryOf(106)).toBe("electronics");
   });
 
   it("still maps existing lowercase slugs correctly", () => {
-    expect(categoryOf(104)).toBe("travel");
+    expect(categoryOf(104)).toBe("hotels");
     expect(categoryOf(105)).toBe("supermarket");
   });
 
-  it("maps the Mastercard_Offers category to other", () => {
+  // The card-network tabs say who qualifies, not what is sold, so the vertical has to come from
+  // the offer text — and falls back to "other" only when the text names nothing either.
+  it("reads a vertical out of the text when the tab only names a card network", () => {
     expect(categoryOf(201)).toBe("other");
   });
 });

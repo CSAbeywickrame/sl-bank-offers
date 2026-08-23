@@ -2,8 +2,8 @@ import crypto from "node:crypto";
 import Anthropic from "@anthropic-ai/sdk";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { activeOfferCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
-import { isBrowsableCategory } from "@/lib/offers/categories";
+import { offerCategories, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { isOfferCategory } from "@/lib/offers/categories";
 import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 
 export const EXTRACTION_MODEL = "claude-haiku-4-5-20251001";
@@ -49,10 +49,8 @@ const OFFER_SCHEMA = {
         required: ["title", "category", "description", "termsLink", "sourceUrl"],
         properties: {
           title: { type: "string" },
-          // Pinned to the categories in use today, not the migration superset: until the taxonomy
-          // migration lands, a model-assigned "hotels"/"fashion" row would be unreachable from the
-          // category filters and index.
-          category: { type: "string", enum: [...activeOfferCategories] },
+          // The verticals the site browses by. The prompt above defines each one.
+          category: { type: "string", enum: [...offerCategories] },
           description: { type: "string" },
           merchant: { type: "string" },
           validFrom: { type: "string" },
@@ -69,7 +67,21 @@ const SYSTEM_PROMPT = [
   "You extract credit/debit card promotions from a bank's offers page content into a strict JSON schema.",
   "Rules:",
   "- Only include real promotions that are actually present in the supplied content. Never invent offers.",
-  "- `category` MUST be one of the allowed enum values; pick the closest fit, otherwise use \"other\".",
+  "- `category` MUST be one of the allowed enum values. It says WHAT is being bought — the merchant's vertical — and NEVER how the offer is paid for or discounted. An interest-free plan at an electronics store is `electronics`; a cashback offer at a supermarket is `supermarket`.",
+  "  - dining: restaurants, cafes, bars, bakeries, food delivery, buffets. A restaurant INSIDE a hotel is dining, not hotels.",
+  "  - hotels: hotel and resort STAYS — rooms, villas, half/full-board packages, day outings.",
+  "  - travel: flights, airlines, travel agents, tours, cruises, visa services, airport lounges, duty free. Getting there; hotels is staying there.",
+  "  - supermarket: supermarkets and grocery chains (Keells, Cargills, Arpico, Spar, Glomark).",
+  "  - fuel: fuel stations and fuel purchases.",
+  "  - fashion: clothing, footwear, bags, jewellery, watches, textiles.",
+  "  - electronics: phones, computers, appliances, TVs, cameras.",
+  "  - health: hospitals, clinics, pharmacies, labs, dental, opticians, spas, salons, gyms.",
+  "  - home: furniture, homeware, kitchenware, bedding, hardware, paint, tiles, home improvement.",
+  "  - automotive: vehicle purchase and servicing, parts, tyres, lubricants.",
+  "  - leisure: cinemas, parks, gaming, events, sports gear, toys, books, kids' activities.",
+  "  - online: online-only offers on multi-vertical marketplaces (Daraz, PickMe). A single-vertical online store uses its own vertical.",
+  "  - other: ONLY when nothing above fits — insurance, telecom, utilities, education, courier, banking services. Most offers ARE classifiable; be reluctant to use other. Never guess a vertical from an uninformative merchant name — prefer other.",
+  "- A card network named in the eligibility text (\"for all Visa credit cardholders\") says who qualifies, NOT what is sold. Never let it decide the category.",
   "- Set `validFrom`/`validUntil` as YYYY-MM-DD ONLY when a clear date is present in the content; otherwise omit the field.",
   "- `sourceUrl` = the specific offer's detail URL if it appears in the content, otherwise the page URL provided in the message.",
   "- `termsLink` = the terms/detail URL if present, otherwise the same URL as `sourceUrl`.",
@@ -79,11 +91,11 @@ const SYSTEM_PROMPT = [
   "- If the content contains no offers, return an empty `offers` array."
 ].join("\n");
 
-// Coerces the model's category to one the site can actually browse. Pinned to the active list, not
-// the schema superset, for the same reason the tool schema above is: a migration vertical that slips
-// through would render on a card but be unreachable from the filter and the category index.
+// Last-resort coercion. The schema enum should make this unreachable, but a row with a category
+// the site cannot browse would render on a card and appear in no filter, so anything unrecognised
+// becomes "other" rather than being trusted through.
 function toCategory(value: unknown): OfferCategory {
-  return typeof value === "string" && isBrowsableCategory(value) ? value : "other";
+  return typeof value === "string" && isOfferCategory(value) ? value : "other";
 }
 
 // Returns a trimmed string when value is a non-empty string, otherwise undefined.
