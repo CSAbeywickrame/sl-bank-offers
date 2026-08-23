@@ -15,10 +15,10 @@ export function DesktopNav() {
           <Link
             key={href}
             href={href}
-            className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+            className={`rounded-sm border px-3.5 py-2 text-sm font-semibold transition-colors duration-(--motion-fast) ${
               active
-                ? "bg-emerald-50 font-semibold text-emerald-700"
-                : "text-neutral-700 hover:bg-neutral-100 hover:text-neutral-900"
+                ? "border-emerald-100 bg-emerald-50 text-(--text-link)"
+                : "border-transparent text-(--text-body) hover:bg-(--surface-muted) hover:text-(--text-strong)"
             }`}
           >
             {label}

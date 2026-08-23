@@ -16,9 +16,9 @@ export function OfferCard({ offer }: { offer: Offer }) {
   const expiringSoon = isExpiringSoon(offer.validUntil);
 
   return (
-    <article className="group flex h-full flex-col overflow-hidden rounded-xl border border-neutral-200 bg-white shadow-sm transition-all duration-150 hover:border-neutral-300 hover:shadow-md">
+    <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-(--border-subtle) bg-(--surface-card) shadow-sm transition-[box-shadow,border-color,transform] duration-(--motion-med) ease-out hover:-translate-y-1 hover:border-(--border-default) hover:shadow-lg motion-reduce:hover:translate-y-0">
       {/* Navy-to-emerald top rule */}
-      <div style={{ height: "4px", background: "var(--offer-rule)", flexShrink: 0 }} />
+      <div aria-hidden="true" className="h-1 shrink-0" style={{ background: "var(--offer-rule)" }} />
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* Badges */}
@@ -31,40 +31,42 @@ export function OfferCard({ offer }: { offer: Offer }) {
         {/* Content */}
         <div className="flex-1">
           {offer.merchant && (
-            <p className="mb-1 text-xs font-semibold uppercase tracking-[0.04em] text-emerald-700">
+            <p className="mb-1 text-xs font-semibold uppercase tracking-(--ls-wide) text-(--text-link)">
               {offer.merchant}
             </p>
           )}
-          <h2 className="text-base font-semibold leading-snug text-neutral-900 transition-colors duration-150 group-hover:text-emerald-700">
+          <h2 className="text-base font-semibold leading-snug text-(--text-strong) transition-colors duration-(--motion-fast) group-hover:text-(--text-link)">
             {offer.title}
           </h2>
-          <p className="mt-2 line-clamp-3 text-sm leading-6 text-neutral-600">
+          <p className="mt-2 line-clamp-3 text-sm leading-6 text-(--text-muted)">
             {offer.description}
           </p>
         </div>
 
-        {/* Validity grid */}
-        <dl className="grid grid-cols-2 gap-x-4 gap-y-2 rounded-md bg-neutral-100 px-3 py-2.5 text-xs">
+        {/* Validity grid — T3.2 adds the design system's "Min. spend" cell here when offer.minSpend is set */}
+        <dl className="grid grid-cols-2 gap-x-3 gap-y-2 rounded-md bg-(--surface-muted) px-3 py-2.5 text-xs">
           <div>
-            <dt className="font-semibold text-neutral-900">Valid until</dt>
-            <dd className={expiringSoon ? "text-red-600" : "text-neutral-700"}>{formatDate(offer.validUntil)}</dd>
+            <dt className="font-semibold text-(--text-strong)">Valid until</dt>
+            <dd className={expiringSoon ? "mt-0.5 font-medium text-red-600" : "mt-0.5 text-(--text-body)"}>
+              {formatDate(offer.validUntil)}
+            </dd>
           </div>
           <div>
-            <dt className="font-semibold text-neutral-900">Last checked</dt>
-            <dd className="text-neutral-700">{formatDate(offer.lastCheckedAt)}</dd>
+            <dt className="font-semibold text-(--text-strong)">Last checked</dt>
+            <dd className="mt-0.5 text-(--text-body)">{formatDate(offer.lastCheckedAt)}</dd>
           </div>
         </dl>
 
         {/* CTA row — side by side to keep the card compact; navy = primary, emerald outline = secondary */}
-        <div className="mt-auto flex gap-2">
+        <div className="mt-auto flex flex-wrap gap-2">
           <Link
-            className={buttonClasses({ variant: "primary" }) + " flex-1 whitespace-nowrap"}
+            className={buttonClasses({ variant: "primary", className: "min-w-30 flex-1" })}
             href={`/offers/${offer.id}`}
           >
             View details
           </Link>
           <a
-            className={buttonClasses({ variant: "outline" }) + " flex-1 whitespace-nowrap"}
+            className={buttonClasses({ variant: "outline", className: "min-w-30 flex-1" })}
             href={offer.sourceUrl}
             target="_blank"
             rel="noreferrer"

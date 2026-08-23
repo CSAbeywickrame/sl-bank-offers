@@ -1,10 +1,19 @@
 import type { Metadata } from "next";
+import { Hanken_Grotesk } from "next/font/google";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { WebAnalytics } from "@/components/WebAnalytics";
 import { siteDescription, siteName, siteUrl } from "@/lib/site-config";
 import "./globals.css";
+
+// Self-hosted at build time by next/font, so there is no render-blocking request to
+// fonts.googleapis.com. The design system's --font-sans token points at this variable.
+const hankenGrotesk = Hanken_Grotesk({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-hanken-grotesk",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -77,7 +86,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={hankenGrotesk.variable}>
       <body className="flex min-h-screen flex-col">
         <JsonLd data={websiteJsonLd} />
         <Header />

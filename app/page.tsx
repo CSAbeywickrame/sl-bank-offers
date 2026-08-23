@@ -85,7 +85,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
 
       <section
         className="relative overflow-hidden"
-        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "#fff" }}
+        style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "var(--text-on-inverse)" }}
       >
         <div className="absolute inset-0" aria-hidden="true">
           <div className="hero-orb hero-orb-emerald" />
@@ -104,9 +104,9 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   background: "var(--hero-eyebrow-bg)",
                   border: "1px solid var(--hero-eyebrow-bg)",
                   color: "var(--hero-eyebrow-fg)",
-                  borderRadius: "9999px",
+                  borderRadius: "var(--radius-pill)",
                   padding: "4px 12px",
-                  letterSpacing: "0.04em",
+                  letterSpacing: "var(--ls-wide)",
                 }}
               >
                 <span
@@ -114,7 +114,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                   style={{
                     width: "6px",
                     height: "6px",
-                    borderRadius: "9999px",
+                    borderRadius: "var(--radius-pill)",
                     background: "currentColor",
                     display: "inline-block",
                     flexShrink: 0,
@@ -124,14 +124,14 @@ export default async function HomePage({ searchParams }: HomePageProps) {
               </p>
               <h1
                 className="mt-4 font-bold"
-                style={{ fontSize: "44px", lineHeight: 1.1, letterSpacing: "-0.02em" }}
+                style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
                 Compare {totalCount}+ Sri Lankan Credit Card Offers{" "}
                 <span style={{ color: "var(--hero-highlight)" }}>from 10+ Banks</span>
               </h1>
               <p
                 className="mt-4 text-base"
-                style={{ lineHeight: 1.7, color: "rgba(255,255,255,0.78)" }}
+                style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}
               >
                 Compare active credit card offers across Sri Lankan banks and categories.
                 Always verify details at the official bank source before using an offer.

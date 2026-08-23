@@ -51,8 +51,8 @@ export function MobileMenu() {
         aria-expanded={isOpen}
         aria-controls="mobile-nav"
         onClick={() => setIsOpen((prev) => !prev)}
-        className={`flex h-10 w-10 items-center justify-center rounded-md text-neutral-700 transition-colors ${
-          isOpen ? "bg-navy-900/10" : "hover:bg-neutral-100"
+        className={`flex h-10 w-10 items-center justify-center rounded-md text-(--text-body) transition-colors duration-(--motion-fast) ${
+          isOpen ? "bg-navy-900/10" : "hover:bg-(--surface-muted)"
         }`}
       >
         {isOpen ? (
