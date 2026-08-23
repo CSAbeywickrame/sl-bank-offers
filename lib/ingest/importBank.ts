@@ -1,7 +1,11 @@
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 import { syncScannedOffers } from "@/lib/offers/scanned";
 import { enrichOffer } from "@/lib/ingest/enrich";
+import { feedMappers } from "@/lib/ingest/feedMappers";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
+
+// Banks whose rows are rebuilt deterministically every run rather than re-read from a snapshot.
+const feedMapperBankIds = new Set(Object.keys(feedMappers));
 
 // True if the offer has not expired as of reviewDateIso (no validUntil => always active).
 export function isActiveOffer(validUntil: string | undefined, reviewDateIso: string): boolean {
@@ -20,22 +24,31 @@ export function importBankOffers(
   seed: SeedData,
   catalog: ScannedOfferCatalog,
 ): { seed: SeedData; catalog: ScannedOfferCatalog } {
-  // "Date added" per offer id, from the rows this import is about to replace.
-  const priorFirstSeen = new Map<string, string>();
+  // What the rows this import is about to replace already knew, kept by offer id.
+  const prior = new Map<string, ScannedOffer>();
   for (const offer of catalog.offers) {
-    if (offer.bankId === entry.bankId) {
-      priorFirstSeen.set(offer.id, offer.firstSeenAt ?? offer.lastReviewedAt);
-    }
+    if (offer.bankId === entry.bankId) prior.set(offer.id, offer);
   }
   // Enrichment belongs here rather than in each producer: every refresh path (LLM extraction,
   // deterministic feed mappers, crawl reuse) funnels through this function, so none can skip it.
-  // firstSeenAt is restored from the replaced row for the same reason the map above exists — the
-  // per-bank batch replace below drops the old rows outright, which would otherwise reset every
-  // offer's "date added" to today on each weekly refresh.
-  const importedOffers: ScannedOffer[] = offers.map(offer => ({
-    ...enrichOffer(offer),
-    firstSeenAt: offer.firstSeenAt ?? priorFirstSeen.get(offer.id) ?? reviewDateIso,
-  }));
+  // firstSeenAt is restored from the replaced row because the per-bank batch replace below drops
+  // the old rows outright, which would otherwise reset every offer's "date added" to today.
+  //
+  // Category is restored for the same structural reason, but only for the feed banks. Their rows
+  // are rebuilt from scratch every run by a regex categorizer, so an unchanged offer would be
+  // re-derived rather than remembered — and the stored category came from a far better source (a
+  // one-time model pass over the whole catalog). Measured against the migrated data, letting the
+  // regex win would rewrite roughly two thirds of the 915 HNB and Sampath rows on the next weekly
+  // refresh. New offer ids still take the categorizer's answer, since there is nothing to keep.
+  const keepStoredCategory = feedMapperBankIds.has(entry.bankId);
+  const importedOffers: ScannedOffer[] = offers.map(offer => {
+    const previous = prior.get(offer.id);
+    return {
+      ...enrichOffer(offer),
+      ...(keepStoredCategory && previous ? { category: previous.category } : {}),
+      firstSeenAt: offer.firstSeenAt ?? previous?.firstSeenAt ?? previous?.lastReviewedAt ?? reviewDateIso,
+    };
+  });
   const nextCatalog: ScannedOfferCatalog = {
     ...catalog,
     updatedAt: reviewDateIso,
