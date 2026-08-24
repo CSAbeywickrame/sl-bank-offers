@@ -1,0 +1,64 @@
+{
+  "_readme": [
+    "Curated merchant identity. Keys and `canonical` values are merchantSlug() output (see lib/offers/merchants.ts).",
+    "",
+    "`canonical` MERGES two names into one merchant. Only ever use it for genuine spellings of ONE place a cardholder can walk into — 'pasikuda' / 'pasikudah' / 'passikuda' are the same resort. NEVER use it to fold siblings together: 'Jetwing Beach' and 'Jetwing Beach - The Deck' are a hotel and a restaurant inside it, and merging them would claim a dining discount covers a room booking. Two hotels in one chain are likewise two merchants.",
+    "",
+    "`group` is the soft relationship: same brand, still separate merchants. It powers a 'more from this brand' strip and never affects offer counts, bank counts, or the best-discount figure. Prefer it whenever you are tempted by `canonical` but not certain.",
+    "",
+    "Groups are curated rather than derived from the first word on purpose — 'Ceylon', 'Royal' and 'Colombo' each head a dozen unrelated businesses, and 'Layards Wharf' merely starts like 'Laya'.",
+    "",
+    "Regenerate candidates with: npx tsx scripts/merchant-fragmentation.ts"
+  ],
+
+  "anantaya-resort-and-spa-pasikudah": { "canonical": "anantaya-resort-and-spa-pasikuda" },
+  "anantaya-resort-and-spa-passikuda": { "canonical": "anantaya-resort-and-spa-pasikuda" },
+  "anantaya-resorts-and-spa": { "canonical": "anantaya-resort-and-spa" },
+  "anantaya-resort-and-spa": { "group": "Anantaya" },
+  "anantaya-resort-and-spa-pasikuda": { "group": "Anantaya" },
+  "anantaya-resort-and-spa-chilaw": { "group": "Anantaya" },
+
+  "centauria-hill-hotel": { "canonical": "centauria-hill-resort" },
+  "centauria-hill-ratnapura": { "canonical": "centauria-hill-resort" },
+  "centauria-hill": { "canonical": "centauria-hill-resort" },
+  "centauria-lake-hotel": { "canonical": "centauria-lake-resort" },
+  "centauria-lake": { "canonical": "centauria-lake-resort" },
+  "centauria-hill-resort": { "group": "Centauria" },
+  "centauria-lake-resort": { "group": "Centauria" },
+
+  "araliya-green-hills-hotel": { "canonical": "araliya-green-hills" },
+  "araliya-green-hills-nuwara-eliya": { "canonical": "araliya-green-hills" },
+  "araliya-green-hills": { "group": "Araliya" },
+  "araliya-green-city": { "group": "Araliya" },
+  "araliya-beach-resot-and-spa": { "group": "Araliya" },
+
+  "laya-beach-hotel": { "canonical": "laya-beach-wadduwa" },
+  "laya-beach": { "canonical": "laya-beach-wadduwa" },
+  "laya-beach-wadduwa": { "group": "Laya" },
+  "laya-safari-army-welfare-holiday-resort": { "group": "Laya" },
+
+  "oak-ray-colombo-city-hotel": { "canonical": "oak-ray-city-hotel-colombo" },
+
+  "jetwing-hotels": { "group": "Jetwing" },
+  "jetwing-beach": { "group": "Jetwing" },
+  "jetwing-blue": { "group": "Jetwing" },
+  "jetwing-colombo-seven": { "group": "Jetwing" },
+  "jetwing-jaffna": { "group": "Jetwing" },
+  "jetwing-lake": { "group": "Jetwing" },
+  "jetwing-lighthouse": { "group": "Jetwing" },
+  "jetwing-sea": { "group": "Jetwing" },
+  "jetwing-yala": { "group": "Jetwing" },
+  "jetwing-waha-waluwa": { "group": "Jetwing" },
+  "jetwing-warwick-gardens": { "group": "Jetwing" },
+
+  "cinnamon-hotels-and-resorts": { "group": "Cinnamon" },
+  "cinnamon-grand-colombo": { "group": "Cinnamon" },
+  "cinnamon-lakeside-colombo": { "group": "Cinnamon" },
+  "cinnamon-red-colombo": { "group": "Cinnamon" },
+  "cinnamon-bey-beruwala": { "group": "Cinnamon" },
+  "cinnamon-citadel-kandy": { "group": "Cinnamon" },
+
+  "hilton-colombo": { "group": "Hilton" },
+  "hilton-colombo-residences": { "group": "Hilton" },
+  "hilton-yala": { "group": "Hilton" }
+}
