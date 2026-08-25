@@ -199,6 +199,29 @@ export function parseMaxDiscountAmount(text: string): number | undefined {
   return firstAmount(text, [MAX_THEN_SAVING_PATTERN, SAVING_THEN_MAX_PATTERN, CAPPED_AT_PATTERN]);
 }
 
+// "36 months", "up to 24 Months", "12-month". Capped at 120 because a plan longer than ten years
+// is a parse artefact, not a Sri Lankan instalment term.
+const INSTALLMENT_MONTHS_PATTERN = /\b(\d{1,3})\s*[-\s]?months?\b/gi;
+const MAX_INSTALLMENT_MONTHS = 120;
+
+/**
+ * Longest interest-free term an installment offer advertises, in months.
+ *
+ * Only read when the text is actually about an installment plan: "3 months free membership" is a
+ * gym promotion, not a payment term. Banks lead with the longest tenure they offer ("up to 36
+ * months"), so the largest figure is the headline a shopper is being sold.
+ */
+export function parseInstallmentMonths(text: string): number | undefined {
+  if (!INSTALLMENT_PATTERN.test(text)) return undefined;
+  let best: number | undefined;
+  for (const match of text.matchAll(INSTALLMENT_MONTHS_PATTERN)) {
+    const months = Number(match[1]);
+    if (!Number.isFinite(months) || months < 1 || months > MAX_INSTALLMENT_MONTHS) continue;
+    if (best === undefined || months > best) best = months;
+  }
+  return best;
+}
+
 // Ordered per the `cardNetworks` const so results come back in a stable order.
 const CARD_NETWORK_PATTERNS: Array<{ network: CardNetwork; pattern: RegExp }> = [
   { network: "visa", pattern: /\bvisa\b/i },
@@ -287,6 +310,7 @@ export function enrichOffer<T extends ScannedOffer>(offer: T): T {
 
   const enriched: T = { ...offer };
   setWhenParsed(enriched, "discountPct", discountPct);
+  setWhenParsed(enriched, "installmentMonths", offer.installmentMonths ?? parseInstallmentMonths(text));
   setWhenParsed(enriched, "minSpend", offer.minSpend ?? parseMinSpend(text));
   setWhenParsed(enriched, "maxDiscountAmount", offer.maxDiscountAmount ?? parseMaxDiscountAmount(text));
   setWhenParsed(enriched, "validDays", offer.validDays ?? parseValidDays(text));

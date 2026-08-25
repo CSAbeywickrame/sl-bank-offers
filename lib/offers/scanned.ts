@@ -33,6 +33,7 @@ function isOptionalMemberArray(value: unknown, allowed: readonly string[]): bool
 function assertEnrichmentFields(value: Record<string, unknown>): void {
   if (
     !isOptionalAmount(value.discountPct, 100) ||
+    !isOptionalAmount(value.installmentMonths, 120) ||
     !isOptionalAmount(value.minSpend, Number.POSITIVE_INFINITY) ||
     !isOptionalAmount(value.maxDiscountAmount, Number.POSITIVE_INFINITY) ||
     !isOptionalMember(value.offerType, offerTypes) ||
