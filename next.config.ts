@@ -9,13 +9,12 @@ const nextConfig: NextConfig = {
       // old category pages point at the equivalent filtered listing rather than 404ing on links
       // already in the wild.
       //
-      // Deliberately temporary (302). Nothing reads `type` yet — the offer-type filter arrives with
-      // filters v2 — so today these land on the unfiltered homepage. A 301 would let browsers and
-      // search engines cache that half-answer permanently; promote these to `permanent: true` in
-      // the change that makes the param do something.
-      { source: "/categories/installment", destination: "/?type=installment", permanent: false },
-      { source: "/categories/cashback", destination: "/?type=cashback", permanent: false },
-      { source: "/categories/bogo", destination: "/?type=bogo", permanent: false },
+      // Permanent now that the offer-type filter reads `type` and these land on a real filtered
+      // listing. They were 302s while the param did nothing, so no browser or crawler cached a
+      // redirect to the unfiltered homepage.
+      { source: "/categories/installment", destination: "/?type=installment", permanent: true },
+      { source: "/categories/cashback", destination: "/?type=cashback", permanent: true },
+      { source: "/categories/bogo", destination: "/?type=bogo", permanent: true },
     ];
   },
 };

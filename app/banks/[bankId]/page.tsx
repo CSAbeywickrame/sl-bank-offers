@@ -145,6 +145,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
         lockedBankId={bankId}
         actionPath={`/banks/${bankId}`}
         resultCount={filteredOffers.length}
+        filters={filters}
       />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">

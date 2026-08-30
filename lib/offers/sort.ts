@@ -33,6 +33,25 @@ function sortByExpiringSoon(offers: Offer[]): Offer[] {
   return [...withDate.map((entry) => entry.offer), ...withoutDate];
 }
 
+// Sorts by advertised discount, largest first. Offers with no stated percentage keep their relative
+// order at the end: an instalment plan has no percentage to rank by, and pretending it is worth 0%
+// would bury real offers below it.
+function sortByBiggestDiscount(offers: Offer[]): Offer[] {
+  const withPct: { offer: Offer; pct: number }[] = [];
+  const withoutPct: Offer[] = [];
+
+  for (const offer of offers) {
+    if (typeof offer.discountPct === "number") {
+      withPct.push({ offer, pct: offer.discountPct });
+    } else {
+      withoutPct.push(offer);
+    }
+  }
+
+  withPct.sort((a, b) => b.pct - a.pct);
+  return [...withPct.map((entry) => entry.offer), ...withoutPct];
+}
+
 // Returns a new, sorted array of offers for the given sort key, without mutating the input array
 export function sortOffers(offers: Offer[], sortKey: SortKey): Offer[] {
   switch (sortKey) {
@@ -40,6 +59,8 @@ export function sortOffers(offers: Offer[], sortKey: SortKey): Offer[] {
       return sortByNewest([...offers]);
     case "expiring-soon":
       return sortByExpiringSoon(offers);
+    case "biggest-discount":
+      return sortByBiggestDiscount(offers);
     case "relevance":
     default:
       return [...offers];
