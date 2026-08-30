@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getBanks } from "@/lib/offers/banks";
 import { categories } from "@/lib/offers/categories";
+import { getMerchantSummaries } from "@/lib/offers/merchants";
 import { getAllOffers } from "@/lib/offers/repository";
 import { siteUrl } from "@/lib/site-config";
 
@@ -23,6 +24,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
+  // Merchants at more than one bank first: those pages carry a real comparison, which is what makes
+  // them worth indexing. Single-bank merchant pages are reachable from /merchants but largely
+  // duplicate the offer page they point at.
+  const merchantEntries: MetadataRoute.Sitemap = (await getMerchantSummaries())
+    .filter((merchant) => merchant.bankCount > 1)
+    .map((merchant) => ({
+      url: `${siteUrl}/merchants/${merchant.slug}`,
+      changeFrequency: "weekly" as const,
+      priority: 0.7,
+    }));
+
   const offerEntries: MetadataRoute.Sitemap = activeOffers.map((offer) => ({
     url: `${siteUrl}/offers/${offer.id}`,
     changeFrequency: "weekly",
@@ -33,8 +45,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   return [
     { url: siteUrl, changeFrequency: "daily", priority: 1.0 },
     { url: `${siteUrl}/categories`, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${siteUrl}/merchants`, changeFrequency: "daily", priority: 0.8 },
     ...bankEntries,
     ...categoryEntries,
+    ...merchantEntries,
     ...offerEntries,
   ];
 }

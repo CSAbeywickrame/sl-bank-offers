@@ -3,12 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-
-const navLinks = [
-  { href: "/", label: "All Offers" },
-  { href: "/banks", label: "Browse Banks" },
-  { href: "/categories", label: "View Categories" },
-] as const;
+import { navLinks } from "@/lib/nav-links";
 
 export function MobileMenu() {
   const [isOpen, setIsOpen] = useState(false);
