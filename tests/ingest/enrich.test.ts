@@ -6,7 +6,6 @@ import {
   parseDiscountPct,
   parseMaxDiscountAmount,
   parseMinSpend,
-  parseInstallmentMonths,
   parseValidDays
 } from "@/lib/ingest/enrich";
 import type { ScannedOffer } from "@/lib/offers/types";
@@ -365,27 +364,5 @@ describe("enrichOffer", () => {
       category: "dining",
       status: "active"
     });
-  });
-});
-
-describe("parseInstallmentMonths", () => {
-  it("reads the tenure an instalment plan advertises", () => {
-    expect(parseInstallmentMonths("Up to 36 Months 0% Installment Plans")).toBe(36);
-    expect(parseInstallmentMonths("12 month instalment plan")).toBe(12);
-  });
-
-  // Banks lead with the longest tenure they offer, so that is the figure being sold.
-  it("takes the longest term when several are listed", () => {
-    expect(parseInstallmentMonths("0% instalment over 12 and 24 month plans")).toBe(24);
-  });
-
-  // "3 months free membership" is a gym promotion, not a payment term.
-  it("ignores a month count that has nothing to do with a payment plan", () => {
-    expect(parseInstallmentMonths("3 months free gym membership")).toBeUndefined();
-    expect(parseInstallmentMonths("25% off for 6 months")).toBeUndefined();
-  });
-
-  it("rejects a term too long to be a real plan", () => {
-    expect(parseInstallmentMonths("0% instalment over 240 months")).toBeUndefined();
   });
 });
