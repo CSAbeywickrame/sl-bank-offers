@@ -52,13 +52,6 @@ export interface OfferEnrichment {
   offerType?: OfferType;
   discountPct?: number;
   discountLabel?: string;
-  /**
-   * Longest interest-free term an installment offer advertises, in months.
-   *
-   * An installment plan has no percentage off — the term IS the offer, and a third of the catalog
-   * is one of these. Without it those offers have no headline a card can show.
-   */
-  installmentMonths?: number;
   minSpend?: number;
   maxDiscountAmount?: number;
   validDays?: Weekday[];
