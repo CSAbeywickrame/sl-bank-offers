@@ -42,6 +42,6 @@ describe("branding assets", () => {
   it("uses the uploaded favicon asset for the browser icon", () => {
     const iconSha = createHash("sha256").update(readFileSync("app/icon.png")).digest("hex");
 
-    expect(iconSha).toBe("b388d62d7230c12bf3110625fda84bcd5226679ecc4b5e86bc5575e63d7fb1f5");
+    expect(iconSha).toBe("e62e765f170af3a1ebd49dc6c36c86b7ebb59938e96d90b8f0c5489a219fc9fb");
   });
 });

@@ -5,15 +5,21 @@ export interface CategoryMeta {
   label: string;
 }
 
+// Labels name the vertical the way a shopper would say it, which is not always the way the id
+// reads: "Travel" alone was ambiguous once hotels moved out of it, so it says what is left.
 const categoryLabels: Record<OfferCategory, string> = {
+  hotels: "Hotels & Resorts",
   dining: "Dining",
-  fuel: "Fuel",
-  supermarket: "Supermarket",
-  travel: "Travel",
+  home: "Home & Living",
+  travel: "Travel & Airlines",
+  health: "Health & Wellness",
+  fashion: "Fashion & Retail",
+  electronics: "Electronics",
+  automotive: "Automotive",
+  supermarket: "Supermarkets",
+  leisure: "Leisure & Entertainment",
   online: "Online",
-  installment: "Installment",
-  cashback: "Cashback",
-  bogo: "BOGO",
+  fuel: "Fuel",
   other: "Other"
 };
 

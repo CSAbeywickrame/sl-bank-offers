@@ -19,6 +19,7 @@ import {
 } from "@/lib/offers/presets";
 import { usePopover } from "@/components/ui/popover";
 import { buttonClasses } from "@/components/ui/button";
+import { labelClass } from "@/components/ui/field";
 import { Bookmark, Check, ChevronDown, Close } from "@/components/ui/icon";
 
 interface UseFilterPresetsResult {
@@ -86,9 +87,6 @@ export function useFilterPresets(catalog: OfferCatalog): UseFilterPresetsResult 
 
   return { isLoaded, presets: reconciledPresets, save, remove, clearAll, markUsed };
 }
-
-// Small uppercase section label, matching the labelClass idiom used across the filter panel
-const sectionLabelClass = "text-xs font-semibold uppercase tracking-[0.04em] text-(--text-muted)";
 
 interface SavedFilterRowProps {
   reconciled: ReconciledPreset;
@@ -245,16 +243,15 @@ function SavedFiltersPopover({
         <div
           role="group"
           aria-label="Saved filters"
-          className="absolute right-0 z-10 w-72 rounded-lg border border-(--border-default) bg-(--surface-card) p-2"
+          className="absolute right-0 z-10 w-72 rounded-lg border border-(--border-default) bg-(--surface-card) p-2 shadow-md"
           style={{
             top: "100%",
-            marginTop: "4px",
-            boxShadow: "0 4px 12px rgb(15 23 42 / 10%)",
+            marginTop: "var(--space-1)",
             maxHeight: "320px",
             overflowY: "auto",
           }}
         >
-          <p className={`${sectionLabelClass} px-2 pb-1 pt-0.5`}>Saved filters</p>
+          <p className={`${labelClass} px-2 pb-1 pt-0.5`}>Saved filters</p>
 
           {presets.length === 0 ? (
             <p className="px-2 py-3 text-sm text-(--text-muted)">No saved filters yet.</p>
@@ -280,7 +277,7 @@ function SavedFiltersPopover({
                 </p>
               ) : isSavingNew ? (
                 <form onSubmit={handleSave} className="grid gap-1.5 px-2 py-1.5">
-                  <label htmlFor="preset-name-input" className={sectionLabelClass}>
+                  <label htmlFor="preset-name-input" className={labelClass}>
                     Preset name
                   </label>
                   <input
@@ -290,7 +287,7 @@ function SavedFiltersPopover({
                     defaultValue={suggestPresetName(selection, catalog)}
                     autoFocus
                     onKeyDown={handleNameKeyDown}
-                    className="h-9 w-full rounded-md border border-(--border-default) bg-(--surface-card) px-2 text-sm text-(--text-strong)"
+                    className="h-9 w-full rounded-md border border-(--border-default) bg-(--surface-card) px-2 text-sm text-(--text-strong) transition-colors duration-(--motion-fast) focus:border-(--border-focus)"
                   />
                   <div className="mt-0.5 flex items-center gap-3">
                     <button type="submit" className={buttonClasses({ variant: "accent", size: "sm" })}>

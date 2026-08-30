@@ -58,6 +58,29 @@ This is the handoff contract for Scout and any future scraper output. Each recor
 - `lastReviewedAt`: ISO timestamp for the scrape/manual verification time
 - `status`: `active`, `inactive`, `expired`, or `needs_review`
 
+### Optional enrichment fields
+
+Carried by both `Offer` and `ScannedOffer`. A scraper may set any of them; `lib/ingest/enrich.ts` fills the ones marked "parsed" below from the offer's own title and description during import, and never overwrites a value the scraper supplied. Loading the catalog rejects a malformed value but always accepts an absent one, so older rows stay valid.
+
+The rest are marked "scraper-only": they are typed, validated, and plumbed through to the UI, but nothing writes them yet — a scraper or a later migration has to supply them.
+
+- `offerType` (parsed): one of `discount`, `installment`, `cashback`, `bogo`, `other`
+- `discountPct` (parsed): number above 0 and at most 100 (0% is financing, never a discount)
+- `discountLabel` (scraper-only): display text for the discount, e.g. `"Up to 30% off"`
+- `minSpend` (parsed): minimum qualifying spend in LKR, above 0
+- `maxDiscountAmount` (parsed): cap on the saving in LKR, above 0
+- `validDays` (parsed): subset of `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun`, in that order
+- `cardNetworks` (parsed): subset of `visa`, `mastercard`, `amex`, `unionpay`, `jcb`, `diners`
+- `cardTypes` (parsed): subset of `credit`, `debit`, `prepaid`
+- `cardTiers` (parsed): subset of `classic`, `gold`, `platinum`, `signature`, `infinite`, `world`, `premium`, `corporate`
+- `eligibilityNote` (scraper-only): free-text eligibility caveat
+- `imageUrl` (scraper-only): promotional image for the offer
+- `firstSeenAt` (set on import): ISO timestamp of the first import that carried this offer. Set on first import and preserved across refreshes, so it survives the per-bank batch replace and can be trusted as "date added"
+
+### Category taxonomy
+
+`category` is validated against a superset while the taxonomy migrates: the nine categories above, plus the staged verticals `hotels`, `fashion`, `electronics`, `health`, `home`, `automotive`, `leisure`. Only the original nine are emitted by the extractor and rendered in the UI today; the superset shrinks to one taxonomy once the offer data migrates.
+
 The tracked catalog wrapper is:
 
 ```json

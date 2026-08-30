@@ -8,6 +8,7 @@ import {
   buildUpdatedQueryString,
   getVisiblePageNumbers,
 } from "@/lib/offers/pagination";
+import { Select } from "@/components/ui/field";
 
 interface OfferPaginationProps {
   actionPath: string;
@@ -21,21 +22,28 @@ interface OfferPaginationProps {
 }
 
 const pillStyle: React.CSSProperties = {
-  minWidth: "40px",
-  height: "40px",
-  borderRadius: "9999px",
+  minWidth: "var(--control-h)",
+  height: "var(--control-h)",
+  borderRadius: "var(--radius-pill)",
   borderWidth: "1px",
   borderStyle: "solid",
-  borderColor: "#c4d3cb",
-  background: "#fff",
-  color: "#16201b",
+  borderColor: "var(--border-default)",
+  background: "var(--surface-card)",
+  color: "var(--text-strong)",
   display: "inline-flex",
   alignItems: "center",
   justifyContent: "center",
-  fontSize: "14px",
-  fontWeight: 600,
+  fontSize: "var(--fs-body)",
+  fontWeight: "var(--fw-semibold)",
   padding: "0 14px",
-  transition: "all 150ms ease",
+  transition: "background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, color var(--motion-fast) ease",
+};
+
+const currentPagePillStyle: React.CSSProperties = {
+  ...pillStyle,
+  borderColor: "var(--action-accent-bg)",
+  background: "var(--action-accent-bg)",
+  color: "var(--action-accent-fg)",
 };
 
 export function OfferPagination({
@@ -75,41 +83,36 @@ export function OfferPagination({
   }
 
   return (
-    <div
-      className="grid gap-4 rounded-2xl border px-4 py-4 sm:px-5"
-      style={{ borderColor: "#dde7e1", background: "#fff", boxShadow: "0 1px 2px rgb(15 23 42 / 5%)" }}
-    >
+    <div className="grid gap-4 rounded-lg border border-(--border-subtle) bg-(--surface-card) px-4 py-4 shadow-sm sm:px-5">
       {!navOnly && (
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "#6a7d73" }}>
+            <p className="text-xs font-semibold uppercase tracking-(--ls-wider) text-(--text-muted)">
               Results
             </p>
-            <p className="mt-1 text-sm font-medium" style={{ color: "#16201b" }}>
+            <p className="mt-1 text-sm font-medium text-(--text-strong)">
               Showing {startIndex.toLocaleString()}-{endIndex.toLocaleString()} of {totalItems.toLocaleString()} offers
             </p>
-            <p className="mt-1 text-sm" style={{ color: "#6a7d73" }}>
+            <p className="mt-1 text-sm text-(--text-muted)">
               Page {page} of {totalPages}
             </p>
           </div>
 
-          <label className="grid gap-1 text-sm font-medium sm:w-[180px]" style={{ color: "#16201b" }}>
-            <span className="text-xs font-semibold uppercase tracking-[0.08em]" style={{ color: "#6a7d73" }}>
+          <label className="grid gap-1 text-sm font-medium text-(--text-strong) sm:w-[180px]">
+            <span className="text-xs font-semibold uppercase tracking-(--ls-wider) text-(--text-muted)">
               Offers per page
             </span>
-            <select
+            <Select
               aria-label="Offers per page"
               value={String(pageSize)}
               onChange={(event) => handlePageSizeChange(event.target.value)}
-              className="h-10 rounded-md border px-3 text-sm"
-              style={{ borderColor: "#c4d3cb", background: "#fff", color: "#16201b" }}
             >
               {PAGE_SIZE_OPTIONS.map((option) => (
                 <option key={option} value={option}>
                   {option} offers
                 </option>
               ))}
-            </select>
+            </Select>
           </label>
         </div>
       )}
@@ -130,8 +133,7 @@ export function OfferPagination({
             token === "ellipsis" ? (
               <span
                 key={`ellipsis-${page}-${index}`}
-                className="inline-flex h-10 items-center justify-center px-1 text-sm font-semibold"
-                style={{ color: "#6a7d73" }}
+                className="inline-flex h-10 items-center justify-center px-1 text-sm font-semibold text-(--text-muted)"
               >
                 ...
               </span>
@@ -142,16 +144,7 @@ export function OfferPagination({
                 aria-current={token === page ? "page" : undefined}
                 aria-label={`Page ${token}`}
                 className="inline-flex items-center justify-center rounded-full text-sm font-semibold"
-                style={
-                  token === page
-                    ? {
-                        ...pillStyle,
-                        borderColor: "#047857",
-                        background: "#047857",
-                        color: "#fff",
-                      }
-                    : pillStyle
-                }
+                style={token === page ? currentPagePillStyle : pillStyle}
               >
                 {token}
               </Link>

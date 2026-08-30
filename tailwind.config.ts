@@ -5,7 +5,6 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        forest: "#08271c",
         emerald: {
           50: "#ecfdf5",
           100: "#d1fae5",
@@ -54,6 +53,7 @@ const config: Config = {
           700: "#3b4a43",
           800: "#25322c",
           900: "#16201b",
+          950: "#0c1410",
         },
         amber: {
           50: "#fffbeb",
