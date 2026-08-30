@@ -48,6 +48,7 @@ function toOffer(catalogOffer: CatalogOffer, cardsById: Map<string, Card>, banks
     offerType: catalogOffer.offerType,
     discountPct: catalogOffer.discountPct,
     discountLabel: catalogOffer.discountLabel,
+    installmentMonths: catalogOffer.installmentMonths,
     minSpend: catalogOffer.minSpend,
     maxDiscountAmount: catalogOffer.maxDiscountAmount,
     validDays: catalogOffer.validDays,

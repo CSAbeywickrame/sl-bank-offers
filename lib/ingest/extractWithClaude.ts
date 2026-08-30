@@ -45,6 +45,7 @@ interface RawOffer {
   sourceUrl?: unknown;
   discountPct?: unknown;
   discountLabel?: unknown;
+  installmentMonths?: unknown;
   minSpend?: unknown;
   maxDiscountAmount?: unknown;
   validDays?: unknown;
@@ -83,6 +84,7 @@ const OFFER_SCHEMA = {
           // text as a fallback, so an omission costs a regex pass rather than the field.
           discountPct: { type: "number" },
           discountLabel: { type: "string" },
+          installmentMonths: { type: "number" },
           minSpend: { type: "number" },
           maxDiscountAmount: { type: "number" },
           validDays: { type: "array", items: { type: "string", enum: [...weekdays] } },
@@ -120,6 +122,7 @@ const SYSTEM_PROMPT = [
   "- The remaining fields are OPTIONAL. Set one ONLY when the content states it outright. Omit anything you would have to infer — a missing field is filled in later from the offer text, but a wrong one is a wrong promise to a cardholder:",
   "  - `discountPct`: the headline discount percentage, above 0 and at most 100 (for \"up to 30%\" use 30). A financing rate is NEVER a discount — \"0% interest\", \"1.2% p.m.\" and \"18% per annum\" are not discounts.",
   "  - `discountLabel`: a short verbatim label ONLY when a bare percentage cannot express the deal (\"Buy 1 Get 1 Free\", \"Rs. 2,000 off\", \"Free room upgrade\"). Omit it when `discountPct` already says everything.",
+  "  - `installmentMonths`: for an installment plan, the longest interest-free term in months (\"up to 36 months\" = 36). Omit unless the offer IS a payment plan.",
   "  - `minSpend`: minimum qualifying spend in LKR, as a number.",
   "  - `maxDiscountAmount`: the cap on the SAVING in LKR. A maximum transaction or bill value is a spending ceiling, NOT a discount cap — omit those.",
   "  - `validDays`: only when specific days are named (\"weekends\" = sat,sun; \"weekdays\" = mon-fri). Omit for offers that run every day, and omit rather than listing all seven.",
@@ -283,6 +286,7 @@ export async function extractOffers(
         offerType: optionalMember(raw.offerType, offerTypes),
         discountPct: optionalAmount(raw.discountPct, 100),
         discountLabel: optionalString(raw.discountLabel),
+        installmentMonths: optionalAmount(raw.installmentMonths, 120),
         minSpend: optionalAmount(raw.minSpend),
         maxDiscountAmount: optionalAmount(raw.maxDiscountAmount),
         validDays: optionalDays(raw.validDays),
