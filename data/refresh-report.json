@@ -1,16 +1,253 @@
 {
-  "runAt": "2026-08-23T18:52:33.760Z",
+  "runAt": "2026-08-31T08:11:25.432Z",
   "tokensUsed": {
-    "input": 266458,
-    "output": 151190
+    "input": 1597414,
+    "output": 139901
   },
   "banks": {
-    "ntb": {
+    "commercial-bank": {
+      "status": "fetch-failed",
+      "sources": [
+        "https://www.combank.lk/rewards-promotions"
+      ],
+      "message": "HTTP 403"
+    },
+    "ndb": {
       "status": "updated",
+      "sources": [
+        "https://www.ndbbank.com/cards/card-offers"
+      ],
+      "offersWritten": 59
+    },
+    "boc": {
+      "status": "fetch-failed",
+      "sources": [
+        "https://www.boc.lk/personal-banking/card-offers"
+      ],
+      "message": "HTTP 403"
+    },
+    "peoples-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.peoplesbank.lk/special-offers/"
+      ],
+      "offersWritten": 325,
+      "assetFailures": [
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2026/07/Mr-Dissanayaka_L-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaXo123Yy9n2n6BUUei1\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Orient-Hotel-Bandarawela.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY1RBS49mMzuV86fg1x\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Joes_Unawatuna.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY1r3QQazkorP8sY1by\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Joes_Bentota.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY1xSsTQ1kD83b21AKn\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Hikkaduwa-Beach-Hotel.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY2NQmYhUsbiJ2XdJeD\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/02/Mount-Lavinia-Hotel.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY2RdzRHoZ9W6H9mTCp\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Centauria-Lake.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY2jiBn2FFoM9oEb1uW\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/03/Centauria-Hill.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY2nzP5Fm2LsZc9QWjh\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Senani-Hotel.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY3MHLSkdMVYquLqVoF\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/10/Laya_Beach.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY5FQRPUYyrmktek9Yr\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/10/Fish-Co.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY61MrS5qvFS8PrHHnc\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Oasis-Lounge-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY6S69AmTL9WFZ528ob\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Gardenia-Coffee-Shop-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY6VFPqmwyrCaNpHkTT\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2026/08/Wide_Eyes.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY81izRGNbSoWbj2rjK\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/10/Food-Studio.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY8y23XT32RgJ7RdVzh\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2026/01/Hello-Beirut-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY93LVu9u2MiHdPs9gL\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Boardwalk.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY9PxjdnKycALfdpWiF\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Pranzo.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY9c9DAx1LMBuYZixnH\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Thuna_Paha.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY9fT9NAwGmbbb7CLpG\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Bakery.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaY9wTZfoqxRvbsYcEM2\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/09/Kobe_japanese.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYAD991brNt87h8rY5r\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/03/ward-7.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYAePve5194GPTPSAmA\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/07/Ceylon-City-Mart.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYAvbzcD1rMUWaa61ty\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/03/pickme.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYAz2d7dTpEyTA4MHX9\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/05/Cargills_Online.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYBFEBFHF1i48AECnbq\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Hunter.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYBqAqyKZyWb22GkXDJ\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/03/keels.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYBtoP9geY6EW96xkYv\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/03/Wheel_Service-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYCjN8Pk2JsstT4Mxve\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/03/Toyota_Lanka-1.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYCnaMMJDZYzpx7TM42\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/05/Sri-Lankan-Airlines_oneworld-2.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYCxygK5oUWcZmAonRK\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2025/04/Findmyfare.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYD9sXByXvtzZR1GLoD\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/1.MRS_.-P.R.-MADURAWALA-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYJf4L6RAruByhZYvTM\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/8.Ms_.M.A.D.M.Karunarathna-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYKNF5ZHuEVoGPuCqnr\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/1.Mr_.K.B.Rajapaksha-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYKp7KwgSqqXvf3mrZn\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Ranjith-Kodithuwakku-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYKtMon32QZTDjYSqym\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Sudarshana-Ahangama_-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Could not process image\"},\"request_id\":\"req_011CeaYLXqKAHdiK6fNMbmSY\"}"
+        }
+      ]
+    },
+    "ntb": {
+      "status": "fetch-failed",
       "sources": [
         "https://www.nationstrust.com/promotions"
       ],
-      "offersWritten": 614
+      "message": "HTTP 403"
+    },
+    "pan-asia-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.pabcbank.com/card-offers/"
+      ],
+      "offersWritten": 76
+    },
+    "union-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.unionb.com/credit-cards-offers/",
+        "https://www.unionb.com/credit-cards-offers/page/2/"
+      ],
+      "offersWritten": 53
+    },
+    "cargills-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
+        "https://www.cargillsbank.com/products/mastercard-promotions/"
+      ],
+      "offersWritten": 92
+    },
+    "sampath": {
+      "status": "updated",
+      "sources": [
+        "https://www.sampath.lk/api/card-promotions"
+      ],
+      "offersWritten": 107
+    },
+    "dfcc": {
+      "status": "updated",
+      "sources": [
+        "https://www.dfcc.lk/cards/card-offers",
+        "https://www.dfcc.lk/cards/credit-card-offers",
+        "https://www.dfcc.lk/cards/cards/mastercard-offers",
+        "https://www.dfcc.lk/cards/cards/visa-offers"
+      ],
+      "offersWritten": 106
+    },
+    "seylan": {
+      "status": "updated",
+      "sources": [
+        "https://www.seylan.lk/promotions/cards?type[]=credit_card"
+      ],
+      "offersWritten": 265
+    },
+    "nsb": {
+      "status": "updated",
+      "sources": [
+        "https://www.nsb.lk/category/card-offers/",
+        "https://www.nsb.lk/category/card-offers/page/2/",
+        "https://www.nsb.lk/category/card-offers/page/3/"
+      ],
+      "offersWritten": 15
+    },
+    "hnb": {
+      "status": "updated",
+      "sources": [
+        "https://venus.hnb.lk/api/get_all_web_card_promos?page=1&limit=2000"
+      ],
+      "offersWritten": 795
     }
   }
 }
