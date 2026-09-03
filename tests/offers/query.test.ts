@@ -110,3 +110,87 @@ describe("buildFilterQueryString", () => {
     expect(new URLSearchParams(result).get("sort")).toBe("newest");
   });
 });
+
+describe("advanced filter params", () => {
+  it("reads every new dimension out of the URL", () => {
+    const filters = parseOfferFilters({
+      type: ["installment", "cashback"],
+      discount: "20",
+      day: "sat",
+      validity: "ends-week",
+      added: "7d",
+      network: ["visa"],
+      cardtype: ["credit", "debit"],
+      tier: ["infinite"],
+    });
+    expect(filters).toMatchObject({
+      offerTypes: ["installment", "cashback"],
+      minDiscountPct: 20,
+      day: "sat",
+      validity: "ends-week",
+      added: "7d",
+      cardNetworks: ["visa"],
+      cardTypes: ["credit", "debit"],
+      cardTiers: ["infinite"],
+    });
+  });
+
+  // A URL is user input. A hand-edited or stale link should widen the results, never error.
+  it("drops values that are not ours", () => {
+    const filters = parseOfferFilters({
+      type: ["installment", "nonsense"],
+      day: "funday",
+      validity: "whenever",
+      added: "5y",
+      network: ["bogus"],
+      tier: ["diamond"],
+    });
+    expect(filters.offerTypes).toEqual(["installment"]);
+    expect(filters.day).toBeUndefined();
+    expect(filters.validity).toBeUndefined();
+    expect(filters.added).toBeUndefined();
+    expect(filters.cardNetworks).toBeUndefined();
+    expect(filters.cardTiers).toBeUndefined();
+  });
+
+  // Only the advertised steps are honoured: an arbitrary number would produce a filter state the
+  // controls and chips cannot render back.
+  it("accepts only the discount steps the UI offers", () => {
+    expect(parseOfferFilters({ discount: "20" }).minDiscountPct).toBe(20);
+    expect(parseOfferFilters({ discount: "17" }).minDiscountPct).toBeUndefined();
+    expect(parseOfferFilters({ discount: "abc" }).minDiscountPct).toBeUndefined();
+  });
+
+  it("round-trips a full selection through the query string", () => {
+    const query = buildFilterQueryString(new URLSearchParams(), {
+      offerTypes: ["installment"],
+      minDiscountPct: 30,
+      day: "fri",
+      validity: "ends-3d",
+      added: "30d",
+      cardNetworks: ["visa", "amex"],
+      cardTypes: ["credit"],
+      cardTiers: ["platinum"],
+    });
+    const parsed = parseOfferFilters(Object.fromEntries(new URLSearchParams(query).entries()));
+    expect(parsed.minDiscountPct).toBe(30);
+    expect(parsed.day).toBe("fri");
+    expect(parsed.validity).toBe("ends-3d");
+    expect(parsed.added).toBe("30d");
+    expect(parsed.cardTypes).toEqual(["credit"]);
+  });
+
+  it("removes a cleared filter from the URL entirely", () => {
+    const current = new URLSearchParams("discount=20&day=sat&type=installment&network=visa");
+    const query = buildFilterQueryString(current, {
+      minDiscountPct: undefined,
+      day: "",
+      offerTypes: [],
+      cardNetworks: [],
+    });
+    expect(query).not.toContain("discount");
+    expect(query).not.toContain("day");
+    expect(query).not.toContain("type");
+    expect(query).not.toContain("network");
+  });
+});

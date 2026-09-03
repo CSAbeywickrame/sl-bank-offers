@@ -160,6 +160,7 @@ export default async function HomePage({ searchParams }: HomePageProps) {
         selectedSort={sort}
         search={filters.search ?? ""}
         resultCount={filteredOffers.length}
+        filters={filters}
       />
 
       {/* <AdSlot className="mt-5" /> */}
