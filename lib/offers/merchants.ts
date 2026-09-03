@@ -235,3 +235,19 @@ export function resetMerchantIndexForTests(): void {
   indexPromise = undefined;
   aliasCache = undefined;
 }
+
+/**
+ * The canonical merchant an unknown slug should redirect to, or undefined when there is nothing to
+ * redirect to and the page should 404.
+ *
+ * Extracted so the redirect target is testable. It was previously built inline in the page, where a
+ * bad edit silently produced `/merchants/` — a permanent redirect to a dead URL, which browsers and
+ * crawlers then cache.
+ */
+export async function getCanonicalMerchantSlug(slug: string): Promise<string | undefined> {
+  if (await getMerchantBySlug(slug)) return undefined;
+  const canonical = resolveMerchant(slug.replace(/-/g, " "))?.slug;
+  if (!canonical || canonical === slug) return undefined;
+  return (await getMerchantBySlug(canonical)) ? canonical : undefined;
+}
+

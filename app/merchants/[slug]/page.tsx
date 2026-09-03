@@ -1,6 +1,6 @@
-import type { Metadata, Route } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, permanentRedirect } from "next/navigation";
+import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
 import { OfferCard } from "@/components/OfferCard";
 import { getCategoryLabel } from "@/lib/offers/categories";
@@ -9,8 +9,7 @@ import {
   getGroupSiblings,
   getMerchantBySlug,
   getMerchantOffers,
-  getMerchantSummaries,
-  resolveMerchant
+  getMerchantSummaries
 } from "@/lib/offers/merchants";
 import { siteUrl } from "@/lib/site-config";
 
@@ -58,15 +57,9 @@ export default async function MerchantPage({ params }: MerchantPageProps) {
   const { slug } = await params;
   let merchant = await getMerchantBySlug(slug);
 
-  if (!merchant) {
-    // An alias slug is a real address someone may have linked to — send it to the canonical page
-    // rather than 404ing. resolveMerchant returns the slug the offers are actually counted under.
-    const canonical = resolveMerchant(slug.replace(/-/g, " "))?.slug;
-    if (canonical && canonical !== slug && (await getMerchantBySlug(canonical))) {
-      permanentRedirect(`/merchants/` as Route);
-    }
-    notFound();
-  }
+  // Alias slugs never reach here: next.config redirects them to the canonical merchant before the
+  // route runs.
+  if (!merchant) notFound();
 
   const offers = await getMerchantOffers(slug);
   const siblings = await getGroupSiblings(slug);
