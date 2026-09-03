@@ -9,6 +9,8 @@ import { OfferPagination } from "@/components/OfferPagination";
 import { StatTile } from "@/components/StatTile";
 import { getBankById, getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
+import { getCategoryLabel } from "@/lib/offers/categories";
+import type { OfferCategory } from "@/lib/offers/types";
 import { filterOffers } from "@/lib/offers/filter";
 import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
@@ -50,7 +52,22 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
   const filters = { ...parseOfferFilters(query), bankId, bankIds: undefined };
   const sort = parseSortKey(query);
   const pagination = parsePaginationParams(query);
-  const filteredOffers = sortOffers(filterOffers(await getActiveOffers(), filters), sort);
+  const activeOffers = await getActiveOffers();
+  const filteredOffers = sortOffers(filterOffers(activeOffers, filters), sort);
+  // The bank's own totals, unaffected by whatever the visitor has filtered to — the summary line
+  // describes the bank, not the current view.
+  const bankOffers = activeOffers.filter((offer) => offer.bankId === bankId);
+  const bankDiscounts = bankOffers
+    .map((offer) => offer.discountPct)
+    .filter((pct): pct is number => typeof pct === "number");
+  const bestDiscountPct = bankDiscounts.length > 0 ? Math.max(...bankDiscounts) : undefined;
+  const lastChecked = bankOffers.map((offer) => offer.lastCheckedAt).filter(Boolean).sort().at(-1);
+  const topCategories = [...bankOffers.reduce((counts, offer) => {
+    counts.set(offer.category, (counts.get(offer.category) ?? 0) + 1);
+    return counts;
+  }, new Map<OfferCategory, number>())]
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
   const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
@@ -123,11 +140,30 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
                 <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
-                Browse active offers collected for {bank.name}. Open each official bank link to confirm final terms.
+                {bankOffers.length} live offer{bankOffers.length === 1 ? "" : "s"} from {bank.name}
+                {bestDiscountPct !== undefined && <> · best is {bestDiscountPct}% off</>}
+                {lastChecked && <> · last checked {formatCheckedDate(lastChecked)}</>}.
+                {" "}Open the official bank link on any offer to confirm its final terms.
               </p>
+              {topCategories.length > 0 && (
+                <ul className="mt-4 flex flex-wrap gap-2" role="list">
+                  {topCategories.map(([category, count]) => (
+                    <li key={category}>
+                      <Link
+                        href={`/banks/${bankId}?category=${category}`}
+                        className="inline-flex items-center gap-1.5 rounded-(--radius-pill) px-3 py-1 text-xs font-semibold"
+                        style={{ background: "var(--hero-eyebrow-bg)", color: "var(--hero-eyebrow-fg)" }}
+                      >
+                        {getCategoryLabel(category)}
+                        <span style={{ opacity: 0.75 }}>{count}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
             <StatTile
-              value={filteredOffers.length}
+              value={bankOffers.length}
               label={`active offer${filteredOffers.length !== 1 ? "s" : ""}`}
               className="min-w-[180px]"
             />
@@ -178,4 +214,13 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
       </section>
     </main>
   );
+}
+
+// Short, unambiguous freshness for the hero line: "23 Aug" reads faster than a full date and does
+// not imply more precision than a weekly refresh has.
+function formatCheckedDate(value: string): string {
+  const date = new Date(value);
+  return Number.isFinite(date.getTime())
+    ? new Intl.DateTimeFormat("en", { day: "numeric", month: "short" }).format(date)
+    : "recently";
 }

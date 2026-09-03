@@ -2,7 +2,7 @@
 
 Pick this up cold. Everything you need to resume is here or reachable from here.
 
-**Last updated:** 2026-08-30, after E10-T11 shipped to production.
+**Last updated:** 2026-08-31, after T13 merchants, T8 filters, T15 about and the alias-redirect fix all merged to develop.
 
 ## Where to look first
 
@@ -14,13 +14,13 @@ Pick this up cold. Everything you need to resume is here or reachable from here.
 
 ## State as of this handoff
 
-`main` and `develop` are in sync — zero code difference. Production carries everything through T11.
+**Merged to develop (11 of 19):** T0.1 dead-pipeline deletion · T1.1 schema + enrichment · T1.2 catalog migration · T1.3 taxonomy lock · T2.1 extraction schema v2 · T2.5 merchant registry · T3.1 design tokens · T3.2 card + detail v2 · T3.4 merchant pages · T3.3 filters v2 · T4.1 about page. Plus a fix for the alias redirect T3.4 shipped broken.
 
-**Done and live (7 of 17):** T0.1 dead-pipeline deletion · T1.1 schema + enrichment · T1.2 catalog migration · T1.3 taxonomy lock · T3.1 design tokens · T2.1 extraction schema v2 · T2.5 merchant registry · T3.2 card + detail v2.
+**Not yet on main.** Production carries everything through T11; develop is ahead by the merchant pages, filters v2, the about page and the alias fix. The user pushes develop → main themselves.
 
-**Catalog:** 2,617 offers, 13 verticals, 1,383 merchants (190 at more than one bank).
+**Catalog:** 2,617 rows, of which **1,303 have already expired** — banks cluster end dates at month end, so the live count dips before a refresh and recovers after. 13 verticals, ~584 live merchants.
 
-**Verification baseline:** `npm run lint`, `npm test` (318 passing), `npm run build` all green on develop. If a number below is lower than what you see, someone added tests — fine. If it is *higher*, something regressed.
+**Verification baseline:** `npm run lint`, `npm test` (344 passing), `npm run build` all green on develop. If the number you see is lower, something regressed.
 
 ## How this project works
 
@@ -49,9 +49,7 @@ That is how the `installmentMonths` bug was caught — stored on 897 offers, ren
 
 ## Remaining tasks, in the order I would take them
 
-**T13 — `/merchants` and `/merchants/[slug]`** (next). The registry (`lib/offers/merchants.ts`) and `components/RelatedOffers.tsx` already do the work; this is routes, `generateStaticParams`, `ItemList` JSON-LD, alias slugs redirecting to canonical, nav and sitemap. Split the index into "at more than one bank" and the rest.
-
-**T3.3 — filters v2.** Min discount, offer type, day of week, validity window, date added (`firstSeenAt` exists for this), network/type/tier. One match function per dimension in `lib/offers/filter.ts`, new controls behind a "More filters" disclosure, `biggest-discount` sort. **Carry-over:** three redirects in `next.config.ts` are deliberately `permanent: false` because nothing reads `?type=` yet — flip them to `permanent: true` in this task.
+**T3.5 — banks surfaces** (in progress). Live counts and last-checked on `/banks`, richer per-bank intro.
 
 **T2.2 — image pipeline.** Add `sharp`; `lib/ingest/images.ts` with `prepareForVision` (downscale before the vision call — this is the fix for the peoples-bank "Could not process image" 400s), `saveThumbnail` (content-hash webp in `public/offer-images/`), `sweepOrphans`. Also add a relevance filter to `discoverAssetUrls` (it currently ingests staff portraits) and cache failed assets so a bad file stops burning an API call every run.
 
@@ -59,7 +57,11 @@ That is how the `installmentMonths` bug was caught — stored on 897 offers, ren
 
 **T2.4 — backfill.** `FORCE_EXTRACT=1` flag on `scripts/refresh.ts`, then per-bank runs. Costs real API credit; the user tops it up.
 
-**T3.5 banks surfaces · T4.1 about page · T4.2 SEO rebrand · T4.3 refresh dry run.** T4.2 depends on T13 for the merchant count.
+**T4.2 SEO rebrand · T4.3 refresh dry run.**
+
+**E10-T18 — app-wide soft 404s.** Every dynamic route returns HTTP 200 with 404 content, because `middleware.ts` returns `NextResponse.next()` and drops the status. Search engines index soft 404s as real pages.
+
+**E10-T19 — honour robots.txt.** The scraper sends an identifying UA but never reads robots.txt. `/about` deliberately avoids claiming compliance until this lands.
 
 ## Things worth not relearning
 
@@ -68,3 +70,6 @@ That is how the `installmentMonths` bug was caught — stored on 897 offers, ren
 - **Category is what is bought; `offerType` is how it pays out.** An interest-free plan at an electronics shop is `electronics` + `installment`. Rule order in `lib/ingest/categorize.ts` encodes real cases: dining before hotels (a hotel restaurant is a meal out), online last (it describes how you buy).
 - **Parsers are conservative by design.** A blank the UI hides beats a wrong promise to a cardholder. Every guard exists because live data broke without it: `visa` matched card boilerplate, `Book now` matched books, a bare "maximum" matched transaction ceilings and published a Rs. 1 discount cap on 84 offers.
 - **Review by measuring against `data/scanned-offers.json`**, not by reasoning. Every serious bug in this epic was found that way and missed by the test suite.
+- **Never use `perl -pi` on a string containing `${...}`.** Perl interpolates it as a variable and silently writes an empty value. That shipped a permanent redirect to `/merchants/` with no slug. Use a python heredoc for anything containing template literals.
+- **A redirect returned from a page render loses to Next.js prerendering.** The route gets prerendered as not-found and the cached 404 is served without the redirect ever running. Build-time-known redirects belong in `next.config` `redirects()`.
+- **Verify what a URL returns, not that it returns something.** The alias redirect passed review because 200 was read as "works". Assert the destination.

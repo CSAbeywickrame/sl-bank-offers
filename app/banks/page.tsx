@@ -24,9 +24,21 @@ export default async function BanksPage() {
   const banks = getBanks();
   const allOffers = await getActiveOffers();
 
+  // Best discount and freshness per bank, alongside the count — the three facts that make a bank
+  // directory worth scanning rather than a list of names.
+  const bestDiscountByBank = new Map<string, number>();
+  const lastCheckedByBank = new Map<string, string>();
   const offerCountByBank = new Map<string, number>();
   for (const offer of allOffers) {
     offerCountByBank.set(offer.bankId, (offerCountByBank.get(offer.bankId) ?? 0) + 1);
+    if (typeof offer.discountPct === "number") {
+      const best = bestDiscountByBank.get(offer.bankId);
+      if (best === undefined || offer.discountPct > best) bestDiscountByBank.set(offer.bankId, offer.discountPct);
+    }
+    const seen = lastCheckedByBank.get(offer.bankId);
+    if (offer.lastCheckedAt && (!seen || offer.lastCheckedAt > seen)) {
+      lastCheckedByBank.set(offer.bankId, offer.lastCheckedAt);
+    }
   }
 
   const breadcrumbJsonLd = {
@@ -120,7 +132,13 @@ export default async function BanksPage() {
             const count = offerCountByBank.get(bank.id) ?? 0;
             return (
               <li key={bank.id}>
-                <BankCard id={bank.id} name={bank.name} count={count} />
+                <BankCard
+                  id={bank.id}
+                  name={bank.name}
+                  count={count}
+                  bestDiscountPct={bestDiscountByBank.get(bank.id)}
+                  lastCheckedAt={lastCheckedByBank.get(bank.id)}
+                />
               </li>
             );
           })}
