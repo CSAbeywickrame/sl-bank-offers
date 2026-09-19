@@ -96,7 +96,7 @@ function isInconsistentFeed(parsed: unknown): boolean {
 }
 
 // Strips HTML noise tags and returns normalized plain text from the body
-function stripHtml(html: string): string {
+export function stripHtml(html: string): string {
   const $ = cheerio.load(html);
   $("script, style, noscript, nav, header, footer, svg, iframe, form").remove();
   const raw = $("body").length ? $("body").text() : $.root().text();
