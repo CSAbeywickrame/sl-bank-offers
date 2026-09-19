@@ -40,6 +40,9 @@ function merchantAliasRedirects() {
 
 const nextConfig: NextConfig = {
   typedRoutes: true,
+  // Offer thumbnails are already pre-sized (640w webp) at scrape time by lib/ingest/images.ts, so
+  // Vercel's on-request image optimizer would only add cost with nothing left for it to do.
+  images: { unoptimized: true },
   async redirects() {
     return [
       { source: "/banks/standard-chartered", destination: "/banks", permanent: true },

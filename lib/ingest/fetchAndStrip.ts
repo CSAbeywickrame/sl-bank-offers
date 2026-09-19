@@ -1,15 +1,26 @@
 import crypto from "node:crypto";
+// Supported Node range: >=20 <26 (see package.json engines, .nvmrc pins 24). On Node >=26,
+// cheerio's fetch override strips all response headers, which silently breaks two things
+// downstream: content-type comes back null (every image fetch fails as "unsupported or
+// missing image content-type"), and the Anthropic SDK's streaming fails with "request ended
+// without sending any chunks". Symptom looks like "the scraper is broken"; it's just Node.
 import * as cheerio from "cheerio";
 import type { RegistrySource } from "@/lib/sources/bankRegistry";
 import { normalizeText } from "@/lib/ingest/textUtils";
+import { prepareForVision } from "@/lib/ingest/images";
 
 const USER_AGENT = "SLBankOffersBot/0.1 (+https://github.com/CSAbeywickrame/sl-bank-offers)";
 const CRAWL_THROTTLE_MS = 300;
 
 // Largest pdf byte size accepted before it is rejected as too large to safely process.
 export const MAX_PDF_BYTES = 32 * 1024 * 1024;
-// Largest image byte size accepted before it is rejected as too large to safely process.
+// Above this, an image is downscaled (via prepareForVision) rather than rejected outright — most
+// real offer creatives are well under this, and Claude never sees more than 1568px on the long edge
+// of anything anyway, so a legitimately larger banner just gets shrunk instead of dropped.
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+// Absolute ceiling: a file this large is rejected outright, without attempting to decode it, so a
+// pathological asset can't force an oversized in-memory decode.
+export const MAX_IMAGE_BYTES_HARD_CEILING = 25 * 1024 * 1024;
 // Largest estimated pdf page count accepted before it is rejected as too large to safely process.
 export const MAX_PDF_PAGES = 100;
 
@@ -176,10 +187,19 @@ export async function fetchAndStrip(source: RegistrySource): Promise<FetchResult
         return { ok: false, error: `unsupported or missing image content-type for ${source.url}` };
       }
       const imageBytes = Buffer.from(await res.arrayBuffer());
-      if (imageBytes.length > MAX_IMAGE_BYTES) {
-        return { ok: false, error: `image too large: ${imageBytes.length} bytes (max ${MAX_IMAGE_BYTES})` };
+      if (imageBytes.length > MAX_IMAGE_BYTES_HARD_CEILING) {
+        return { ok: false, error: `image too large: ${imageBytes.length} bytes (max ${MAX_IMAGE_BYTES_HARD_CEILING})` };
       }
+      // Content hash is always taken over the ORIGINAL bytes, even when downscaled below — so the
+      // same source file always hashes the same way regardless of how big it happened to be.
       const contentHash = hashContent(imageBytes);
+      if (imageBytes.length > MAX_IMAGE_BYTES) {
+        const prepared = await prepareForVision(imageBytes, imageMediaType);
+        if (!prepared.ok) {
+          return { ok: false, error: `oversized image failed to decode: ${prepared.error}` };
+        }
+        return { ok: true, imageBytes: prepared.bytes, imageMediaType: prepared.mediaType, contentHash };
+      }
       return { ok: true, imageBytes, imageMediaType, contentHash };
     }
 

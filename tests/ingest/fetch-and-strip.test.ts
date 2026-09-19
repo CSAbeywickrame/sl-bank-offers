@@ -1,6 +1,19 @@
+import sharp from "sharp";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { fetchAndStrip, MAX_PDF_BYTES, MAX_IMAGE_BYTES, MAX_PDF_PAGES } from "@/lib/ingest/fetchAndStrip";
+import { fetchAndStrip, MAX_PDF_BYTES, MAX_IMAGE_BYTES, MAX_IMAGE_BYTES_HARD_CEILING, MAX_PDF_PAGES } from "@/lib/ingest/fetchAndStrip";
 import type { RegistrySource } from "@/lib/sources/bankRegistry";
+
+// Builds a real, tiny, decodable JPEG padded with trailing zero bytes past `size` — a decoder reads
+// up to the JPEG's own end-of-image marker and ignores the padding, so this is valid image content
+// at any byte size without needing to actually render a huge image in a test.
+async function paddedJpeg(size: number): Promise<Uint8Array<ArrayBuffer>> {
+  const jpeg = await sharp({ create: { width: 4, height: 4, channels: 3, background: { r: 10, g: 20, b: 30 } } })
+    .jpeg()
+    .toBuffer();
+  // Buffer's broader ArrayBufferLike typing isn't assignable to fetch's BodyInit under this
+  // project's @types/node version, hence the explicit Uint8Array<ArrayBuffer> return type above.
+  return Uint8Array.from(Buffer.concat([jpeg, Buffer.alloc(Math.max(0, size - jpeg.length))]));
+}
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -39,8 +52,23 @@ describe("fetchAndStrip — image source", () => {
     expect(res.error).toMatch(/unsupported or missing image content-type/);
   });
 
-  it("rejects an image body larger than MAX_IMAGE_BYTES", async () => {
-    const bytes = Buffer.alloc(MAX_IMAGE_BYTES + 1);
+  it("downscales, rather than rejects, an image body larger than MAX_IMAGE_BYTES", async () => {
+    const bytes = await paddedJpeg(MAX_IMAGE_BYTES + 1);
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(bytes, { status: 200, headers: { "content-type": "image/jpeg" } })));
+
+    const res = await fetchAndStrip(imageSource);
+
+    expect(res.ok).toBe(true);
+    expect(res.imageMediaType).toBe("image/jpeg");
+    expect(res.imageBytes).toBeInstanceOf(Buffer);
+    expect(res.imageBytes!.length).toBeLessThan(bytes.length);
+    // Hashed over the ORIGINAL (oversized) bytes, not the downscaled ones, so the same source file
+    // always hashes the same way regardless of how big it happened to be.
+    expect(res.contentHash).toMatch(/^[0-9a-f]{40}$/);
+  });
+
+  it("rejects an image body larger than MAX_IMAGE_BYTES_HARD_CEILING outright, without attempting to decode it", async () => {
+    const bytes = Buffer.alloc(MAX_IMAGE_BYTES_HARD_CEILING + 1); // not even valid image bytes — must never reach sharp
     vi.stubGlobal("fetch", vi.fn(async () => new Response(bytes, { status: 200, headers: { "content-type": "image/jpeg" } })));
 
     const res = await fetchAndStrip(imageSource);
