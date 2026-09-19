@@ -1,6 +1,7 @@
 // lib/ingest/crawlExtract.ts
+import * as cheerio from "cheerio";
 import { normalizeUrl, normalizeAssetUrl, discoverDetailUrls, discoverAssetUrls } from "@/lib/ingest/crawlBank";
-import type { CrawlRecipe, HtmlFetcher } from "@/lib/ingest/crawlBank";
+import type { CrawlRecipe, HtmlFetcher, DiscoveredAsset } from "@/lib/ingest/crawlBank";
 import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 import type { ScannedOffer } from "@/lib/offers/types";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
@@ -25,7 +26,11 @@ export interface DiscoveredCrawlUrl {
   // retaining raw HTML for every discovered page — peoples-bank's 273 detail pages at ~240KB of
   // HTML each (~65MB, ~130MB resident as V8 UTF-16) is what OOM-killed a full run; stripped text
   // runs ~7KB/page instead (RC7).
-  stripped?: { strippedText: string; contentHash: string };
+  //
+  // ogImageUrl is set from the same page-scan pass, but ONLY when the page has no image asset of
+  // its own (see pageContentAssets/scanPageForAssets below) — the fallback creative for a detail
+  // page whose offers would otherwise get no image at all.
+  stripped?: { strippedText: string; contentHash: string; ogImageUrl?: string };
 }
 
 const CONTENT_IMAGE_EXTENSIONS = /\.(jpe?g|png|gif|webp)$/i;
@@ -51,20 +56,33 @@ export function isUndersizedImage(type: DiscoveredCrawlAssetType, imageBytes?: B
   return type === "image" && (imageBytes?.length ?? 0) < MIN_ASSET_IMAGE_BYTES;
 }
 
-// Folds one page's content-worthy PDF/image assets into an existing seen-set + output array — shared
-// by discoverCrawlUrls (page fetched fresh) and collectPageAssets (page already fetched).
-function foldPageAssets(
-  html: string,
-  baseUrl: string,
-  assetHosts: string[],
-  seen: Set<string>,
-  out: DiscoveredCrawlUrl[],
-): void {
-  for (const asset of discoverAssetUrls(html, baseUrl, assetHosts)) {
+// Content-worthy PDF/image assets found in one page's own HTML, junk images already filtered — the
+// pre-dedup form shared by discoverCrawlUrls' page scan and the og:image fallback below (which needs
+// to know, before dedup, whether THIS page has an image asset of its own).
+function pageContentAssets(html: string, baseUrl: string, assetHosts: string[]): DiscoveredAsset[] {
+  return discoverAssetUrls(html, baseUrl, assetHosts).filter((asset) => asset.type !== "image" || isContentImage(asset.url));
+}
+
+// Folds a page's already-filtered assets into an existing seen-set + output array, deduped by url —
+// shared by discoverCrawlUrls (page fetched fresh) and collectPageAssets (page already fetched).
+function foldAssets(assets: DiscoveredAsset[], seen: Set<string>, out: DiscoveredCrawlUrl[]): void {
+  for (const asset of assets) {
     if (seen.has(asset.url)) continue;
-    if (asset.type === "image" && !isContentImage(asset.url)) continue;
     seen.add(asset.url);
     out.push(asset);
+  }
+}
+
+// Extracts an absolute og:image URL from a page's HTML, resolved against baseUrl — the fallback
+// creative for a crawl detail page whose own HTML carries no offer-image asset of its own.
+function extractOgImage(html: string, baseUrl: string): string | undefined {
+  const $ = cheerio.load(html);
+  const content = $('meta[property="og:image"]').attr("content");
+  if (!content) return undefined;
+  try {
+    return new URL(content, baseUrl).toString();
+  } catch {
+    return undefined;
   }
 }
 
@@ -113,8 +131,15 @@ export async function discoverCrawlUrls(
     } catch {
       return;
     }
-    if (target && stripHtml) target.stripped = stripHtml(html);
-    foldPageAssets(html, normalized, assetHosts, seen, urls);
+    const pageAssets = pageContentAssets(html, normalized, assetHosts);
+    if (target && stripHtml) {
+      // Only fall back to the page's og:image when it has no image asset of its own — an asset
+      // found here becomes its own separate offer-image via a later Claude vision extraction, so
+      // using the og:image too would be a redundant (and possibly worse) second creative.
+      const hasOwnImage = pageAssets.some((asset) => asset.type === "image");
+      target.stripped = { ...stripHtml(html), ogImageUrl: hasOwnImage ? undefined : extractOgImage(html, normalized) };
+    }
+    foldAssets(pageAssets, seen, urls);
   };
 
   for (const seedUrl of seedUrls) await scanPageForAssets(seedUrl);
@@ -138,7 +163,7 @@ export function collectPageAssets(
     } catch {
       continue;
     }
-    foldPageAssets(page.rawHtml, baseUrl, assetHosts, seen, assets);
+    foldAssets(pageContentAssets(page.rawHtml, baseUrl, assetHosts), seen, assets);
   }
   return assets;
 }
@@ -147,8 +172,14 @@ export function collectPageAssets(
 export interface FetchedCrawlContent {
   strippedText?: string;
   pdfBytes?: Buffer;
-  imageBytes?: Buffer;
+  imageBytes?: Buffer; // vision-ready bytes (already repaired/downscaled) when this asset is an image
   imageMediaType?: ImageMediaType;
+  // The SAME image's original, un-repaired bytes — kept separately so a thumbnail can be
+  // content-addressed to the source file rather than to its re-encoded vision copy.
+  thumbnailBytes?: Buffer;
+  // A static_html detail page's og:image, carried from discovery (see DiscoveredCrawlUrl.stripped)
+  // for a page that has no image asset of its own — the caller's fallback offer-image source.
+  ogImageUrl?: string;
 }
 
 export interface CrawlExtractDeps {
@@ -159,6 +190,8 @@ export interface CrawlExtractDeps {
     pdfBytes?: Buffer;
     imageBytes?: Buffer;
     imageMediaType?: ImageMediaType;
+    thumbnailBytes?: Buffer;
+    ogImageUrl?: string;
     contentHash?: string;
     error?: string;
   }>;
@@ -336,6 +369,8 @@ export async function refreshCrawlBank(
         pdfBytes: fetched.pdfBytes,
         imageBytes: fetched.imageBytes,
         imageMediaType: fetched.imageMediaType,
+        thumbnailBytes: fetched.thumbnailBytes,
+        ogImageUrl: fetched.ogImageUrl,
       });
     } catch (err) {
       extractFailures += 1;

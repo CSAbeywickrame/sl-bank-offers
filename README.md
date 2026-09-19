@@ -15,6 +15,9 @@ scraped from official bank sources, in one searchable place. Live at
 
 ## Local development
 
+Node version is pinned in `.nvmrc` (run `nvm use`) — see `lib/ingest/fetchAndStrip.ts` for why
+the scraper needs Node <26.
+
 ```bash
 npm install
 npm run dev          # start the dev server on http://localhost:3000

@@ -584,6 +584,51 @@ describe("discoverCrawlUrls", () => {
 
     expect(res.urls).toEqual([{ url: detailUrl, type: "static_html" }]);
   });
+
+  it("carries a detail page's og:image as its stripped.ogImageUrl when the page has no image asset of its own", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a></main>`,
+      [detailUrl]: `<html><head><meta property="og:image" content="/social/plates-share.jpg"></head><body><main>Plates 30% off</main></body></html>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+    const stripHtml = vi.fn((raw: string) => ({ strippedText: "Plates 30% off", contentHash: "h1" }));
+
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml, [], false, stripHtml);
+
+    expect(res.urls).toEqual([
+      {
+        url: detailUrl,
+        type: "static_html",
+        stripped: { strippedText: "Plates 30% off", contentHash: "h1", ogImageUrl: "https://www.peoplesbank.lk/social/plates-share.jpg" },
+      },
+    ]);
+  });
+
+  it("omits ogImageUrl when the detail page has its own image asset — that asset gets its own extraction instead", async () => {
+    const detailUrl = "https://www.peoplesbank.lk/promotion/plates-30-off-credit/";
+    const html: Record<string, string> = {
+      [restaurantsUrl]: `<main><a href="/promotion/plates-30-off-credit/">Plates</a></main>`,
+      [detailUrl]: `<html><head><meta property="og:image" content="/social/plates-share.jpg"></head><body><main><img src="/banners/plates-promo.jpg" alt="promo">Plates 30% off</main></body></html>`,
+    };
+    const fetchHtml = vi.fn(async (url: string) => {
+      const page = html[url];
+      if (page === undefined) throw new Error(`unexpected fetch ${url}`);
+      return page;
+    });
+    const stripHtml = vi.fn((raw: string) => ({ strippedText: "Plates 30% off", contentHash: "h1" }));
+
+    const res = await discoverCrawlUrls([restaurantsUrl], recipe, fetchHtml, [], false, stripHtml);
+
+    expect(res.urls).toEqual([
+      { url: detailUrl, type: "static_html", stripped: { strippedText: "Plates 30% off", contentHash: "h1" } },
+      { url: "https://www.peoplesbank.lk/banners/plates-promo.jpg", type: "image" },
+    ]);
+  });
 });
 
 describe("collectPageAssets", () => {

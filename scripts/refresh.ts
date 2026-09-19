@@ -2,11 +2,13 @@ import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
-import { fetchAndStrip, hashContent, fetchRawHtml, stripHtml, type FetchResult } from "@/lib/ingest/fetchAndStrip";
-import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage, groupOffersBySourceUrl, carryForwardUnextractedOffers, type CrawlExtractResult } from "@/lib/ingest/crawlExtract";
+import { fetchAndStrip, hashContent, fetchRawHtml, stripHtml, type FetchResult, type ImageMediaType } from "@/lib/ingest/fetchAndStrip";
+import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage, groupOffersBySourceUrl, carryForwardUnextractedOffers, type CrawlExtractResult, type FetchedCrawlContent } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { dedupeOffers, expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
+import { prepareForVision, saveThumbnail, sweepOrphans, isPortraitImage } from "@/lib/ingest/images";
+import { isAssetCacheHit, recordAssetFailure, pruneAssetCache, type FailedAssetCache } from "@/lib/ingest/assetCache";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 
 const MIN_CONTENT_CHARS = 200;
@@ -21,12 +23,94 @@ const seedPath = join(dataDir, "seed.json");
 const scannedPath = join(dataDir, "scanned-offers.json");
 const statePath = join(dataDir, "refresh-state.json");
 const reportPath = join(dataDir, "refresh-report.json");
+// Next's public/ dir — saveThumbnail/sweepOrphans append their own "offer-images" sub-folder.
+const publicImagesDir = join(process.cwd(), "public");
 
 type BankStatus = "updated" | "unchanged" | "skipped-empty" | "fetch-failed" | "extract-failed" | "deferred" | "disabled" | "sanity-rejected";
 
 interface RefreshState {
   lastRunAt: string;
-  banks: Record<string, { hash?: string; lastUpdatedAt: string; details?: Record<string, string> }>;
+  banks: Record<string, {
+    hash?: string;
+    lastUpdatedAt: string;
+    details?: Record<string, string>;
+    // Asset content-hashes that failed unrecoverably (undecodable, or rejected by the API after
+    // repair) — see lib/ingest/assetCache.ts. Absent once pruned back down to nothing.
+    failedAssets?: FailedAssetCache;
+  }>;
+}
+
+// Rebuilds a bank's state entry with failedAssets set (or, once pruned to empty, omitted entirely —
+// so a fixed cache never lingers in the JSON as a stale empty object).
+function withFailedAssets(
+  bankState: RefreshState["banks"][string] | undefined,
+  failedAssets: FailedAssetCache,
+  fallbackLastUpdatedAt: string,
+): RefreshState["banks"][string] {
+  const base = bankState ?? { lastUpdatedAt: fallbackLastUpdatedAt };
+  if (Object.keys(failedAssets).length === 0) {
+    const { failedAssets: _drop, ...rest } = base;
+    return rest;
+  }
+  return { ...base, failedAssets };
+}
+
+// True when a Claude API error is specifically an image-content rejection (the empirically-observed
+// 400 "Could not process image") rather than a transient/unrelated failure (rate limit, timeout,
+// truncated output) — only this kind gets cached under the asset's hash, since a transient error
+// deserves a normal retry next run, not a permanent skip.
+function isImageRejectionError(err: unknown): boolean {
+  return err instanceof Anthropic.BadRequestError && /image/i.test(err.message);
+}
+
+// Prepares one fetched image for Claude vision, applying the failed-asset cache: a hash cached from
+// an earlier unrecoverable failure is skipped without another decode attempt, and a hash that fails
+// prepareForVision for the first time is recorded so future runs skip it too. Returns the
+// vision-ready bytes/mediaType plus the (possibly updated) cache and the hash — the caller folds
+// both back into its own per-bank state — or an error to report and carry forward from, exactly
+// like a normal fetch failure.
+async function prepareImageAsset(
+  imageBytes: Buffer,
+  imageMediaType: ImageMediaType,
+  failedAssets: FailedAssetCache | undefined,
+  nowIso: string,
+): Promise<
+  | { ok: true; imageBytes: Buffer; imageMediaType: ImageMediaType; hash: string; failedAssets: FailedAssetCache | undefined }
+  | { ok: false; error: string; hash: string; failedAssets: FailedAssetCache | undefined }
+> {
+  const hash = hashContent(imageBytes);
+  if (isAssetCacheHit(failedAssets, hash, nowIso)) {
+    return { ok: false, error: "skipped: previously failed unrecoverably (cached)", hash, failedAssets };
+  }
+  const prepared = await prepareForVision(imageBytes, imageMediaType);
+  if (!prepared.ok) {
+    return {
+      ok: false,
+      error: `undecodable image: ${prepared.error}`,
+      hash,
+      failedAssets: recordAssetFailure(failedAssets, hash, nowIso),
+    };
+  }
+  return { ok: true, imageBytes: prepared.bytes!, imageMediaType: prepared.mediaType!, hash, failedAssets };
+}
+
+// Resolves the imageUrl for offers extracted from one crawl detail page or asset: its own image
+// asset's thumbnail when it fetched one, otherwise its page's og:image meta tag (parsed during
+// discovery — see extractOgImage in lib/ingest/crawlExtract.ts), fetched once and thumbnailed the
+// same way. Both are content-addressed to their ORIGINAL bytes, never the vision-prepared copy.
+async function resolveCrawlOfferImage(fetched: FetchedCrawlContent): Promise<string | undefined> {
+  if (fetched.thumbnailBytes) {
+    const thumb = await saveThumbnail(fetched.thumbnailBytes, publicImagesDir);
+    return thumb.ok ? thumb.url : undefined;
+  }
+  if (fetched.ogImageUrl) {
+    const og = await fetchAndStrip({ url: fetched.ogImageUrl, type: "image" });
+    if (og.ok && og.imageBytes) {
+      const thumb = await saveThumbnail(og.imageBytes, publicImagesDir);
+      return thumb.ok ? thumb.url : undefined;
+    }
+  }
+  return undefined;
 }
 
 interface BankReport {
@@ -139,6 +223,13 @@ async function main(): Promise<void> {
     const bankStartedAt = Date.now();
     console.error(`[refresh] ${entry.bankId}: starting (${sourceUrls.length} source${sourceUrls.length === 1 ? "" : "s"})`);
 
+    // Per-bank failed-asset cache state (lib/ingest/assetCache.ts): `bankFailedAssets` starts as
+    // whatever the previous run recorded and is threaded through every image this run touches;
+    // `seenAssetHashes` collects every hash actually fetched this run, so the pruning pass in
+    // `finally` below can drop entries for hashes no longer discovered.
+    let bankFailedAssets = state.banks[entry.bankId]?.failedAssets;
+    const seenAssetHashes = new Set<string>();
+
     try {
       // Crawl branch: a source with a `crawl` recipe is walked to its detail pages, each hash-gated
       // so only new/changed pages reach Claude. Keeps existing rows on any discovery/fetch failure.
@@ -170,14 +261,50 @@ async function main(): Promise<void> {
           ),
           fetchDetail: async (url, type) => {
             const fetched = await fetchAndStrip({ url, type });
-            if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
-              return { ok: true };
+            if (!fetched.ok || type !== "image" || !fetched.imageBytes || !fetched.imageMediaType) {
+              return fetched;
             }
-            return fetched;
+            if (isUndersizedImage(type, fetched.imageBytes)) return { ok: true };
+            if (await isPortraitImage(fetched.imageBytes)) return { ok: true };
+            // Every image reaching Claude goes through prepareForVision first (tolerant decode +
+            // downscale — see lib/ingest/images.ts); the ORIGINAL bytes are kept separately as
+            // thumbnailBytes so the thumbnail stays content-addressed to the source file.
+            const prepared = await prepareImageAsset(fetched.imageBytes, fetched.imageMediaType, bankFailedAssets, reviewDateIso);
+            seenAssetHashes.add(prepared.hash);
+            bankFailedAssets = prepared.failedAssets;
+            if (!prepared.ok) return { ok: false, error: prepared.error };
+            return {
+              ...fetched,
+              imageBytes: prepared.imageBytes,
+              imageMediaType: prepared.imageMediaType,
+              thumbnailBytes: fetched.imageBytes,
+            };
           },
           extract: async (sourceUrl, fetched) => {
-            const ex = await extractOffers({ entry, sourceUrl, ...fetched }, client, reviewDateIso);
-            return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
+            let ex;
+            try {
+              ex = await extractOffers(
+                {
+                  entry,
+                  sourceUrl,
+                  strippedText: fetched.strippedText,
+                  pdfBytes: fetched.pdfBytes,
+                  imageBytes: fetched.imageBytes,
+                  imageMediaType: fetched.imageMediaType,
+                },
+                client,
+                reviewDateIso,
+              );
+            } catch (err) {
+              if (fetched.imageBytes && isImageRejectionError(err)) {
+                const hash = hashContent(fetched.thumbnailBytes ?? fetched.imageBytes);
+                bankFailedAssets = recordAssetFailure(bankFailedAssets, hash, reviewDateIso);
+              }
+              throw err;
+            }
+            const imageUrl = await resolveCrawlOfferImage(fetched);
+            const offers = imageUrl ? ex.offers.map((o) => ({ ...o, imageUrl })) : ex.offers;
+            return { offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
           },
           throttleMs: 300,
           maxExtractions: maxDetails,
@@ -346,6 +473,23 @@ async function main(): Promise<void> {
         // entirely and rely on the auto-discovered asset loop below.
         if (entry.extractPageText !== false) {
           for (const { source, result } of fetched) {
+            // Registry `image` sources are always sent regardless of size (unlike auto-discovered
+            // assets below) — but every image still goes through prepareForVision + the
+            // failed-asset cache before it reaches Claude.
+            let visionImageBytes = result.imageBytes;
+            let visionImageMediaType = result.imageMediaType;
+            if (source.type === "image" && result.imageBytes && result.imageMediaType) {
+              const prepared = await prepareImageAsset(result.imageBytes, result.imageMediaType, bankFailedAssets, reviewDateIso);
+              seenAssetHashes.add(prepared.hash);
+              bankFailedAssets = prepared.failedAssets;
+              if (!prepared.ok) {
+                assetFailures.push({ url: source.url, reason: prepared.error });
+                carryForward([source.url]);
+                continue;
+              }
+              visionImageBytes = prepared.imageBytes;
+              visionImageMediaType = prepared.imageMediaType;
+            }
             // A throw on one listing page must not drop a multi-source bank's other sources (dfcc/union-bank).
             let extracted;
             try {
@@ -355,8 +499,8 @@ async function main(): Promise<void> {
                   sourceUrl: source.url,
                   strippedText: result.strippedText,
                   pdfBytes: result.pdfBytes,
-                  imageBytes: result.imageBytes,
-                  imageMediaType: result.imageMediaType,
+                  imageBytes: visionImageBytes,
+                  imageMediaType: visionImageMediaType,
                 },
                 client,
                 reviewDateIso
@@ -364,12 +508,20 @@ async function main(): Promise<void> {
             } catch (error) {
               assetFailures.push({ url: source.url, reason: error instanceof Error ? error.message : "extract failed" });
               extractFailures += 1;
+              if (source.type === "image" && result.imageBytes && isImageRejectionError(error)) {
+                bankFailedAssets = recordAssetFailure(bankFailedAssets, hashContent(result.imageBytes), reviewDateIso);
+              }
               carryForward([source.url]);
               continue;
             }
             report.tokensUsed.input += extracted.inputTokens;
             report.tokensUsed.output += extracted.outputTokens;
-            offers.push(...extracted.offers);
+            let offersFromSource = extracted.offers;
+            if (source.type === "image" && result.imageBytes) {
+              const thumb = await saveThumbnail(result.imageBytes, publicImagesDir);
+              if (thumb.ok) offersFromSource = offersFromSource.map((o) => ({ ...o, imageUrl: thumb.url }));
+            }
+            offers.push(...offersFromSource);
             nonCrawlExtracted += 1;
           }
           extractedCount += 1;
@@ -399,6 +551,26 @@ async function main(): Promise<void> {
             carryForward([asset.url]);
             continue;
           }
+          if (asset.type === "image" && assetResult.imageBytes && (await isPortraitImage(assetResult.imageBytes))) {
+            // Poster/person-shot heuristic (lib/ingest/images.ts) — same treatment as undersized: a
+            // deliberate skip, carried forward like any other "not extracted this run" asset.
+            carryForward([asset.url]);
+            continue;
+          }
+          let visionImageBytes = assetResult.imageBytes;
+          let visionImageMediaType = assetResult.imageMediaType;
+          if (asset.type === "image" && assetResult.imageBytes && assetResult.imageMediaType) {
+            const prepared = await prepareImageAsset(assetResult.imageBytes, assetResult.imageMediaType, bankFailedAssets, reviewDateIso);
+            seenAssetHashes.add(prepared.hash);
+            bankFailedAssets = prepared.failedAssets;
+            if (!prepared.ok) {
+              assetFailures.push({ url: asset.url, reason: prepared.error });
+              carryForward([asset.url]);
+              continue;
+            }
+            visionImageBytes = prepared.imageBytes;
+            visionImageMediaType = prepared.imageMediaType;
+          }
           // A single bad flyer (e.g. a corrupt/oversized image Claude rejects) must not abort the bank.
           let extracted;
           try {
@@ -408,8 +580,8 @@ async function main(): Promise<void> {
                 sourceUrl: asset.url,
                 strippedText: assetResult.strippedText,
                 pdfBytes: assetResult.pdfBytes,
-                imageBytes: assetResult.imageBytes,
-                imageMediaType: assetResult.imageMediaType,
+                imageBytes: visionImageBytes,
+                imageMediaType: visionImageMediaType,
               },
               client,
               reviewDateIso
@@ -417,12 +589,20 @@ async function main(): Promise<void> {
           } catch (error) {
             assetFailures.push({ url: asset.url, reason: error instanceof Error ? error.message : "extract failed" });
             extractFailures += 1;
+            if (asset.type === "image" && assetResult.imageBytes && isImageRejectionError(error)) {
+              bankFailedAssets = recordAssetFailure(bankFailedAssets, hashContent(assetResult.imageBytes), reviewDateIso);
+            }
             carryForward([asset.url]);
             continue;
           }
           report.tokensUsed.input += extracted.inputTokens;
           report.tokensUsed.output += extracted.outputTokens;
-          offers.push(...extracted.offers);
+          let offersFromAsset = extracted.offers;
+          if (asset.type === "image" && assetResult.imageBytes) {
+            const thumb = await saveThumbnail(assetResult.imageBytes, publicImagesDir);
+            if (thumb.ok) offersFromAsset = offersFromAsset.map((o) => ({ ...o, imageUrl: thumb.url }));
+          }
+          offers.push(...offersFromAsset);
           assetExtractions += 1;
           nonCrawlExtracted += 1;
         }
@@ -497,6 +677,16 @@ async function main(): Promise<void> {
         if (b.extractFailures) parts.push(`${b.extractFailures} extract failure(s)`);
         console.error(`[refresh] ${entry.bankId}: ${parts.join(" · ")}`);
       }
+      // Fold this run's failed-asset-cache activity back into state — pruned of expired entries and
+      // (only when this run actually scanned assets for the bank) hashes no longer discovered. Only
+      // touches state.banks[entry.bankId] when there's an existing entry to update or something new
+      // to record — a bank that has never succeeded and recorded no failure this run (e.g. it
+      // fetch-failed before any asset was even reached) must not gain a fabricated lastUpdatedAt.
+      const prunedFailedAssets = pruneAssetCache(bankFailedAssets, seenAssetHashes, reviewDateIso);
+      const existingBankState = state.banks[entry.bankId];
+      if (existingBankState || Object.keys(prunedFailedAssets).length > 0) {
+        state.banks[entry.bankId] = withFailedAssets(existingBankState, prunedFailedAssets, reviewDateIso);
+      }
       checkpoint();
     }
   }
@@ -508,6 +698,11 @@ async function main(): Promise<void> {
   seed = swept.seed;
   catalog = swept.catalog;
 
+  // Delete any thumbnail no offer references any more (a dropped offer, or one whose creative
+  // changed and got a new content hash) — run last, once the catalog is fully settled.
+  const referencedImageUrls = catalog.offers.map((o) => o.imageUrl).filter((url): url is string => Boolean(url));
+  const orphanImagesSwept = sweepOrphans(publicImagesDir, referencedImageUrls);
+
   state.lastRunAt = reviewDateIso;
   checkpoint();
 
@@ -517,7 +712,7 @@ async function main(): Promise<void> {
   // read off the bank-status counts alone (RC3).
   const extractFailureTotal = Object.values(report.banks).reduce((sum, b) => sum + (b.extractFailures ?? 0), 0);
   const assetFailureTotal = Object.values(report.banks).reduce((sum, b) => sum + (b.assetFailures?.length ?? 0), 0);
-  console.log(`Refresh complete. ${JSON.stringify(counts)} | expired swept: ${swept.dropped} | tokens: ${JSON.stringify(report.tokensUsed)} | assetFailures: ${assetFailureTotal} | extractFailures: ${extractFailureTotal}`);
+  console.log(`Refresh complete. ${JSON.stringify(counts)} | expired swept: ${swept.dropped} | orphan images swept: ${orphanImagesSwept} | tokens: ${JSON.stringify(report.tokensUsed)} | assetFailures: ${assetFailureTotal} | extractFailures: ${extractFailureTotal}`);
 
   // Surface failures so the CI run is marked failed (and the operator is notified). A sanity-rejected
   // bank counts as a failure on purpose, so a rejected update never passes silently. extractFailureTotal
