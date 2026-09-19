@@ -57,7 +57,7 @@ interface RawOffer {
 
 // JSON schema for structured output. Structured outputs require additionalProperties:false
 // on every object; optional fields are simply omitted from `required`.
-const OFFER_SCHEMA = {
+export const OFFER_SCHEMA = {
   type: "object",
   additionalProperties: false,
   required: ["offers"],
@@ -87,11 +87,17 @@ const OFFER_SCHEMA = {
           installmentMonths: { type: "number" },
           minSpend: { type: "number" },
           maxDiscountAmount: { type: "number" },
+          eligibilityNote: { type: "string" },
+          // These four array-of-enum properties MUST stay last in this object. Verified against the
+          // live API: with additionalProperties:false and mostly-optional properties, declaring any
+          // optional scalar property AFTER an array-of-enum property makes the API reject the whole
+          // schema with 400 "Schema is too complex" on every model — a constrained-decoding
+          // limitation, not a size limit (an identical property set/byte length passes once these
+          // are moved last). New optional scalar fields go ABOVE this comment, never below it.
           validDays: { type: "array", items: { type: "string", enum: [...weekdays] } },
           cardNetworks: { type: "array", items: { type: "string", enum: [...cardNetworks] } },
           cardTypes: { type: "array", items: { type: "string", enum: [...cardKinds] } },
-          cardTiers: { type: "array", items: { type: "string", enum: [...cardTierValues] } },
-          eligibilityNote: { type: "string" }
+          cardTiers: { type: "array", items: { type: "string", enum: [...cardTierValues] } }
         }
       }
     }
