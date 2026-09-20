@@ -189,7 +189,7 @@ function ClearAllButton({ onClick }: { onClick: () => void }) {
     <button
       type="button"
       onClick={onClick}
-      className="text-[13px] font-bold text-(--text-link) transition-colors duration-(--motion-fast) hover:text-(--text-link-hover)"
+      className="text-[13px] leading-4 font-bold text-(--text-link) transition-colors duration-(--motion-fast) hover:text-(--text-link-hover)"
     >
       Clear all
     </button>
@@ -511,20 +511,29 @@ export function FilterPanel({
               </div>
             </div>
 
-            {/* Preset controls and "Clear all" travel together, pinned to the right */}
-            <div className="ml-auto flex flex-nowrap items-center gap-3">
-              <FilterPresetControls
-                presets={presets}
-                isLoaded={isLoaded}
-                selection={selection}
-                catalog={catalog}
-                canSave={activeFilterCount > 0 && !isPresetSelectionEmpty(selection)}
-                onApply={applyPreset}
-                onSave={save}
-                onDelete={remove}
-                onClearAll={clearAllPresets}
-              />
-              {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
+            {/* Preset group, pinned to the right, mirrors its neighbours' label-over-control shape:
+                "Clear all" takes the label row instead of an uppercase label (right-aligned, since
+                this group hugs the right edge), and the Saved filters button sits on the control
+                row beneath it. The label row stays min-h-4 — matching labelClass's text-xs line
+                box — even when "Clear all" isn't rendered, so hiding it at activeFilterCount === 0
+                can't collapse the row and pull the button out of line with the other four controls. */}
+            <div className="ml-auto grid gap-1">
+              <div className="flex min-h-4 items-center justify-end">
+                {activeFilterCount > 0 && <ClearAllButton onClick={clearAll} />}
+              </div>
+              <div className="flex flex-nowrap items-center">
+                <FilterPresetControls
+                  presets={presets}
+                  isLoaded={isLoaded}
+                  selection={selection}
+                  catalog={catalog}
+                  canSave={activeFilterCount > 0 && !isPresetSelectionEmpty(selection)}
+                  onApply={applyPreset}
+                  onSave={save}
+                  onDelete={remove}
+                  onClearAll={clearAllPresets}
+                />
+              </div>
             </div>
           </div>
 
