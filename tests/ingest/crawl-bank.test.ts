@@ -207,6 +207,20 @@ describe("discoverAssetUrls", () => {
     ]);
   });
 
+  it("excludes an image sitting in a noscript block, even with no tiny dimensions or chrome naming", () => {
+    // No width/height/class/chrome-path signal on this one — if noscript weren't stripped, the
+    // relevance filter would let it through and this test would (rightly) fail.
+    const html = `
+      <noscript><img src="/pixel/tr.gif" alt="tracking pixel"></noscript>
+      <main>
+        <img src="/banners/dining-promo.jpg" alt="Dining promo">
+      </main>`;
+
+    expect(discoverAssetUrls(html, base)).toEqual([
+      { url: "https://www.example.lk/banners/dining-promo.jpg", type: "image" },
+    ]);
+  });
+
   it("excludes offsite links and images that don't share the base hostname", () => {
     const html = `
       <main>
