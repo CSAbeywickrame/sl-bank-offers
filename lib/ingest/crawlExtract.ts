@@ -1,5 +1,5 @@
 // lib/ingest/crawlExtract.ts
-import * as cheerio from "cheerio";
+import * as cheerio from "cheerio/slim";
 import { normalizeUrl, normalizeAssetUrl, discoverDetailUrls, discoverAssetUrls } from "@/lib/ingest/crawlBank";
 import type { CrawlRecipe, HtmlFetcher, DiscoveredAsset } from "@/lib/ingest/crawlBank";
 import type { ImageMediaType } from "@/lib/ingest/fetchAndStrip";

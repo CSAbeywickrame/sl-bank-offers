@@ -1,10 +1,10 @@
 import crypto from "node:crypto";
-// Supported Node range: >=20 <26 (see package.json engines, .nvmrc pins 24). On Node >=26,
-// cheerio's fetch override strips all response headers, which silently breaks two things
-// downstream: content-type comes back null (every image fetch fails as "unsupported or
-// missing image content-type"), and the Anthropic SDK's streaming fails with "request ended
-// without sending any chunks". Symptom looks like "the scraper is broken"; it's just Node.
-import * as cheerio from "cheerio";
+// Import from "cheerio/slim", never "cheerio": the full build's undici-based network helpers
+// replace global fetch on Node >=26 and strip every response header, which silently breaks
+// image content-type detection above and the Anthropic SDK's streaming elsewhere. "cheerio/slim"
+// omits those network helpers (only cheerio.load is used anywhere in this repo, and slim ships
+// it) so global fetch is never touched. Do not change this back to "cheerio".
+import * as cheerio from "cheerio/slim";
 import type { RegistrySource } from "@/lib/sources/bankRegistry";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import { prepareForVision } from "@/lib/ingest/images";

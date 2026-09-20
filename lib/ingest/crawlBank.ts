@@ -1,4 +1,4 @@
-import * as cheerio from "cheerio";
+import * as cheerio from "cheerio/slim";
 
 // Normalize a URL for stable comparison/keys: lowercase host, strip fragment, single trailing slash on the path.
 export function normalizeUrl(input: string): string {
@@ -187,7 +187,7 @@ export function discoverAssetUrls(html: string, baseUrl: string, assetHosts: str
   const baseHost = base.hostname.toLowerCase();
   const allowedHosts = new Set([baseHost, ...assetHosts.map((h) => h.toLowerCase())]);
   const $ = cheerio.load(html);
-  $("nav, header, footer").remove();
+  $("nav, header, footer, noscript").remove();
   const assets = new Map<string, DiscoveredAsset>();
 
   $("a[href]").each((_, el) => {
