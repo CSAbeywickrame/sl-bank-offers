@@ -5,7 +5,29 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useMemo, useState } from "react";
 import { categories, getCategoryLabel } from "@/lib/offers/categories";
 import { buildFilterQueryString } from "@/lib/offers/query";
-import { sortKeys, type Bank, type Card, type OfferCategory, type SortKey } from "@/lib/offers/types";
+import {
+  addedWindows,
+  cardKinds,
+  cardNetworks,
+  cardTierValues,
+  discountFloors,
+  offerTypes,
+  sortKeys,
+  validityWindows,
+  weekdays,
+  type AddedWindow,
+  type Bank,
+  type Card,
+  type CardKind,
+  type CardNetwork,
+  type CardTier,
+  type OfferCategory,
+  type OfferFilters,
+  type OfferType,
+  type SortKey,
+  type ValidityWindow,
+  type Weekday
+} from "@/lib/offers/types";
 import { buttonClasses } from "@/components/ui/button";
 import { fieldClass, Input, labelClass, Select } from "@/components/ui/field";
 import { usePopover } from "@/components/ui/popover";
@@ -26,6 +48,14 @@ interface FilterPanelProps {
   lockedBankId?: string;
   lockedCategory?: OfferCategory;
   resultCount?: number;
+  /**
+   * The parsed filters, for the advanced dimensions.
+   *
+   * Passed as one object rather than eight props: every page already has it, and a per-prop API
+   * would let a call site silently omit a dimension — the filter would then read as "off" while the
+   * URL still carried it, and the offer list would disagree with the controls.
+   */
+  filters?: OfferFilters;
 }
 
 // Human-readable labels for each sort key, in display order
@@ -33,6 +63,51 @@ const sortLabels: Record<SortKey, string> = {
   relevance: "Relevance",
   newest: "Newest",
   "expiring-soon": "Expiring soon",
+  "biggest-discount": "Biggest discount",
+};
+
+const validityLabels: Record<ValidityWindow, string> = {
+  "ends-3d": "Ends in 3 days",
+  "ends-week": "Ends this week",
+  "ends-month": "Ends this month",
+  "not-started": "Not started yet",
+  "no-end": "No end date",
+};
+
+const addedLabels: Record<AddedWindow, string> = {
+  "7d": "Added this week",
+  "30d": "Added this month",
+};
+
+const weekdayLabels: Record<Weekday, string> = {
+  mon: "Monday",
+  tue: "Tuesday",
+  wed: "Wednesday",
+  thu: "Thursday",
+  fri: "Friday",
+  sat: "Saturday",
+  sun: "Sunday",
+};
+
+const offerTypeLabels: Record<OfferType, string> = {
+  discount: "Discount",
+  installment: "Instalment plan",
+  cashback: "Cashback",
+  bogo: "Buy 1 get 1",
+  other: "Other",
+};
+
+function titleCase(value: string): string {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
+
+const networkLabels: Record<CardNetwork, string> = {
+  visa: "Visa",
+  mastercard: "Mastercard",
+  amex: "Amex",
+  unionpay: "UnionPay",
+  jcb: "JCB",
+  diners: "Diners",
 };
 
 interface MultiSelectFieldProps {
@@ -133,17 +208,49 @@ export function FilterPanel({
   lockedBankId,
   lockedCategory,
   resultCount,
+  filters = {},
 }: FilterPanelProps) {
+  const selectedOfferTypes = filters.offerTypes ?? [];
+  const selectedMinDiscount = filters.minDiscountPct;
+  const selectedDay = filters.day;
+  const selectedValidity = filters.validity;
+  const selectedAdded = filters.added;
+  const selectedNetworks = filters.cardNetworks ?? [];
+  const selectedCardTypes = filters.cardTypes ?? [];
+  const selectedTiers = filters.cardTiers ?? [];
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isFiltersOpen, setIsFiltersOpen] = useState(true);
+  // The advanced tier starts open only when it already holds a filter, so a shared link explains
+  // itself instead of hiding why the result set looks narrow.
+  const [isMoreOpen, setIsMoreOpen] = useState(
+    () =>
+      selectedOfferTypes.length + selectedNetworks.length + selectedCardTypes.length + selectedTiers.length > 0 ||
+      selectedMinDiscount !== undefined ||
+      selectedDay !== undefined ||
+      selectedValidity !== undefined ||
+      selectedAdded !== undefined
+  );
 
   const cardScopeBankIds = lockedBankId ? [lockedBankId] : selectedBankIds;
   const availableCards =
     cardScopeBankIds.length > 0 ? cards.filter((card) => cardScopeBankIds.includes(card.bankId)) : cards;
   const bankById = Object.fromEntries(banks.map((b) => [b.id, b]));
+  const advancedFilterCount =
+    selectedOfferTypes.length +
+    selectedNetworks.length +
+    selectedCardTypes.length +
+    selectedTiers.length +
+    (selectedMinDiscount !== undefined ? 1 : 0) +
+    (selectedDay ? 1 : 0) +
+    (selectedValidity ? 1 : 0) +
+    (selectedAdded ? 1 : 0);
   const activeFilterCount =
-    selectedBankIds.length + selectedCategories.length + (selectedCardId ? 1 : 0) + (search ? 1 : 0);
+    selectedBankIds.length +
+    selectedCategories.length +
+    (selectedCardId ? 1 : 0) +
+    (search ? 1 : 0) +
+    advancedFilterCount;
 
   // Preset selection reflects the *effective* filter, folding in any dimension locked by the current page
   const selection: PresetSelection = {
@@ -168,7 +275,7 @@ export function FilterPanel({
   }
 
   // Pushes an updated query string to actionPath, merging the current filter state with overrides
-  function pushFilter(overrides: Partial<{ bankIds: string[]; categories: string[]; cardId: string; search: string }>) {
+  function pushFilter(overrides: Partial<Parameters<typeof buildFilterQueryString>[1]>) {
     pushQuery({
       bankIds: selectedBankIds,
       categories: selectedCategories,
@@ -176,6 +283,12 @@ export function FilterPanel({
       search,
       ...overrides,
     });
+  }
+
+  // A single-value filter toggles off when its current value is picked again, so the same control
+  // both sets and clears without needing a separate "any" option.
+  function toggleSingle<T extends string>(current: T | undefined, next: T): string {
+    return current === next ? "" : next;
   }
 
   // Adds id to the list if absent, or removes it if present
@@ -200,6 +313,14 @@ export function FilterPanel({
       ...(lockedCategory ? {} : { categories: [] }),
       cardId: "",
       search: "",
+      offerTypes: [],
+      cardNetworks: [],
+      cardTypes: [],
+      cardTiers: [],
+      minDiscountPct: undefined,
+      day: "",
+      validity: "",
+      added: "",
     });
   }
 
@@ -249,6 +370,46 @@ export function FilterPanel({
       label: `“${search}”`,
       onRemove: () => pushFilter({ search: "" }),
     }] : []),
+    ...(selectedMinDiscount !== undefined ? [{
+      id: "discount",
+      label: `${selectedMinDiscount}%+`,
+      onRemove: () => pushFilter({ minDiscountPct: undefined }),
+    }] : []),
+    ...selectedOfferTypes.map((type) => ({
+      id: `type:${type}`,
+      label: offerTypeLabels[type],
+      onRemove: () => pushFilter({ offerTypes: toggleInList(selectedOfferTypes, type) }),
+    })),
+    ...(selectedDay ? [{
+      id: "day",
+      label: weekdayLabels[selectedDay],
+      onRemove: () => pushFilter({ day: "" }),
+    }] : []),
+    ...(selectedValidity ? [{
+      id: "validity",
+      label: validityLabels[selectedValidity],
+      onRemove: () => pushFilter({ validity: "" }),
+    }] : []),
+    ...(selectedAdded ? [{
+      id: "added",
+      label: addedLabels[selectedAdded],
+      onRemove: () => pushFilter({ added: "" }),
+    }] : []),
+    ...selectedNetworks.map((network) => ({
+      id: `network:${network}`,
+      label: networkLabels[network],
+      onRemove: () => pushFilter({ cardNetworks: toggleInList(selectedNetworks, network) }),
+    })),
+    ...selectedCardTypes.map((kind) => ({
+      id: `cardtype:${kind}`,
+      label: titleCase(kind),
+      onRemove: () => pushFilter({ cardTypes: toggleInList(selectedCardTypes, kind) }),
+    })),
+    ...selectedTiers.map((tier) => ({
+      id: `tier:${tier}`,
+      label: titleCase(tier),
+      onRemove: () => pushFilter({ cardTiers: toggleInList(selectedTiers, tier) }),
+    })),
   ];
 
   return (
@@ -372,6 +533,125 @@ export function FilterPanel({
               <FilterSummary resultCount={resultCount} chips={chips} />
             </div>
           )}
+
+          {/* Advanced tier. Kept behind a disclosure because these answer narrower questions than
+              bank and category — most visits never need them, and the row above should stay
+              readable at a glance. */}
+          <div className="mt-3 border-t border-(--border-subtle) pt-3">
+            <button
+              type="button"
+              onClick={() => setIsMoreOpen((prev) => !prev)}
+              aria-expanded={isMoreOpen}
+              aria-controls="advanced-filters"
+              className="flex items-center gap-2 text-sm font-semibold text-(--text-strong)"
+            >
+              More filters
+              <FilterCountBadge count={advancedFilterCount} />
+              <ChevronDown size={12} className={`transition-transform ${isMoreOpen ? "rotate-180" : ""}`} />
+            </button>
+
+            {isMoreOpen && (
+              <div id="advanced-filters" className="mt-3 flex flex-wrap items-end gap-x-4 gap-y-3">
+                <div className="grid w-full gap-1 sm:w-40">
+                  <label htmlFor="offer-discount-filter" className={labelClass}>Min discount</label>
+                  <Select
+                    id="offer-discount-filter"
+                    name="discount"
+                    value={selectedMinDiscount === undefined ? "" : String(selectedMinDiscount)}
+                    onChange={(e) =>
+                      pushFilter({ minDiscountPct: e.target.value ? Number(e.target.value) : undefined })
+                    }
+                  >
+                    <option value="">Any discount</option>
+                    {discountFloors.map((floor) => (
+                      <option key={floor} value={floor}>{floor}% or more</option>
+                    ))}
+                  </Select>
+                </div>
+
+                <MultiSelectField
+                  id="offer-type-filter"
+                  label="Offer type"
+                  allLabel="Any type"
+                  options={offerTypes.map((type) => ({ id: type, label: offerTypeLabels[type] }))}
+                  selectedIds={selectedOfferTypes}
+                  onToggle={(id) => pushFilter({ offerTypes: toggleInList(selectedOfferTypes, id as OfferType) })}
+                />
+
+                <div className="grid w-full gap-1 sm:w-40">
+                  <label htmlFor="offer-day-filter" className={labelClass}>Valid on</label>
+                  <Select
+                    id="offer-day-filter"
+                    name="day"
+                    value={selectedDay ?? ""}
+                    onChange={(e) => pushFilter({ day: e.target.value })}
+                  >
+                    <option value="">Any day</option>
+                    {weekdays.map((day) => (
+                      <option key={day} value={day}>{weekdayLabels[day]}</option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="grid w-full gap-1 sm:w-44">
+                  <label htmlFor="offer-validity-filter" className={labelClass}>Validity</label>
+                  <Select
+                    id="offer-validity-filter"
+                    name="validity"
+                    value={selectedValidity ?? ""}
+                    onChange={(e) => pushFilter({ validity: e.target.value })}
+                  >
+                    <option value="">Any time</option>
+                    {validityWindows.map((window) => (
+                      <option key={window} value={window}>{validityLabels[window]}</option>
+                    ))}
+                  </Select>
+                </div>
+
+                <div className="grid w-full gap-1 sm:w-44">
+                  <label htmlFor="offer-added-filter" className={labelClass}>Date added</label>
+                  <Select
+                    id="offer-added-filter"
+                    name="added"
+                    value={selectedAdded ?? ""}
+                    onChange={(e) => pushFilter({ added: e.target.value })}
+                  >
+                    <option value="">Any time</option>
+                    {addedWindows.map((window) => (
+                      <option key={window} value={window}>{addedLabels[window]}</option>
+                    ))}
+                  </Select>
+                </div>
+
+                <MultiSelectField
+                  id="offer-network-filter"
+                  label="Card network"
+                  allLabel="Any network"
+                  options={cardNetworks.map((network) => ({ id: network, label: networkLabels[network] }))}
+                  selectedIds={selectedNetworks}
+                  onToggle={(id) => pushFilter({ cardNetworks: toggleInList(selectedNetworks, id as CardNetwork) })}
+                />
+
+                <MultiSelectField
+                  id="offer-cardtype-filter"
+                  label="Card type"
+                  allLabel="Any type"
+                  options={cardKinds.map((kind) => ({ id: kind, label: titleCase(kind) }))}
+                  selectedIds={selectedCardTypes}
+                  onToggle={(id) => pushFilter({ cardTypes: toggleInList(selectedCardTypes, id as CardKind) })}
+                />
+
+                <MultiSelectField
+                  id="offer-tier-filter"
+                  label="Card tier"
+                  allLabel="Any tier"
+                  options={cardTierValues.map((tier) => ({ id: tier, label: titleCase(tier) }))}
+                  selectedIds={selectedTiers}
+                  onToggle={(id) => pushFilter({ cardTiers: toggleInList(selectedTiers, id as CardTier) })}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Tier 2 — categories get the full panel width: wrapping on desktop, scrolling on mobile */}

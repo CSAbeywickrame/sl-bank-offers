@@ -55,6 +55,15 @@ export const bankRegistry: BankRegistryEntry[] = [
     ],
     defaultCardId: "commercial-bank-credit-cards",
     assetHosts: ["s3.ap-southeast-1.amazonaws.com"],
+    // scanAssets intentionally left enabled (default true): verified against data/scanned-offers.json,
+    // 48 of this bank's 71 stored offers are sourced from real offer-creative images under
+    // s3.ap-southeast-1.amazonaws.com/static.combank.cloud/... (e.g. seasonal/merchant promo photos),
+    // not category icons — disabling asset scanning would silently drop them on the next crawl since
+    // an undiscovered URL's prior offers can never be carried forward by refreshCrawlBank's keepPrior.
+    // The same-origin combank.lk chrome icons (misc/*.png) that trigger WAF 403s on fetch are a real
+    // but lower-severity cost: a failed fetch is recorded in assetFailures and its (nonexistent) prior
+    // offers are safely kept via keepPrior — no data loss, just wasted requests. Fixing that fully would
+    // need a way to scan assetHosts while skipping same-origin image discovery, which isn't built yet.
     // Listing -> per-offer /rewards-promotion/<category>/<slug> detail pages (singular "promotion"; static + rich).
     sources: [{
       url: "https://www.combank.lk/rewards-promotions",
@@ -172,13 +181,15 @@ export const bankRegistry: BankRegistryEntry[] = [
       { id: "union-bank-credit-cards", bankId: "union-bank", name: "Union Bank Credit Cards", network: "Visa / Mastercard" }
     ],
     defaultCardId: "union-bank-credit-cards",
-    // NOTE: unionb.com is a bot-protected SPA — it returns an empty shell to both plain HTTP and
-    // headless Playwright, so it cannot be auto-scraped yet. Left enabled so its existing offers are
-    // PRESERVED (a failed/empty fetch keeps rows); it will report skipped-empty each run until a
-    // working approach is found. Do NOT set enabled:false (that would delete its offers).
+    // NOTE: unionb.com sits behind Imperva/Incapsula — a plain HTTP fetch (static_html) receives a
+    // JS challenge stub instead of the real page (~212 bytes, 0 extractable text), which is why this
+    // bank used to report skipped-empty every run. Headless Chromium (dynamic_page) clears the
+    // challenge and loads the real page (~340KB HTML, ~5.6K chars of text) — verified against the
+    // live site. Existing offers are still preserved on any future fetch failure — do NOT set
+    // enabled:false, that would delete them.
     sources: [
-      { url: "https://www.unionb.com/credit-cards-offers/", type: "static_html" },
-      { url: "https://www.unionb.com/credit-cards-offers/page/2/", type: "static_html" }
+      { url: "https://www.unionb.com/credit-cards-offers/", type: "dynamic_page" },
+      { url: "https://www.unionb.com/credit-cards-offers/page/2/", type: "dynamic_page" }
     ]
   },
   {

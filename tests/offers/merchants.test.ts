@@ -7,6 +7,7 @@ vi.mock("@/lib/offers/repository", () => ({
 }));
 
 import {
+  getCanonicalMerchantSlug,
   getGroupSiblings,
   getMerchantBySlug,
   getMerchantOffers,
@@ -186,5 +187,35 @@ describe("getGroupSiblings", () => {
 describe("getMerchantOffers", () => {
   it("returns an empty list for an unknown merchant rather than throwing", async () => {
     expect(await getMerchantOffers("nope")).toEqual([]);
+  });
+});
+
+/**
+ * The alias redirect shipped broken once: a bad edit produced `/merchants/` with no slug, and
+ * because it is a PERMANENT redirect, browsers and crawlers cache the dead URL. These pin the
+ * target itself rather than the fact that some redirect happens.
+ */
+describe("getCanonicalMerchantSlug", () => {
+  it("names the canonical merchant an alias should land on", async () => {
+    activeOffers.current = [offer({ id: "a", merchant: "Anantaya Resort and Spa Pasikuda" })];
+    expect(await getCanonicalMerchantSlug("anantaya-resort-and-spa-passikuda")).toBe(
+      "anantaya-resort-and-spa-pasikuda"
+    );
+  });
+
+  it("returns nothing for a merchant that already exists, so the page renders instead", async () => {
+    activeOffers.current = [offer({ id: "a", merchant: "Keells" })];
+    expect(await getCanonicalMerchantSlug("keells")).toBeUndefined();
+  });
+
+  it("returns nothing for a slug that resolves nowhere, so the page 404s", async () => {
+    activeOffers.current = [offer({ id: "a", merchant: "Keells" })];
+    expect(await getCanonicalMerchantSlug("does-not-exist")).toBeUndefined();
+  });
+
+  // An alias pointing at a merchant with no live offers must not redirect into a 404.
+  it("returns nothing when the canonical merchant has no offers", async () => {
+    activeOffers.current = [offer({ id: "a", merchant: "Keells" })];
+    expect(await getCanonicalMerchantSlug("anantaya-resort-and-spa-passikuda")).toBeUndefined();
   });
 });

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 // Site-wide footer with navy background and navy-to-emerald gradient top rule
 export function Footer() {
   return (
@@ -13,7 +15,10 @@ export function Footer() {
             Sri Lankan Bank Card Offers
           </p>
           <p className="text-xs text-white/55">
-            Data sourced from official bank websites · Verify all offers directly with your bank
+            Data sourced from official bank websites · Verify all offers directly with your bank ·{" "}
+            <Link href="/about" className="font-medium text-(--emerald-300) hover:underline">
+              How this works
+            </Link>
           </p>
           <p className="text-xs text-white/55">
             &copy; {new Date().getFullYear()}

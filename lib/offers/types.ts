@@ -69,7 +69,7 @@ export interface OfferEnrichment {
 }
 
 // Supported offer list sort orders, in the order they should appear in a sort control
-export const sortKeys = ["relevance", "newest", "expiring-soon"] as const;
+export const sortKeys = ["relevance", "newest", "expiring-soon", "biggest-discount"] as const;
 
 // A valid sort order for the offer list
 export type SortKey = (typeof sortKeys)[number];
@@ -171,6 +171,22 @@ export interface Offer extends OfferEnrichment {
   rawSourceHash: string;
 }
 
+// How soon an offer's window closes, or whether it has opened yet.
+export const validityWindows = ["ends-3d", "ends-week", "ends-month", "not-started", "no-end"] as const;
+
+export type ValidityWindow = (typeof validityWindows)[number];
+
+// How recently an offer joined the catalog, measured from firstSeenAt.
+export const addedWindows = ["7d", "30d"] as const;
+
+export type AddedWindow = (typeof addedWindows)[number];
+
+// Minimum-discount steps offered in the UI. Coarse on purpose: a shopper thinks "at least 20%",
+// not "at least 23%".
+export const discountFloors = [10, 20, 30, 50] as const;
+
+export type DiscountFloor = (typeof discountFloors)[number];
+
 export interface OfferFilters {
   bankId?: string;
   cardId?: string;
@@ -178,4 +194,14 @@ export interface OfferFilters {
   search?: string;
   bankIds?: string[];
   categories?: OfferCategory[];
+  offerTypes?: OfferType[];
+  /** Keep offers advertising at least this percentage off. */
+  minDiscountPct?: DiscountFloor;
+  /** Keep offers valid on this weekday, including offers with no day restriction at all. */
+  day?: Weekday;
+  validity?: ValidityWindow;
+  added?: AddedWindow;
+  cardNetworks?: CardNetwork[];
+  cardTypes?: CardKind[];
+  cardTiers?: CardTier[];
 }

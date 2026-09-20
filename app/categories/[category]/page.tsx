@@ -129,6 +129,7 @@ export default async function CategoryPage({ params, searchParams }: CategoryPag
         lockedCategory={categoryParam}
         actionPath={`/categories/${categoryParam}`}
         resultCount={filteredOffers.length}
+        filters={filters}
       />
 
       <section className="mx-auto grid max-w-7xl gap-6 px-4 py-8">

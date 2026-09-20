@@ -207,6 +207,20 @@ describe("discoverAssetUrls", () => {
     ]);
   });
 
+  it("excludes an image sitting in a noscript block, even with no tiny dimensions or chrome naming", () => {
+    // No width/height/class/chrome-path signal on this one — if noscript weren't stripped, the
+    // relevance filter would let it through and this test would (rightly) fail.
+    const html = `
+      <noscript><img src="/pixel/tr.gif" alt="tracking pixel"></noscript>
+      <main>
+        <img src="/banners/dining-promo.jpg" alt="Dining promo">
+      </main>`;
+
+    expect(discoverAssetUrls(html, base)).toEqual([
+      { url: "https://www.example.lk/banners/dining-promo.jpg", type: "image" },
+    ]);
+  });
+
   it("excludes offsite links and images that don't share the base hostname", () => {
     const html = `
       <main>
@@ -275,5 +289,56 @@ describe("discoverAssetUrls", () => {
       { url: "https://www.example.lk/files/dining-offers.pdf", type: "pdf" },
       { url: "https://s3.ap-southeast-1.amazonaws.com/banners/dining-promo.jpg", type: "image" },
     ]);
+  });
+
+  describe("relevance filter (skips images that are clearly not offer creatives)", () => {
+    it("drops an image with tiny explicit width/height attributes (an icon/avatar, not a banner)", () => {
+      const html = `
+        <main>
+          <img src="/banners/dining-promo.jpg" width="1200" height="628" alt="real banner">
+          <img src="/misc/star.jpg" width="32" height="32" alt="tiny by width/height">
+          <img src="/misc/tick.jpg" height="24" alt="tiny by height alone">
+        </main>`;
+
+      expect(discoverAssetUrls(html, base)).toEqual([
+        { url: "https://www.example.lk/banners/dining-promo.jpg", type: "image" },
+      ]);
+    });
+
+    it("drops an image whose class marks it as chrome (icon/logo/avatar/spinner)", () => {
+      const html = `
+        <main>
+          <img src="/banners/dining-promo.jpg" class="promo-banner" alt="real banner">
+          <img src="/misc/a.jpg" class="site-icon" alt="icon by class">
+          <img src="/misc/b.jpg" class="brand-logo" alt="logo by class">
+          <img src="/misc/c.jpg" class="user-avatar" alt="avatar by class">
+          <img src="/misc/d.jpg" class="loading-spinner" alt="spinner by class">
+        </main>`;
+
+      expect(discoverAssetUrls(html, base)).toEqual([
+        { url: "https://www.example.lk/banners/dining-promo.jpg", type: "image" },
+      ]);
+    });
+
+    it("drops an image whose URL path marks it as chrome, even with no class or dimensions", () => {
+      const html = `
+        <main>
+          <img src="/banners/dining-promo.jpg" alt="real banner">
+          <img src="/assets/icons/facebook.jpg" alt="icon by path">
+          <img src="/img/logos/visa.jpg" alt="logo by path">
+        </main>`;
+
+      expect(discoverAssetUrls(html, base)).toEqual([
+        { url: "https://www.example.lk/banners/dining-promo.jpg", type: "image" },
+      ]);
+    });
+
+    it("keeps a genuine landscape creative that has no dimensions, class, or chrome-like path", () => {
+      const html = `<main><img src="/promotions/keells-25-off.jpg" alt="Keells 25% off"></main>`;
+
+      expect(discoverAssetUrls(html, base)).toEqual([
+        { url: "https://www.example.lk/promotions/keells-25-off.jpg", type: "image" },
+      ]);
+    });
   });
 });

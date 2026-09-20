@@ -1,4 +1,4 @@
-import * as cheerio from "cheerio";
+import * as cheerio from "cheerio/slim";
 
 // Normalize a URL for stable comparison/keys: lowercase host, strip fragment, single trailing slash on the path.
 export function normalizeUrl(input: string): string {
@@ -152,15 +152,42 @@ export function normalizeAssetUrl(input: string): string {
   return u.toString();
 }
 
+// Generic signals that an <img> is browser chrome (an icon/logo/avatar/loading-spinner) rather than
+// an offer creative — checked against both its class attribute and its URL path, since sites mark
+// these either way. Deliberately just common naming conventions, never a per-bank URL list.
+const CHROME_IMAGE_PATTERN = /icon|logo|avatar|spinner|loader|loading|sprite|placeholder/i;
+// Explicit width/height at or under this (px) marks an <img> as an icon/avatar, not an offer banner.
+const TINY_IMAGE_DIMENSION = 64;
+
+// True when a numeric-looking attribute value is a "tiny" pixel dimension.
+function isTinyDimension(value: string | undefined): boolean {
+  const n = Number(value);
+  return Number.isFinite(n) && n > 0 && n <= TINY_IMAGE_DIMENSION;
+}
+
+// True when an image's class or URL path marks it as chrome rather than a real offer creative.
+function isChromeImage(className: string | undefined, url: string): boolean {
+  if (CHROME_IMAGE_PATTERN.test(className ?? "")) return true;
+  try {
+    return CHROME_IMAGE_PATTERN.test(new URL(url).pathname);
+  } catch {
+    return false;
+  }
+}
+
 // Scans html for offer-bearing PDF links and image banners (nav/header/footer chrome excluded),
 // resolved absolute against baseUrl and restricted to the base hostname plus any hostname in
-// `assetHosts` (for banks that serve offer creatives from a CDN/object-store host).
+// `assetHosts` (for banks that serve offer creatives from a CDN/object-store host). Images that are
+// clearly not offer creatives — tiny explicit dimensions, or an icon/logo/avatar/spinner naming
+// convention in their class or URL — are skipped here too, before they ever cost a fetch or an API
+// call. (A further post-fetch portrait check lives in lib/ingest/images.ts, since telling a poster
+// shot from a banner needs the image's actual pixel dimensions, not just its HTML.)
 export function discoverAssetUrls(html: string, baseUrl: string, assetHosts: string[] = []): DiscoveredAsset[] {
   const base = new URL(baseUrl);
   const baseHost = base.hostname.toLowerCase();
   const allowedHosts = new Set([baseHost, ...assetHosts.map((h) => h.toLowerCase())]);
   const $ = cheerio.load(html);
-  $("nav, header, footer").remove();
+  $("nav, header, footer, noscript").remove();
   const assets = new Map<string, DiscoveredAsset>();
 
   $("a[href]").each((_, el) => {
@@ -188,7 +215,9 @@ export function discoverAssetUrls(html: string, baseUrl: string, assetHosts: str
       return;
     }
     if (!allowedHosts.has(abs.hostname.toLowerCase())) return;
+    if (isTinyDimension($(el).attr("width")) || isTinyDimension($(el).attr("height"))) return;
     const url = normalizeAssetUrl(abs.toString());
+    if (isChromeImage($(el).attr("class"), url)) return;
     assets.set(url, { url, type: "image" });
   });
 

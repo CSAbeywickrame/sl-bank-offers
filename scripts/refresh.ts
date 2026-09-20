@@ -1,12 +1,14 @@
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
-import { fetchAndStrip, hashContent, fetchRawHtml, type FetchResult } from "@/lib/ingest/fetchAndStrip";
-import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage } from "@/lib/ingest/crawlExtract";
+import { fetchAndStrip, hashContent, fetchRawHtml, stripHtml, type FetchResult, type ImageMediaType } from "@/lib/ingest/fetchAndStrip";
+import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage, groupOffersBySourceUrl, carryForwardUnextractedOffers, type CrawlExtractResult, type FetchedCrawlContent } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { dedupeOffers, expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers } from "@/lib/ingest/feedMappers";
+import { prepareForVision, saveThumbnail, sweepOrphans, isPortraitImage } from "@/lib/ingest/images";
+import { isAssetCacheHit, recordAssetFailure, pruneAssetCache, type FailedAssetCache } from "@/lib/ingest/assetCache";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 
 const MIN_CONTENT_CHARS = 200;
@@ -21,12 +23,94 @@ const seedPath = join(dataDir, "seed.json");
 const scannedPath = join(dataDir, "scanned-offers.json");
 const statePath = join(dataDir, "refresh-state.json");
 const reportPath = join(dataDir, "refresh-report.json");
+// Next's public/ dir — saveThumbnail/sweepOrphans append their own "offer-images" sub-folder.
+const publicImagesDir = join(process.cwd(), "public");
 
 type BankStatus = "updated" | "unchanged" | "skipped-empty" | "fetch-failed" | "extract-failed" | "deferred" | "disabled" | "sanity-rejected";
 
 interface RefreshState {
   lastRunAt: string;
-  banks: Record<string, { hash?: string; lastUpdatedAt: string; details?: Record<string, string> }>;
+  banks: Record<string, {
+    hash?: string;
+    lastUpdatedAt: string;
+    details?: Record<string, string>;
+    // Asset content-hashes that failed unrecoverably (undecodable, or rejected by the API after
+    // repair) — see lib/ingest/assetCache.ts. Absent once pruned back down to nothing.
+    failedAssets?: FailedAssetCache;
+  }>;
+}
+
+// Rebuilds a bank's state entry with failedAssets set (or, once pruned to empty, omitted entirely —
+// so a fixed cache never lingers in the JSON as a stale empty object).
+function withFailedAssets(
+  bankState: RefreshState["banks"][string] | undefined,
+  failedAssets: FailedAssetCache,
+  fallbackLastUpdatedAt: string,
+): RefreshState["banks"][string] {
+  const base = bankState ?? { lastUpdatedAt: fallbackLastUpdatedAt };
+  if (Object.keys(failedAssets).length === 0) {
+    const { failedAssets: _drop, ...rest } = base;
+    return rest;
+  }
+  return { ...base, failedAssets };
+}
+
+// True when a Claude API error is specifically an image-content rejection (the empirically-observed
+// 400 "Could not process image") rather than a transient/unrelated failure (rate limit, timeout,
+// truncated output) — only this kind gets cached under the asset's hash, since a transient error
+// deserves a normal retry next run, not a permanent skip.
+function isImageRejectionError(err: unknown): boolean {
+  return err instanceof Anthropic.BadRequestError && /image/i.test(err.message);
+}
+
+// Prepares one fetched image for Claude vision, applying the failed-asset cache: a hash cached from
+// an earlier unrecoverable failure is skipped without another decode attempt, and a hash that fails
+// prepareForVision for the first time is recorded so future runs skip it too. Returns the
+// vision-ready bytes/mediaType plus the (possibly updated) cache and the hash — the caller folds
+// both back into its own per-bank state — or an error to report and carry forward from, exactly
+// like a normal fetch failure.
+async function prepareImageAsset(
+  imageBytes: Buffer,
+  imageMediaType: ImageMediaType,
+  failedAssets: FailedAssetCache | undefined,
+  nowIso: string,
+): Promise<
+  | { ok: true; imageBytes: Buffer; imageMediaType: ImageMediaType; hash: string; failedAssets: FailedAssetCache | undefined }
+  | { ok: false; error: string; hash: string; failedAssets: FailedAssetCache | undefined }
+> {
+  const hash = hashContent(imageBytes);
+  if (isAssetCacheHit(failedAssets, hash, nowIso)) {
+    return { ok: false, error: "skipped: previously failed unrecoverably (cached)", hash, failedAssets };
+  }
+  const prepared = await prepareForVision(imageBytes, imageMediaType);
+  if (!prepared.ok) {
+    return {
+      ok: false,
+      error: `undecodable image: ${prepared.error}`,
+      hash,
+      failedAssets: recordAssetFailure(failedAssets, hash, nowIso),
+    };
+  }
+  return { ok: true, imageBytes: prepared.bytes!, imageMediaType: prepared.mediaType!, hash, failedAssets };
+}
+
+// Resolves the imageUrl for offers extracted from one crawl detail page or asset: its own image
+// asset's thumbnail when it fetched one, otherwise its page's og:image meta tag (parsed during
+// discovery — see extractOgImage in lib/ingest/crawlExtract.ts), fetched once and thumbnailed the
+// same way. Both are content-addressed to their ORIGINAL bytes, never the vision-prepared copy.
+async function resolveCrawlOfferImage(fetched: FetchedCrawlContent): Promise<string | undefined> {
+  if (fetched.thumbnailBytes) {
+    const thumb = await saveThumbnail(fetched.thumbnailBytes, publicImagesDir);
+    return thumb.ok ? thumb.url : undefined;
+  }
+  if (fetched.ogImageUrl) {
+    const og = await fetchAndStrip({ url: fetched.ogImageUrl, type: "image" });
+    if (og.ok && og.imageBytes) {
+      const thumb = await saveThumbnail(og.imageBytes, publicImagesDir);
+      return thumb.ok ? thumb.url : undefined;
+    }
+  }
+  return undefined;
 }
 
 interface BankReport {
@@ -35,6 +119,13 @@ interface BankReport {
   message?: string;
   offersWritten?: number;
   assetFailures?: { url: string; reason: string }[];
+  // Crawl-bank-only diagnostics (RC3/RC4): how many detail pages were freshly extracted vs. reused
+  // from the prior run. Absent for feed/static-page banks.
+  extracted?: number;
+  reused?: number;
+  // How many extraction attempts threw this run. Set by BOTH branches (crawlDiagnostics for crawl
+  // banks, nonCrawlDiagnostics for the rest), unlike extracted/reused above.
+  extractFailures?: number;
 }
 
 interface RefreshReport {
@@ -49,9 +140,31 @@ function readJson<T>(path: string, fallback: T): T {
   return JSON.parse(readFileSync(path, "utf8")) as T;
 }
 
-// Writes a value as pretty JSON with a trailing newline.
+// Writes a value as pretty JSON with a trailing newline, atomically: written to a temp file in the
+// same directory first, then renamed over the target. Rename is atomic on the same filesystem, so a
+// process killed mid-write (e.g. an OOM kill) can never leave a torn/partial JSON file behind.
 function writeJson(path: string, value: unknown): void {
-  writeFileSync(path, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  const tmpPath = `${path}.tmp`;
+  writeFileSync(tmpPath, `${JSON.stringify(value, null, 2)}\n`, "utf8");
+  renameSync(tmpPath, path);
+}
+
+// Extra diagnostic fields folded into a crawl bank's report row — present only when there's
+// something to say for assetFailures/extractFailures, so a healthy bank's report entry stays as
+// small as it was before.
+function crawlDiagnostics(result: CrawlExtractResult): Pick<BankReport, "extracted" | "reused" | "assetFailures" | "extractFailures"> {
+  return {
+    extracted: result.extracted,
+    reused: result.reused,
+    ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+    ...(result.extractFailures > 0 ? { extractFailures: result.extractFailures } : {}),
+  };
+}
+
+// Extra diagnostic field folded into a non-crawl bank's report row when a Claude extraction threw
+// this run — mirrors crawlDiagnostics so extractFailureTotal (in main()) counts both branches equally.
+function nonCrawlDiagnostics(extractFailures: number): Pick<BankReport, "extractFailures"> {
+  return extractFailures > 0 ? { extractFailures } : {};
 }
 
 async function main(): Promise<void> {
@@ -69,7 +182,8 @@ async function main(): Promise<void> {
   // Skip all auto-discovered image/PDF asset work (discovery re-scan + asset extraction) — perf isolation lever.
   const skipAssets = process.env.SKIP_ASSETS === "1";
   const apiKey = process.env.ANTHROPIC_API_KEY;
-  const client = apiKey ? new Anthropic() : null;
+  // A stalled call must not block the whole run for the SDK's 10-minute default (RC8).
+  const client = apiKey ? new Anthropic({ timeout: 180_000 }) : null;
 
   let seed = readJson<SeedData>(seedPath, { banks: [], cards: [], offers: [] });
   let catalog = readJson<ScannedOfferCatalog>(scannedPath, { version: 1, updatedAt: reviewDateIso, offers: [] });
@@ -77,6 +191,17 @@ async function main(): Promise<void> {
 
   const report: RefreshReport = { runAt: reviewDateIso, tokensUsed: { input: 0, output: 0 }, banks: {} };
   let extractedCount = 0;
+
+  // Persists seed/catalog/state/report to disk. Called after every bank — success, failure, or
+  // disabled — not just once at the very end: a multi-hour run that dies partway (an OOM kill cost
+  // us 40 minutes of real API spend and three completed banks once already) must not lose banks
+  // that already finished. writeJson's atomic rename also means a kill mid-write leaves no torn file.
+  const checkpoint = (): void => {
+    writeJson(seedPath, seed);
+    writeJson(scannedPath, catalog);
+    writeJson(statePath, state);
+    writeJson(reportPath, report);
+  };
 
   for (const entry of bankRegistry) {
     if (onlyBanks.size > 0 && !onlyBanks.has(entry.bankId)) continue;
@@ -86,11 +211,24 @@ async function main(): Promise<void> {
     if (!entry.enabled) {
       ({ seed, catalog } = removeBank(entry, reviewDateIso, seed, catalog));
       report.banks[entry.bankId] = { status: "disabled", sources: sourceUrls };
+      checkpoint();
       continue;
     }
 
     // Per-bank asset policy: global SKIP_ASSETS OR the bank opting out via scanAssets:false.
     const skipAssetsForBank = skipAssets || entry.scanAssets === false;
+
+    // Progress output (RC4): a full run takes hours and used to print nothing until the very end.
+    // console.error (not console.log) keeps stdout as the machine-readable summary line only.
+    const bankStartedAt = Date.now();
+    console.error(`[refresh] ${entry.bankId}: starting (${sourceUrls.length} source${sourceUrls.length === 1 ? "" : "s"})`);
+
+    // Per-bank failed-asset cache state (lib/ingest/assetCache.ts): `bankFailedAssets` starts as
+    // whatever the previous run recorded and is threaded through every image this run touches;
+    // `seenAssetHashes` collects every hash actually fetched this run, so the pruning pass in
+    // `finally` below can drop entries for hashes no longer discovered.
+    let bankFailedAssets = state.banks[entry.bankId]?.failedAssets;
+    const seenAssetHashes = new Set<string>();
 
     try {
       // Crawl branch: a source with a `crawl` recipe is walked to its detail pages, each hash-gated
@@ -106,27 +244,94 @@ async function main(): Promise<void> {
         const snapshot = catalog.offers.filter((o) => o.bankId === entry.bankId);
         const prevHashes = state.banks[entry.bankId]?.details ?? {};
         const result = await refreshCrawlBank(entry, snapshot, prevHashes, reviewDateIso, {
-          discover: () => discoverCrawlUrls(seedUrls, recipe, fetchRawHtml, entry.assetHosts ?? [], skipAssetsForBank),
+          discover: () => discoverCrawlUrls(
+            seedUrls,
+            recipe,
+            fetchRawHtml,
+            entry.assetHosts ?? [],
+            skipAssetsForBank,
+            // Strips each discovered detail page's HTML during discovery itself (byte-identical
+            // basis to fetchAndStrip's static_html path: hashContent(stripHtml(html))), so
+            // refreshCrawlBank never needs a second fetch of the same URL — and only the ~7KB
+            // stripped text is retained per page, not the ~240KB of raw HTML (RC7 OOM fix).
+            (html) => {
+              const strippedText = stripHtml(html);
+              return { strippedText, contentHash: hashContent(strippedText) };
+            },
+          ),
           fetchDetail: async (url, type) => {
             const fetched = await fetchAndStrip({ url, type });
-            if (fetched.ok && isUndersizedImage(type, fetched.imageBytes)) {
-              return { ok: true };
+            if (!fetched.ok || type !== "image" || !fetched.imageBytes || !fetched.imageMediaType) {
+              return fetched;
             }
-            return fetched;
+            if (isUndersizedImage(type, fetched.imageBytes)) return { ok: true };
+            if (await isPortraitImage(fetched.imageBytes)) return { ok: true };
+            // Every image reaching Claude goes through prepareForVision first (tolerant decode +
+            // downscale — see lib/ingest/images.ts); the ORIGINAL bytes are kept separately as
+            // thumbnailBytes so the thumbnail stays content-addressed to the source file.
+            const prepared = await prepareImageAsset(fetched.imageBytes, fetched.imageMediaType, bankFailedAssets, reviewDateIso);
+            seenAssetHashes.add(prepared.hash);
+            bankFailedAssets = prepared.failedAssets;
+            if (!prepared.ok) return { ok: false, error: prepared.error };
+            return {
+              ...fetched,
+              imageBytes: prepared.imageBytes,
+              imageMediaType: prepared.imageMediaType,
+              thumbnailBytes: fetched.imageBytes,
+            };
           },
           extract: async (sourceUrl, fetched) => {
-            const ex = await extractOffers({ entry, sourceUrl, ...fetched }, client, reviewDateIso);
-            return { offers: ex.offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
+            let ex;
+            try {
+              ex = await extractOffers(
+                {
+                  entry,
+                  sourceUrl,
+                  strippedText: fetched.strippedText,
+                  pdfBytes: fetched.pdfBytes,
+                  imageBytes: fetched.imageBytes,
+                  imageMediaType: fetched.imageMediaType,
+                },
+                client,
+                reviewDateIso,
+              );
+            } catch (err) {
+              if (fetched.imageBytes && isImageRejectionError(err)) {
+                const hash = hashContent(fetched.thumbnailBytes ?? fetched.imageBytes);
+                bankFailedAssets = recordAssetFailure(bankFailedAssets, hash, reviewDateIso);
+              }
+              throw err;
+            }
+            const imageUrl = await resolveCrawlOfferImage(fetched);
+            const offers = imageUrl ? ex.offers.map((o) => ({ ...o, imageUrl })) : ex.offers;
+            return { offers, inputTokens: ex.inputTokens, outputTokens: ex.outputTokens };
           },
           throttleMs: 300,
           maxExtractions: maxDetails,
+          onProgress: (done, total, extracted, failed) => {
+            if (done % 10 === 0 || done === total) {
+              console.error(`[refresh] ${entry.bankId} ${done}/${total} pages · ${extracted} extracted · ${failed} failed`);
+            }
+          },
         });
         report.tokensUsed.input += result.inputTokens;
         report.tokensUsed.output += result.outputTokens;
         if (!result.ok) {
           report.banks[entry.bankId] = {
             status: "fetch-failed", sources: sourceUrls, message: result.error,
-            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+            ...crawlDiagnostics(result),
+          };
+          continue;
+        }
+        // Every attempted extraction failing (an RC1-style outage) must not look like a healthy
+        // "updated" run just because keepPrior reused the bank's existing rows for each failed URL —
+        // that's exactly how a 100%-failing extraction stayed invisible before (RC3).
+        if (result.extractFailures > 0 && result.extracted === 0) {
+          report.banks[entry.bankId] = {
+            status: "extract-failed",
+            sources: sourceUrls,
+            message: `all ${result.extractFailures} extraction attempt(s) failed`,
+            ...crawlDiagnostics(result),
           };
           continue;
         }
@@ -134,7 +339,7 @@ async function main(): Promise<void> {
         if (activeOffers.length === 0) {
           report.banks[entry.bankId] = {
             status: "extract-failed", sources: sourceUrls, message: "crawl returned no active offers",
-            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+            ...crawlDiagnostics(result),
           };
           continue;
         }
@@ -146,7 +351,7 @@ async function main(): Promise<void> {
             status: "sanity-rejected",
             sources: sourceUrls,
             message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`,
-            ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+            ...crawlDiagnostics(result),
           };
           continue;
         }
@@ -154,7 +359,7 @@ async function main(): Promise<void> {
         state.banks[entry.bankId] = { lastUpdatedAt: reviewDateIso, details: result.detailHashes };
         report.banks[entry.bankId] = {
           status: "updated", sources: sourceUrls, offersWritten: newCount,
-          ...(result.assetFailures.length > 0 ? { assetFailures: result.assetFailures } : {}),
+          ...crawlDiagnostics(result),
         };
         continue;
       }
@@ -226,6 +431,8 @@ async function main(): Promise<void> {
       // Changed content -> produce offers. Banks with a deterministic feed mapper (structured JSON API)
       // skip Claude entirely (no key, no budget, no tokens); all others use the Claude extractor.
       let offers: ScannedOffer[] = [];
+      let nonCrawlExtracted = 0; // successful Claude extractions this run, across page-text sources + auto-discovered assets
+      let extractFailures = 0; // extractOffers() throws this run, across both loops
       const mapper = feedMappers[entry.bankId];
       if (mapper) {
         for (const { result } of fetched) {
@@ -251,10 +458,38 @@ async function main(): Promise<void> {
           };
           continue;
         }
+
+        // A bank's prior offers grouped by their source URL, keyed the same way refreshCrawlBank keys its
+        // own reuse map — used below to carry forward any asset/page whose extraction this run didn't
+        // succeed, so a partial run never silently wipes that source's rows on the wholesale replace.
+        const priorOffersByUrl = groupOffersBySourceUrl(catalog.offers.filter((o) => o.bankId === entry.bankId));
+        // Carries a URL's prior offers into `offers` — the single call site used by every "not
+        // extracted this run" case below (cap reached, fetch failed, undersized image, extract threw).
+        const carryForward = (urls: string[]): void => {
+          offers.push(...carryForwardUnextractedOffers(priorOffersByUrl, urls));
+        };
+
         // Some banks (e.g. cargills-bank) have no usable listing-page text — skip this Claude call
         // entirely and rely on the auto-discovered asset loop below.
         if (entry.extractPageText !== false) {
           for (const { source, result } of fetched) {
+            // Registry `image` sources are always sent regardless of size (unlike auto-discovered
+            // assets below) — but every image still goes through prepareForVision + the
+            // failed-asset cache before it reaches Claude.
+            let visionImageBytes = result.imageBytes;
+            let visionImageMediaType = result.imageMediaType;
+            if (source.type === "image" && result.imageBytes && result.imageMediaType) {
+              const prepared = await prepareImageAsset(result.imageBytes, result.imageMediaType, bankFailedAssets, reviewDateIso);
+              seenAssetHashes.add(prepared.hash);
+              bankFailedAssets = prepared.failedAssets;
+              if (!prepared.ok) {
+                assetFailures.push({ url: source.url, reason: prepared.error });
+                carryForward([source.url]);
+                continue;
+              }
+              visionImageBytes = prepared.imageBytes;
+              visionImageMediaType = prepared.imageMediaType;
+            }
             // A throw on one listing page must not drop a multi-source bank's other sources (dfcc/union-bank).
             let extracted;
             try {
@@ -264,19 +499,30 @@ async function main(): Promise<void> {
                   sourceUrl: source.url,
                   strippedText: result.strippedText,
                   pdfBytes: result.pdfBytes,
-                  imageBytes: result.imageBytes,
-                  imageMediaType: result.imageMediaType,
+                  imageBytes: visionImageBytes,
+                  imageMediaType: visionImageMediaType,
                 },
                 client,
                 reviewDateIso
               );
             } catch (error) {
               assetFailures.push({ url: source.url, reason: error instanceof Error ? error.message : "extract failed" });
+              extractFailures += 1;
+              if (source.type === "image" && result.imageBytes && isImageRejectionError(error)) {
+                bankFailedAssets = recordAssetFailure(bankFailedAssets, hashContent(result.imageBytes), reviewDateIso);
+              }
+              carryForward([source.url]);
               continue;
             }
             report.tokensUsed.input += extracted.inputTokens;
             report.tokensUsed.output += extracted.outputTokens;
-            offers.push(...extracted.offers);
+            let offersFromSource = extracted.offers;
+            if (source.type === "image" && result.imageBytes) {
+              const thumb = await saveThumbnail(result.imageBytes, publicImagesDir);
+              if (thumb.ok) offersFromSource = offersFromSource.map((o) => ({ ...o, imageUrl: thumb.url }));
+            }
+            offers.push(...offersFromSource);
+            nonCrawlExtracted += 1;
           }
           extractedCount += 1;
         }
@@ -284,15 +530,46 @@ async function main(): Promise<void> {
         // Auto-discovered assets (banner images/PDFs found while scanning the page, not explicit registry
         // sources): run each through Claude too, capped by the same per-run detail budget as crawl banks.
         let assetExtractions = 0;
-        for (const asset of pageAssets) {
-          if (assetExtractions >= maxDetails) break;
+        for (const [i, asset] of pageAssets.entries()) {
+          if (assetExtractions >= maxDetails) {
+            // Cap reached: carry forward this AND every remaining asset's prior offers instead of silently
+            // dropping them — previously this just broke out of the loop and forgot them (data-loss bug).
+            carryForward(pageAssets.slice(i).map((a) => a.url));
+            break;
+          }
           const assetResult = await fetchAndStrip({ url: asset.url, type: asset.type });
           if (!assetResult.ok) {
             assetFailures.push({ url: asset.url, reason: assetResult.error ?? "unknown" });
+            carryForward([asset.url]);
             continue;
           }
           if (isUndersizedImage(asset.type, assetResult.imageBytes)) {
+            // A deliberate skip, not a failure. Usually this is a brand-new icon with no prior offers to carry
+            // forward — but an image that DID have real prior offers can also come back undersized on a later
+            // fetch (truncated/short-served), so carrying it forward the same way as the other "not extracted"
+            // cases here is what prevents that from reading as a real disappearance, not just a no-op.
+            carryForward([asset.url]);
             continue;
+          }
+          if (asset.type === "image" && assetResult.imageBytes && (await isPortraitImage(assetResult.imageBytes))) {
+            // Poster/person-shot heuristic (lib/ingest/images.ts) — same treatment as undersized: a
+            // deliberate skip, carried forward like any other "not extracted this run" asset.
+            carryForward([asset.url]);
+            continue;
+          }
+          let visionImageBytes = assetResult.imageBytes;
+          let visionImageMediaType = assetResult.imageMediaType;
+          if (asset.type === "image" && assetResult.imageBytes && assetResult.imageMediaType) {
+            const prepared = await prepareImageAsset(assetResult.imageBytes, assetResult.imageMediaType, bankFailedAssets, reviewDateIso);
+            seenAssetHashes.add(prepared.hash);
+            bankFailedAssets = prepared.failedAssets;
+            if (!prepared.ok) {
+              assetFailures.push({ url: asset.url, reason: prepared.error });
+              carryForward([asset.url]);
+              continue;
+            }
+            visionImageBytes = prepared.imageBytes;
+            visionImageMediaType = prepared.imageMediaType;
           }
           // A single bad flyer (e.g. a corrupt/oversized image Claude rejects) must not abort the bank.
           let extracted;
@@ -303,21 +580,46 @@ async function main(): Promise<void> {
                 sourceUrl: asset.url,
                 strippedText: assetResult.strippedText,
                 pdfBytes: assetResult.pdfBytes,
-                imageBytes: assetResult.imageBytes,
-                imageMediaType: assetResult.imageMediaType,
+                imageBytes: visionImageBytes,
+                imageMediaType: visionImageMediaType,
               },
               client,
               reviewDateIso
             );
           } catch (error) {
             assetFailures.push({ url: asset.url, reason: error instanceof Error ? error.message : "extract failed" });
+            extractFailures += 1;
+            if (asset.type === "image" && assetResult.imageBytes && isImageRejectionError(error)) {
+              bankFailedAssets = recordAssetFailure(bankFailedAssets, hashContent(assetResult.imageBytes), reviewDateIso);
+            }
+            carryForward([asset.url]);
             continue;
           }
           report.tokensUsed.input += extracted.inputTokens;
           report.tokensUsed.output += extracted.outputTokens;
-          offers.push(...extracted.offers);
+          let offersFromAsset = extracted.offers;
+          if (asset.type === "image" && assetResult.imageBytes) {
+            const thumb = await saveThumbnail(assetResult.imageBytes, publicImagesDir);
+            if (thumb.ok) offersFromAsset = offersFromAsset.map((o) => ({ ...o, imageUrl: thumb.url }));
+          }
+          offers.push(...offersFromAsset);
           assetExtractions += 1;
+          nonCrawlExtracted += 1;
         }
+      }
+
+      // Every attempted extraction failing (RC3, non-crawl side) must not read as a healthy "updated" run
+      // just because carried-forward prior offers padded `offers` back up — mirrors the crawl branch's
+      // identical check on result.extractFailures / result.extracted.
+      if (extractFailures > 0 && nonCrawlExtracted === 0) {
+        report.banks[entry.bankId] = {
+          status: "extract-failed",
+          sources: sourceUrls,
+          message: `all ${extractFailures} extraction attempt(s) failed`,
+          ...(assetFailures.length > 0 ? { assetFailures } : {}),
+          ...nonCrawlDiagnostics(extractFailures),
+        };
+        continue;
       }
 
       const activeOffers = offers.filter(o => isActiveOffer(o.validUntil, reviewDateIso));
@@ -328,6 +630,7 @@ async function main(): Promise<void> {
           sources: sourceUrls,
           message: "extraction returned no active offers",
           ...(assetFailures.length > 0 ? { assetFailures } : {}),
+          ...nonCrawlDiagnostics(extractFailures),
         };
         continue;
       }
@@ -344,6 +647,7 @@ async function main(): Promise<void> {
           sources: sourceUrls,
           message: `catalog collapsed: scraped ${newCount} offers vs ${currentCount} stored (likely a broken scrape); kept existing rows. Re-run with SANITY_OVERRIDE=${entry.bankId} to accept.`,
           ...(assetFailures.length > 0 ? { assetFailures } : {}),
+          ...nonCrawlDiagnostics(extractFailures),
         };
         continue;
       }
@@ -353,6 +657,7 @@ async function main(): Promise<void> {
       report.banks[entry.bankId] = {
         status: "updated", sources: sourceUrls, offersWritten: newCount,
         ...(assetFailures.length > 0 ? { assetFailures } : {}),
+        ...nonCrawlDiagnostics(extractFailures),
       };
     } catch (error) {
       report.banks[entry.bankId] = {
@@ -360,6 +665,29 @@ async function main(): Promise<void> {
         sources: sourceUrls,
         message: error instanceof Error ? error.message : "unknown error"
       };
+    } finally {
+      const elapsedSec = ((Date.now() - bankStartedAt) / 1000).toFixed(1);
+      const b = report.banks[entry.bankId];
+      if (b) {
+        const parts = [`${b.status} in ${elapsedSec}s`];
+        if (b.offersWritten !== undefined) parts.push(`${b.offersWritten} offers written`);
+        if (b.extracted !== undefined) parts.push(`${b.extracted} extracted`);
+        if (b.reused !== undefined) parts.push(`${b.reused} reused`);
+        if (b.assetFailures?.length) parts.push(`${b.assetFailures.length} asset failure(s)`);
+        if (b.extractFailures) parts.push(`${b.extractFailures} extract failure(s)`);
+        console.error(`[refresh] ${entry.bankId}: ${parts.join(" · ")}`);
+      }
+      // Fold this run's failed-asset-cache activity back into state — pruned of expired entries and
+      // (only when this run actually scanned assets for the bank) hashes no longer discovered. Only
+      // touches state.banks[entry.bankId] when there's an existing entry to update or something new
+      // to record — a bank that has never succeeded and recorded no failure this run (e.g. it
+      // fetch-failed before any asset was even reached) must not gain a fabricated lastUpdatedAt.
+      const prunedFailedAssets = pruneAssetCache(bankFailedAssets, seenAssetHashes, reviewDateIso);
+      const existingBankState = state.banks[entry.bankId];
+      if (existingBankState || Object.keys(prunedFailedAssets).length > 0) {
+        state.banks[entry.bankId] = withFailedAssets(existingBankState, prunedFailedAssets, reviewDateIso);
+      }
+      checkpoint();
     }
   }
 
@@ -370,20 +698,34 @@ async function main(): Promise<void> {
   seed = swept.seed;
   catalog = swept.catalog;
 
+  // Delete any thumbnail no offer references any more (a dropped offer, or one whose creative
+  // changed and got a new content hash) — run last, once the catalog is fully settled.
+  const referencedImageUrls = catalog.offers.map((o) => o.imageUrl).filter((url): url is string => Boolean(url));
+  const orphanImagesSwept = sweepOrphans(publicImagesDir, referencedImageUrls);
+
   state.lastRunAt = reviewDateIso;
-  writeJson(seedPath, seed);
-  writeJson(scannedPath, catalog);
-  writeJson(statePath, state);
-  writeJson(reportPath, report);
+  checkpoint();
 
   const counts = summarize(report);
-  console.log(`Refresh complete. ${JSON.stringify(counts)} | expired swept: ${swept.dropped} | tokens: ${JSON.stringify(report.tokensUsed)}`);
+  // Sums extractFailures across ALL banks regardless of final status — a bank can have some
+  // extractions fail and still end up "updated" if enough other pages succeeded, so this can't be
+  // read off the bank-status counts alone (RC3).
+  const extractFailureTotal = Object.values(report.banks).reduce((sum, b) => sum + (b.extractFailures ?? 0), 0);
+  const assetFailureTotal = Object.values(report.banks).reduce((sum, b) => sum + (b.assetFailures?.length ?? 0), 0);
+  console.log(`Refresh complete. ${JSON.stringify(counts)} | expired swept: ${swept.dropped} | orphan images swept: ${orphanImagesSwept} | tokens: ${JSON.stringify(report.tokensUsed)} | assetFailures: ${assetFailureTotal} | extractFailures: ${extractFailureTotal}`);
 
   // Surface failures so the CI run is marked failed (and the operator is notified). A sanity-rejected
-  // bank counts as a failure on purpose, so a rejected update never passes silently.
+  // bank counts as a failure on purpose, so a rejected update never passes silently. extractFailureTotal
+  // is checked independently of bank status: a partially-failing crawl bank can still end up "updated"
+  // (see crawlDiagnostics), and that must still fail the run rather than passing silently (RC3).
   const failures = (counts["fetch-failed"] ?? 0) + (counts["extract-failed"] ?? 0) + (counts["sanity-rejected"] ?? 0);
-  if (failures > 0) {
-    console.error(`${failures} bank(s) failed — see data/refresh-report.json`);
+  if (failures > 0 || extractFailureTotal > 0) {
+    if (failures > 0) {
+      console.error(`${failures} bank(s) failed — see data/refresh-report.json`);
+    }
+    if (extractFailureTotal > 0) {
+      console.error(`${extractFailureTotal} extraction attempt(s) failed across the run (see per-bank extractFailures in data/refresh-report.json).`);
+    }
     if (counts["sanity-rejected"]) {
       console.error(`${counts["sanity-rejected"]} bank(s) sanity-rejected (big offer-count drop). Verify, then re-run with SANITY_OVERRIDE=<bankId> to accept.`);
     }
