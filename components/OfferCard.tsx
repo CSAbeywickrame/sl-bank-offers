@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { getCategoryLabel } from "@/lib/offers/categories";
@@ -22,7 +23,21 @@ export function OfferCard({ offer }: { offer: Offer }) {
 
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-lg border border-(--border-subtle) bg-(--surface-card) shadow-sm transition-[box-shadow,border-color,transform] duration-(--motion-med) ease-out hover:-translate-y-1 hover:border-(--border-default) hover:shadow-lg motion-reduce:hover:translate-y-0">
-      <div aria-hidden="true" className="h-1 shrink-0" style={{ background: "var(--offer-rule)" }} />
+      {offer.imageUrl ? (
+        // Fixed 16:9 box keeps grid rows even whatever shape the creative is; object-contain
+        // letterboxes it rather than cropping printed terms or square merchant logos.
+        <div className="relative aspect-video shrink-0 bg-(--surface-muted)">
+          <Image
+            src={offer.imageUrl}
+            alt="" // decorative: merchant and bank already appear as text on the card
+            fill
+            sizes="(min-width: 1280px) 400px, (min-width: 768px) 50vw, 100vw"
+            className="object-contain"
+          />
+        </div>
+      ) : (
+        <div aria-hidden="true" className="h-1 shrink-0" style={{ background: "var(--offer-rule)" }} />
+      )}
 
       <div className="flex flex-1 flex-col gap-4 p-5">
         {/* The saving leads, because it is the one thing a shopper scans for. The bank sits beside
