@@ -127,6 +127,76 @@ describe("refreshCrawlBank", () => {
     expect(res.offers[0]?.lastReviewedAt).toBe(reviewDate);
   });
 
+  describe("force backfill", () => {
+    const URL_B = "https://www.peoplesbank.lk/promotion/cargills-25-off-credit/";
+    const twoUrls = (): Partial<CrawlExtractDeps> => ({
+      discover: async () => ({ ok: true, urls: [{ url: URL_A, type: "static_html" }, { url: URL_B, type: "static_html" }] }),
+    });
+    const snapshot = [offerFor(URL_A, "id-a"), offerFor(URL_B, "id-b")];
+    const hashes = { [URL_A]: "h1", [URL_B]: "h1" };
+
+    it("a capped forced run keeps prior hashes and versions for unextracted pages", async () => {
+      const extract = vi.fn(makeExtract());
+      const res = await refreshCrawlBank(entry, snapshot, hashes, reviewDate,
+        baseDeps({ ...twoUrls(), extract: (u) => extract(u), maxExtractions: 1 }),
+        { force: true, prevVersions: {}, version: 1 });
+      expect(extract).toHaveBeenCalledTimes(1);
+      expect(res.detailHashes).toEqual(hashes);
+      expect(res.detailVersions).toEqual({ [URL_A]: 1 });
+      expect(res.offers).toHaveLength(2);
+    });
+
+    it("resumes: pages already at the current version are reused under force", async () => {
+      const extract = vi.fn(makeExtract());
+      const res = await refreshCrawlBank(entry, snapshot, hashes, reviewDate,
+        baseDeps({ ...twoUrls(), extract: (u) => extract(u), maxExtractions: 1 }),
+        { force: true, prevVersions: { [URL_A]: 1 }, version: 1 });
+      expect(extract).toHaveBeenCalledTimes(1);
+      expect(extract).toHaveBeenCalledWith(URL_B);
+      expect(res.detailVersions).toEqual({ [URL_A]: 1, [URL_B]: 1 });
+    });
+
+    it("keeps prior offers and version when a forced-only re-extraction returns nothing", async () => {
+      const res = await refreshCrawlBank(entry, [offerFor(URL_A, "id-a")], { [URL_A]: "h1" }, reviewDate,
+        baseDeps({ extract: async () => ({ offers: [], inputTokens: 1, outputTokens: 1 }) }),
+        { force: true, prevVersions: { [URL_A]: 0 }, version: 1 });
+      expect(res.offers.map((o) => o.id)).toEqual(["id-a"]);
+      expect(res.offers[0]?.description).toBe("old");
+      expect(res.detailVersions[URL_A]).toBe(0);
+      expect(res.detailHashes[URL_A]).toBe("h1");
+    });
+
+    it("keeps prior offers and version when a forced-only re-extraction throws", async () => {
+      const res = await refreshCrawlBank(entry, [offerFor(URL_A, "id-a")], { [URL_A]: "h1" }, reviewDate,
+        baseDeps({ extract: async () => { throw new Error("boom"); } }),
+        { force: true, prevVersions: {}, version: 1 });
+      expect(res.offers.map((o) => o.id)).toEqual(["id-a"]);
+      expect(res.detailVersions[URL_A]).toBeUndefined();
+      expect(res.extractFailures).toBe(1);
+    });
+
+    it("accepts a forced-only re-extraction that returns offers and stamps the version", async () => {
+      const res = await refreshCrawlBank(entry, [offerFor(URL_A, "id-a")], { [URL_A]: "h1" }, reviewDate,
+        baseDeps(), { force: true, prevVersions: {}, version: 1 });
+      expect(res.offers[0]?.description).toBe("fresh-from-detail");
+      expect(res.detailVersions[URL_A]).toBe(1);
+    });
+
+    it("a non-forced run ignores versions and carries them through", async () => {
+      const extract = vi.fn(makeExtract());
+      const res = await refreshCrawlBank(entry, snapshot, hashes, reviewDate,
+        baseDeps({ ...twoUrls(), extract: (u) => extract(u) }),
+        { prevVersions: { [URL_A]: 1 }, version: 1 });
+      expect(extract).not.toHaveBeenCalled();
+      expect(res.detailVersions).toEqual({ [URL_A]: 1 });
+    });
+
+    it("stamps the version on pages a normal run extracts", async () => {
+      const res = await refreshCrawlBank(entry, [], {}, reviewDate, baseDeps(), { version: 1 });
+      expect(res.detailVersions).toEqual({ [URL_A]: 1 });
+    });
+  });
+
   it("re-extracts when the hash changed", async () => {
     const extract = vi.fn(makeExtract());
     const res = await refreshCrawlBank(entry, [offerFor(URL_A)], { [URL_A]: "OLD" }, reviewDate, baseDeps({ extract: (sourceUrl) => extract(sourceUrl) }));

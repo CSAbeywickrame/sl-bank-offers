@@ -4,11 +4,14 @@ import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
 import { fetchAndStrip, fetchImageBytes, hashContent, fetchRawHtml, stripHtml, type FetchResult, type ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage, groupOffersBySourceUrl, carryForwardUnextractedOffers, type CrawlExtractResult, type FetchedCrawlContent } from "@/lib/ingest/crawlExtract";
+import { bankRunKind } from "@/lib/ingest/bankRunKind";
+import { reconcileOfferIds } from "@/lib/ingest/reconcileIds";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { dedupeOffers, expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
 import { feedMappers, FEED_MAPPER_VERSION } from "@/lib/ingest/feedMappers";
 import { resolveFeedImages, type FeedImageCache } from "@/lib/ingest/feedImages";
 import { prepareForVision, saveThumbnail, sweepOrphans, isPortraitImage } from "@/lib/ingest/images";
+import { EXTRACTION_VERSION, resolveRunConfig, type BankKind } from "@/lib/ingest/forceExtract";
 import { isAssetCacheHit, recordAssetFailure, pruneAssetCache, type FailedAssetCache } from "@/lib/ingest/assetCache";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
 
@@ -35,6 +38,8 @@ interface RefreshState {
     hash?: string;
     lastUpdatedAt: string;
     details?: Record<string, string>;
+    // Crawl banks: EXTRACTION_VERSION each detail page was last extracted under (missing = 0).
+    detailVersions?: Record<string, number>;
     // Asset content-hashes that failed unrecoverably (undecodable, or rejected by the API after
     // repair) — see lib/ingest/assetCache.ts. Absent once pruned back down to nothing.
     failedAssets?: FailedAssetCache;
@@ -184,7 +189,20 @@ async function main(): Promise<void> {
     if (!bankRegistry.some(e => e.bankId === id)) console.warn(`SANITY_OVERRIDE: unknown bankId "${id}" — no registry match (check the slug)`);
   }
   const onlyBanks = new Set((process.env.ONLY_BANKS ?? "").split(",").map((s) => s.trim()).filter(Boolean));
-  const maxDetails = Number(process.env.MAX_DETAILS_PER_RUN ?? "") || Infinity;
+  // One-off backfill: re-extract pages whose recorded EXTRACTION_VERSION is behind (see forceExtract.ts).
+  // Env is validated before any work; the failed-asset cache still applies (those files are known-bad).
+  const bankKinds = bankRegistry.map((e): { bankId: string; kind: BankKind } => ({
+    bankId: e.bankId,
+    kind: bankRunKind(e),
+  }));
+  const config = resolveRunConfig(process.env.FORCE_EXTRACT, process.env.MAX_DETAILS_PER_RUN, onlyBanks, bankKinds);
+  if (!config.ok) {
+    console.error(`[refresh] ${config.error}`);
+    process.exit(1);
+  }
+  const maxDetails = config.maxDetails;
+  const forceExtract = config.force;
+  if (forceExtract) console.error(`[refresh] !!! FORCE_EXTRACT: re-extracting every page for: ${[...onlyBanks].join(", ")} (costs Claude tokens)`);
   // Skip all auto-discovered image/PDF asset work (discovery re-scan + asset extraction) — perf isolation lever.
   const skipAssets = process.env.SKIP_ASSETS === "1";
   const apiKey = process.env.ANTHROPIC_API_KEY;
@@ -240,7 +258,7 @@ async function main(): Promise<void> {
       // Crawl branch: a source with a `crawl` recipe is walked to its detail pages, each hash-gated
       // so only new/changed pages reach Claude. Keeps existing rows on any discovery/fetch failure.
       const crawlSource = entry.sources.find((s) => s.crawl);
-      if (crawlSource?.crawl) {
+      if (bankRunKind(entry) === "crawl" && crawlSource?.crawl) {
         if (!client) {
           report.banks[entry.bankId] = { status: "deferred", sources: sourceUrls, message: "ANTHROPIC_API_KEY not set" };
           continue;
@@ -319,7 +337,7 @@ async function main(): Promise<void> {
               console.error(`[refresh] ${entry.bankId} ${done}/${total} pages · ${extracted} extracted · ${failed} failed`);
             }
           },
-        });
+        }, { force: forceExtract, prevVersions: state.banks[entry.bankId]?.detailVersions, version: EXTRACTION_VERSION });
         report.tokensUsed.input += result.inputTokens;
         report.tokensUsed.output += result.outputTokens;
         if (!result.ok) {
@@ -350,7 +368,8 @@ async function main(): Promise<void> {
           continue;
         }
         const currentCount = countBankOffers(seed, entry);
-        const dedupedOffers = dedupeOffers(activeOffers);
+        // Re-worded titles on re-extraction would mint new ids; keep the prior id so URLs and firstSeenAt survive.
+        const dedupedOffers = reconcileOfferIds(dedupeOffers(activeOffers), snapshot, reviewDateIso);
         const newCount = dedupedOffers.length;
         if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
           report.banks[entry.bankId] = {
@@ -362,7 +381,7 @@ async function main(): Promise<void> {
           continue;
         }
         ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
-        state.banks[entry.bankId] = { lastUpdatedAt: reviewDateIso, details: result.detailHashes };
+        state.banks[entry.bankId] = { lastUpdatedAt: reviewDateIso, details: result.detailHashes, detailVersions: result.detailVersions };
         report.banks[entry.bankId] = {
           status: "updated", sources: sourceUrls, offersWritten: newCount,
           ...crawlDiagnostics(result),
@@ -431,7 +450,7 @@ async function main(): Promise<void> {
           ...(feedMappers[entry.bankId] ? [`mapper-v${FEED_MAPPER_VERSION}`] : [])
         ].join("|")
       );
-      if (state.banks[entry.bankId]?.hash === combinedHash) {
+      if (!forceExtract && state.banks[entry.bankId]?.hash === combinedHash) {
         report.banks[entry.bankId] = {
           status: "unchanged", sources: sourceUrls,
           ...(assetFailures.length > 0 ? { assetFailures } : {}),
@@ -446,7 +465,7 @@ async function main(): Promise<void> {
       let extractFailures = 0; // extractOffers() throws this run, across both loops
       let feedImageStats: Pick<BankReport, "feedImagesResolved" | "feedImagesFailed"> = {};
       let feedImageCache: FeedImageCache | undefined;
-      const mapper = feedMappers[entry.bankId];
+      const mapper = bankRunKind(entry) === "feed" ? feedMappers[entry.bankId] : undefined;
       if (mapper) {
         for (const { result } of fetched) {
           offers.push(...mapper(result.strippedText ?? "", entry, reviewDateIso));
@@ -652,7 +671,11 @@ async function main(): Promise<void> {
       // (likely a broken scrape). Keep existing rows, do NOT advance the hash, and fail the run so
       // the operator is alerted. Accept a real drop by re-running with SANITY_OVERRIDE=<bankId>.
       const currentCount = countBankOffers(seed, entry);
+      // Feed banks mint stable ids from the feed itself; only Claude-extracted ids need reconciling with prior rows.
       let dedupedOffers = dedupeOffers(activeOffers);
+      if (bankRunKind(entry) !== "feed") {
+        dedupedOffers = reconcileOfferIds(dedupedOffers, catalog.offers.filter((o) => o.bankId === entry.bankId), reviewDateIso);
+      }
       const newCount = dedupedOffers.length;
       if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
         report.banks[entry.bankId] = {

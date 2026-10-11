@@ -18,6 +18,15 @@ on:
         description: "Comma-separated bankIds allowed to bypass the sanity gate (accept a big offer-count drop)."
         required: false
         default: ""
+      force_extract:
+        description: "WARNING: re-extracts EVERY page of the selected banks and costs Claude tokens. Requires only_banks (the run fails if it is empty)."
+        type: boolean
+        default: false
+      max_details_per_run:
+        description: "Optional cap on detail pages extracted per bank this run (budget guard). Must be a positive integer (e.g. 50); leave empty for no cap."
+        type: string
+        required: false
+        default: ""
   # Runs automatically every Monday at 02:00 UTC (always all banks; inputs only apply to manual runs):
   schedule:
     - cron: "0 2 * * 1"
@@ -54,6 +63,9 @@ jobs:
           # Empty on schedule runs -> all banks. Set via "Run workflow" inputs to scope a manual run.
           ONLY_BANKS: ${{ github.event.inputs.only_banks }}
           SANITY_OVERRIDE: ${{ github.event.inputs.sanity_override }}
+          # "1" only for a manual run with force_extract ticked; empty on cron (inputs are unset there).
+          FORCE_EXTRACT: ${{ github.event.inputs.force_extract == 'true' && '1' || '' }}
+          MAX_DETAILS_PER_RUN: ${{ github.event.inputs.max_details_per_run }}
         run: npm run refresh:fresh
 
       - name: Commit updated data
