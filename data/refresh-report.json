@@ -1,102 +1,10 @@
 {
-  "runAt": "2026-10-05T08:28:36.287Z",
+  "runAt": "2026-10-11T10:49:47.044Z",
   "tokensUsed": {
-    "input": 1429698,
-    "output": 167797
+    "input": 141791,
+    "output": 13452
   },
   "banks": {
-    "commercial-bank": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.combank.lk/rewards-promotions"
-      ],
-      "message": "HTTP 403",
-      "extracted": 0,
-      "reused": 0
-    },
-    "ndb": {
-      "status": "updated",
-      "sources": [
-        "https://www.ndbbank.com/cards/card-offers"
-      ],
-      "offersWritten": 85
-    },
-    "boc": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.boc.lk/personal-banking/card-offers"
-      ],
-      "message": "HTTP 403",
-      "extracted": 0,
-      "reused": 0
-    },
-    "peoples-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.peoplesbank.lk/special-offers/"
-      ],
-      "offersWritten": 249,
-      "extracted": 118,
-      "reused": 250
-    },
-    "ntb": {
-      "status": "fetch-failed",
-      "sources": [
-        "https://www.nationstrust.com/promotions"
-      ],
-      "message": "HTTP 403",
-      "extracted": 0,
-      "reused": 0
-    },
-    "pan-asia-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.pabcbank.com/card-offers/"
-      ],
-      "offersWritten": 63
-    },
-    "union-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.unionb.com/credit-cards-offers/",
-        "https://www.unionb.com/credit-cards-offers/page/2/"
-      ],
-      "offersWritten": 51
-    },
-    "cargills-bank": {
-      "status": "updated",
-      "sources": [
-        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
-        "https://www.cargillsbank.com/products/mastercard-promotions/"
-      ],
-      "offersWritten": 72
-    },
-    "sampath": {
-      "status": "updated",
-      "sources": [
-        "https://www.sampath.lk/api/card-promotions"
-      ],
-      "offersWritten": 111
-    },
-    "dfcc": {
-      "status": "updated",
-      "sources": [
-        "https://www.dfcc.lk/cards/card-offers",
-        "https://www.dfcc.lk/cards/credit-card-offers",
-        "https://www.dfcc.lk/cards/cards/mastercard-offers",
-        "https://www.dfcc.lk/cards/cards/visa-offers"
-      ],
-      "offersWritten": 116
-    },
-    "seylan": {
-      "status": "updated",
-      "sources": [
-        "https://www.seylan.lk/promotions/cards?type[]=credit_card"
-      ],
-      "offersWritten": 713,
-      "extracted": 169,
-      "reused": 266
-    },
     "nsb": {
       "status": "updated",
       "sources": [
@@ -104,16 +12,9 @@
         "https://www.nsb.lk/category/card-offers/page/2/",
         "https://www.nsb.lk/category/card-offers/page/3/"
       ],
-      "offersWritten": 19,
-      "extracted": 31,
-      "reused": 17
-    },
-    "hnb": {
-      "status": "updated",
-      "sources": [
-        "https://venus.hnb.lk/api/get_all_web_card_promos?page=1&limit=2000"
-      ],
-      "offersWritten": 850
+      "offersWritten": 18,
+      "extracted": 48,
+      "reused": 1
     }
   }
 }

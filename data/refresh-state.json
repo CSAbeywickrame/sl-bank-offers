@@ -1,5 +1,5 @@
 {
-  "lastRunAt": "2026-10-05T08:28:36.287Z",
+  "lastRunAt": "2026-10-11T10:49:47.044Z",
   "banks": {
     "peoples-bank": {
       "lastUpdatedAt": "2026-10-05T08:28:36.287Z",
@@ -882,7 +882,7 @@
       }
     },
     "nsb": {
-      "lastUpdatedAt": "2026-10-05T08:28:36.287Z",
+      "lastUpdatedAt": "2026-10-11T10:49:47.044Z",
       "details": {
         "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/": "37a6b7e4af83ed4aed4e6a2c6e9ca50b86f44f21",
         "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/": "d471b27ea21756c088ba7b08b7bd063ec6c879ae",
@@ -932,6 +932,55 @@
         "https://www.nsb.lk/wp-content/uploads/2024/02/Final-1080-Tiesh-Post-01-1024x1024.jpg": "cbcbfb52d57c2b4982cc57236d3dca436e788943",
         "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-1024x529.jpg": "cca1881ca388783adc59d3859f2850503694b198",
         "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sky-Kandy-1024x529.jpg": "e5d370850e08140b8875998238048cc1e2450599"
+      },
+      "detailVersions": {
+        "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-up-to-50-off-at-christell-wellness-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-a-10-off-at-taru-villas-levita-taru-villas-kandy-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-a-10-off-at-hayleys-hotels-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-a-10-off-at-wishque-with-your-nsb-mastercard-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-a-10-off-at-lassana-flora-with-your-nsb-master-card-debit-card/": 1,
+        "https://www.nsb.lk/nsb-debit-card-cash-back/": 1,
+        "https://www.nsb.lk/enjoy-a-15-off-at-spring-summer-with-your-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-12-off-the-factory-hub-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-15-off-enuli-fashion-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-up-to-60-off-kiddoz-www-kiddoz-lk-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-10-off-nirmani-dress-point-with-nsb-debit-card-2/": 1,
+        "https://www.nsb.lk/enjoy-10-off-galis-lingerie-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-20-off-fitness-first-lk-by-nsb-mastercard/": 1,
+        "https://www.nsb.lk/enjoy-10-off-spring-summer-online-in-store-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-10-off-cib-fashion-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-10-off-prasad-fashion-stores-with-nsb-debit-card/": 1,
+        "https://www.nsb.lk/enjoy-15-off-zig-zag-with-nsb-debit-card-online-in-store/": 1,
+        "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/": 1,
+        "https://www.nsb.lk/enjoy-30-off-amara-hotels-with-nsb-debit-card-3/": 1,
+        "https://www.nsb.lk/wp-content/themes/nsb/img/banner-nsb-media-center.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2023/01/iPhone-13-Series_Offer-New-01-1.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/03/IMG-20250315-WA00121.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-010.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-005.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-013.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-011.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-012.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-003.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-004.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-002.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-001.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgq_-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgaas-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpga_-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-12-16-08-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgdqwd-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpgswq-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-008.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/12/Card-007.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2024/02/Final-1080-Tiesh-Post-01-1024x1024.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-1024x529.jpg": 1,
+        "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sky-Kandy-1024x529.jpg": 1
       }
     },
     "ndb": {

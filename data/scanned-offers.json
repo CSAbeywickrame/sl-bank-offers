@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "updatedAt": "2026-10-05T08:28:36.287Z",
+  "updatedAt": "2026-10-11T10:49:47.044Z",
   "offers": [
     {
       "id": "commercial-bank-ed763aa509fc",
@@ -12812,28 +12812,6 @@
       "firstSeenAt": "2026-08-17T02:59:43.961Z"
     },
     {
-      "id": "peoples-bank-a322a6522403",
-      "bankId": "peoples-bank",
-      "cardId": "peoples-bank-credit-cards",
-      "title": "Fashion Enuli - 15% off - Credit",
-      "category": "fashion",
-      "description": "15% discount at Fashion Enuli with a maximum bill value of Rs. 50,000",
-      "merchant": "Fashion Enuli",
-      "validFrom": "2026-10-01",
-      "validUntil": "2026-10-07",
-      "termsLink": "https://www.peoplesbank.lk/promotion/fashion-enuli-30-off-credit/",
-      "sourceUrl": "https://www.peoplesbank.lk/promotion/fashion-enuli-30-off-credit/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 15,
-      "maxDiscountAmount": 7500,
-      "cardTypes": [
-        "credit"
-      ],
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
       "id": "peoples-bank-c7f538701832",
       "bankId": "peoples-bank",
       "cardId": "peoples-bank-credit-cards",
@@ -16893,23 +16871,6 @@
       "firstSeenAt": "2026-10-05T08:28:36.287Z"
     },
     {
-      "id": "union-bank-22465df1bd45",
-      "bankId": "union-bank",
-      "cardId": "union-bank-credit-cards",
-      "title": "SPAR 25% off on total bill",
-      "category": "supermarket",
-      "description": "25% off on total bill at SPAR",
-      "merchant": "SPAR",
-      "validUntil": "2026-10-10",
-      "termsLink": "https://www.unionb.com/credit-cards-offers/",
-      "sourceUrl": "https://www.unionb.com/credit-cards-offers/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 25,
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
       "id": "union-bank-99d422c72ca7",
       "bankId": "union-bank",
       "cardId": "union-bank-credit-cards",
@@ -18172,29 +18133,6 @@
       "firstSeenAt": "2026-10-05T08:28:36.287Z"
     },
     {
-      "id": "cargills-bank-e7abf4eeaca9",
-      "bankId": "cargills-bank",
-      "cardId": "cargills-bank-mastercard-credit-cards",
-      "title": "10% savings on Cargills Online purchases",
-      "category": "supermarket",
-      "description": "Enjoy 10% savings on total cart value for Cargills Bank Credit & Debit cards on purchases made online on Cargills online app or website. Maximum discount capped at LKR 2,000 per customer during the offer period. Valid for up to 5 orders within the offer period. Not valid for Milk Powder, Tobacco, commodities, and already discounted items.",
-      "merchant": "Cargills Online",
-      "validFrom": "2026-10-01",
-      "validUntil": "2026-10-10",
-      "termsLink": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Cargills-Online-Terms-and-Conditions-5.pdf",
-      "sourceUrl": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Cargills-Online-Terms-and-Conditions-5.pdf",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "maxDiscountAmount": 2000,
-      "cardTypes": [
-        "credit",
-        "debit"
-      ],
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
       "id": "cargills-bank-5d74adce08e6",
       "bankId": "cargills-bank",
       "cardId": "cargills-bank-mastercard-credit-cards",
@@ -18784,26 +18722,6 @@
       ],
       "eligibilityNote": "Offer valid for two or more tickets",
       "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "cargills-bank-dfb30580e71b",
-      "bankId": "cargills-bank",
-      "cardId": "cargills-bank-mastercard-credit-cards",
-      "title": "10% Savings on Cargills Online App or www.cargillsonline.com",
-      "category": "supermarket",
-      "description": "10% savings on purchases made via Cargills Online App or www.cargillsonline.com with Cargills Bank Cards. Maximum discount of Rs.2,000 per order with a maximum of 5 orders eligible.",
-      "merchant": "Cargills Online",
-      "validFrom": "2026-10-01",
-      "validUntil": "2026-10-10",
-      "termsLink": "https://www.cargillsbank.com/wp-content/uploads/2018/04/2026-new-1-1-1024x1024.jpg",
-      "sourceUrl": "https://www.cargillsbank.com/wp-content/uploads/2018/04/2026-new-1-1-1024x1024.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "maxDiscountAmount": 2000,
-      "imageUrl": "/offer-images/af2bc8bf3d0a.webp",
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
     },
     {
       "id": "cargills-bank-d60947cf215b",
@@ -40735,373 +40653,6 @@
       "firstSeenAt": "2026-10-05T08:28:36.287Z"
     },
     {
-      "id": "nsb-63a02a1cee47",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "15% off at Spring & Summer",
-      "category": "fashion",
-      "description": "Enjoy 15% discount at Spring & Summer with your NSB Debit Card",
-      "merchant": "Spring & Summer",
-      "termsLink": "https://www.nsb.lk/enjoy-a-15-off-at-spring-summer-with-your-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-a-15-off-at-spring-summer-with-your-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 15,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-15fc07ffac2c",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 12% off @ The Factory Hub with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 12% off at The Factory Hub when you pay with your NSB Debit Card",
-      "merchant": "The Factory Hub",
-      "termsLink": "https://www.nsb.lk/enjoy-12-off-the-factory-hub-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-12-off-the-factory-hub-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 12,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-4ebb6416535e",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 15% off @ Enuli Fashion with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 15% discount on purchases at Enuli Fashion when using your NSB Debit Card",
-      "merchant": "Enuli Fashion",
-      "termsLink": "https://www.nsb.lk/enjoy-15-off-enuli-fashion-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-15-off-enuli-fashion-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 15,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-8ff8b4be7904",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy up to 60% off @ Kiddoz with NSB Debit Card",
-      "category": "leisure",
-      "description": "Get up to 60% discount at Kiddoz (www.kiddoz.lk) when paying with NSB Debit Card",
-      "merchant": "Kiddoz",
-      "termsLink": "https://www.nsb.lk/enjoy-up-to-60-off-kiddoz-www-kiddoz-lk-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-up-to-60-off-kiddoz-www-kiddoz-lk-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 60,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-5d58fd1cf334",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 10% off @ Nirmani Dress Point with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 10% discount at Nirmani Dress Point when you use your NSB Debit Card",
-      "merchant": "Nirmani Dress Point",
-      "termsLink": "https://www.nsb.lk/enjoy-10-off-nirmani-dress-point-with-nsb-debit-card-2/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-nirmani-dress-point-with-nsb-debit-card-2/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-987744763973",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 10% off at Galis Lingerie with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 10% discount when you shop at Galis Lingerie using your NSB Debit Card.",
-      "merchant": "Galis Lingerie",
-      "termsLink": "https://www.nsb.lk/enjoy-10-off-galis-lingerie-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-galis-lingerie-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-fa43e3f9dd45",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 20% off @ Fitness First LK by NSB Mastercard",
-      "category": "health",
-      "description": "Get 20% discount at Fitness First LK when you pay with NSB Mastercard",
-      "merchant": "Fitness First LK",
-      "termsLink": "https://www.nsb.lk/enjoy-20-off-fitness-first-lk-by-nsb-mastercard/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-20-off-fitness-first-lk-by-nsb-mastercard/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 20,
-      "cardNetworks": [
-        "mastercard"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-d17a01033ae6",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 10% off @ Spring & Summer Online & In store with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 10% discount at Spring & Summer for online and in-store purchases with NSB Debit Card",
-      "merchant": "Spring & Summer",
-      "termsLink": "https://www.nsb.lk/enjoy-10-off-spring-summer-online-in-store-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-spring-summer-online-in-store-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-f85b12f75a1e",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 10% off @ CIB Fashion with NSB Debit Card",
-      "category": "fashion",
-      "description": "Get 10% discount on purchases at CIB Fashion when using NSB Debit Card",
-      "merchant": "CIB Fashion",
-      "termsLink": "https://www.nsb.lk/enjoy-10-off-cib-fashion-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-cib-fashion-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-dfdc43a41bba",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "10% off at Prasad Fashion Stores",
-      "category": "fashion",
-      "description": "Enjoy 10% discount at Prasad Fashion Stores when paying with NSB Debit Card",
-      "merchant": "Prasad Fashion Stores",
-      "termsLink": "https://www.nsb.lk/enjoy-10-off-prasad-fashion-stores-with-nsb-debit-card/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-prasad-fashion-stores-with-nsb-debit-card/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 10,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-ee6b90803df3",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Enjoy 15% off @ Zig Zag with NSB Debit Card (Online & In Store)",
-      "category": "fashion",
-      "description": "Get 15% discount on purchases at Zig Zag when using your NSB Debit Card, both online and in-store.",
-      "merchant": "Zig Zag",
-      "termsLink": "https://www.nsb.lk/enjoy-15-off-zig-zag-with-nsb-debit-card-online-in-store/",
-      "sourceUrl": "https://www.nsb.lk/enjoy-15-off-zig-zag-with-nsb-debit-card-online-in-store/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 15,
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-2b04fc148342",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Celebrate the Glimmer of Love at Tiesh with NSB Master Debit cards",
-      "category": "fashion",
-      "description": "NSB Master Debit card promotion at Tiesh for special occasions and gifting",
-      "merchant": "Tiesh",
-      "termsLink": "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/",
-      "sourceUrl": "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "other",
-      "cardNetworks": [
-        "mastercard"
-      ],
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-1b6c8f04b650",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "iPhone 13 Series Offer",
-      "category": "electronics",
-      "description": "Special promotion on iPhone 13 Series for NSB Mastercard holders",
-      "merchant": "Apple",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2023/01/iPhone-13-Series_Offer-New-01-1.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2023/01/iPhone-13-Series_Offer-New-01-1.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "other",
-      "cardNetworks": [
-        "mastercard"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-80a39c2695fb",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "20% Cashback for Shree Savings Account Holders",
-      "category": "other",
-      "description": "Enjoy 20% cashback on eligible transactions for Shree Savings Account holders.",
-      "merchant": "National Savings Bank",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "cashback",
-      "discountLabel": "20% Cashback for Shree Savings Account Holders",
-      "eligibilityNote": "for Shree Savings Account holders",
-      "discountPct": 20,
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-9cfde4ef3fde",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Kiddoz Exclusive Discount with NSB Debit Card",
-      "category": "leisure",
-      "description": "Get an exclusive discount when you pay using NSB Debit Card at Kiddoz. Up to 60% off on site or 10% off on card. Promotion runs every Thursday of the month.",
-      "merchant": "Kiddoz",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "discountPct": 60,
-      "discountLabel": "Up to 60% off on site or 10% off on card",
-      "validDays": [
-        "thu"
-      ],
-      "cardTypes": [
-        "debit"
-      ],
-      "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "nsb-3dee4a783119",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "NSB Debit Card Exclusive Discount",
-      "category": "other",
-      "description": "Get exclusive discount when you pay using NSB Debit Card at partner merchants",
-      "merchant": "NSB",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-011.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-011.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "discount",
-      "cardTypes": [
-        "debit"
-      ],
-      "imageUrl": "/offer-images/23f025620460.webp",
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
-      "id": "nsb-1876efdc4fe6",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Amaara Sigiriya Hotel Stay Offer",
-      "category": "hotels",
-      "description": "Special offer for hotel stays at Amaara Sigiriya",
-      "merchant": "Amaara Sigiriya",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-2.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-2.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "imageUrl": "/offer-images/da6b4cc3d878.webp",
-      "offerType": "other",
-      "firstSeenAt": "2026-09-21T07:41:38.845Z"
-    },
-    {
-      "id": "nsb-bb28c48ac8f5",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Uber Rides with Mastercard",
-      "category": "travel",
-      "description": "Eligible Mastercard debit and credit cardholders can use their cards for Uber rides.",
-      "merchant": "Uber",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgq_-1024x1024.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgq_-1024x1024.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "cardNetworks": [
-        "mastercard"
-      ],
-      "cardTypes": [
-        "credit",
-        "debit"
-      ],
-      "eligibilityNote": "Only applicable for Uber rides paid with Mastercard debit and credit cards",
-      "imageUrl": "/offer-images/e9a7af9c28fa.webp",
-      "offerType": "other",
-      "firstSeenAt": "2026-09-21T07:41:38.845Z"
-    },
-    {
-      "id": "nsb-9c099495b91e",
-      "bankId": "nsb",
-      "cardId": "nsb-mastercard-debit-cards",
-      "title": "Bonus points on every tap with Lassana.com",
-      "category": "online",
-      "description": "Earn bonus points with every Mastercard tap at Lassana.com throughout the year.",
-      "merchant": "Lassana.com",
-      "termsLink": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpgswq-1024x1024.jpg",
-      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpgswq-1024x1024.jpg",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "offerType": "other",
-      "cardNetworks": [
-        "mastercard"
-      ],
-      "imageUrl": "/offer-images/dac93609d4a5.webp",
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
       "id": "hnb-3360",
       "bankId": "hnb",
       "cardId": "hnb-credit-cards",
@@ -55658,24 +55209,6 @@
       "firstSeenAt": "2026-09-28T08:18:52.368Z"
     },
     {
-      "id": "hnb-4181",
-      "bankId": "hnb",
-      "cardId": "hnb-credit-cards",
-      "title": "15% off at Enuli Fashion - Matugama",
-      "category": "fashion",
-      "description": "15% off at Enuli Fashion - Matugama",
-      "merchant": "Enuli Fashion",
-      "validFrom": "2026-10-01",
-      "validUntil": "2026-10-07",
-      "termsLink": "https://www.hnb.lk/card-promotion/search/4181",
-      "sourceUrl": "https://www.hnb.lk/card-promotion/search/4181",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "discountPct": 15,
-      "offerType": "discount",
-      "firstSeenAt": "2026-10-05T08:28:36.287Z"
-    },
-    {
       "id": "hnb-4211",
       "bankId": "hnb",
       "cardId": "hnb-credit-cards",
@@ -55727,26 +55260,6 @@
       "discountPct": 20,
       "offerType": "discount",
       "firstSeenAt": "2026-08-17T02:59:43.961Z"
-    },
-    {
-      "id": "hnb-4111",
-      "bankId": "hnb",
-      "cardId": "hnb-credit-cards",
-      "title": "Premium Card Offer - 20% off at Mild Earth online store",
-      "category": "online",
-      "description": "Premium Card Offer - 20% off at Mild Earth online store",
-      "merchant": "Mild Earth - Oline store",
-      "validUntil": "2026-10-10",
-      "termsLink": "https://www.hnb.lk/card-promotion/search/4111",
-      "sourceUrl": "https://www.hnb.lk/card-promotion/search/4111",
-      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
-      "status": "active",
-      "discountPct": 20,
-      "cardTiers": [
-        "premium"
-      ],
-      "offerType": "discount",
-      "firstSeenAt": "2026-09-21T07:41:38.845Z"
     },
     {
       "id": "hnb-4192",
@@ -55803,6 +55316,382 @@
       ],
       "offerType": "discount",
       "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-63a02a1cee47",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "15% off at Spring & Summer with NSB Debit Card",
+      "category": "fashion",
+      "description": "Enjoy 15% discount at Spring & Summer with your NSB Debit Card",
+      "merchant": "Spring & Summer",
+      "termsLink": "https://www.nsb.lk/enjoy-a-15-off-at-spring-summer-with-your-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-a-15-off-at-spring-summer-with-your-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 15,
+      "cardTypes": [
+        "debit"
+      ],
+      "cardTiers": [
+        "classic"
+      ],
+      "offerType": "discount",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-15fc07ffac2c",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Enjoy 12% off @ The Factory Hub with NSB Debit Card",
+      "category": "fashion",
+      "description": "12% discount at The Factory Hub when paying with NSB Debit Card",
+      "merchant": "The Factory Hub",
+      "termsLink": "https://www.nsb.lk/enjoy-12-off-the-factory-hub-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-12-off-the-factory-hub-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 12,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-4ebb6416535e",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "15% off at Enuli Fashion with NSB Debit Card",
+      "category": "fashion",
+      "description": "Enjoy 15% discount on purchases at Enuli Fashion when paying with NSB Debit Card",
+      "merchant": "Enuli Fashion",
+      "termsLink": "https://www.nsb.lk/enjoy-15-off-enuli-fashion-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-15-off-enuli-fashion-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 15,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-8ff8b4be7904",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Up to 60% off at Kiddoz",
+      "category": "leisure",
+      "description": "Enjoy up to 60% discount on purchases at Kiddoz online store with NSB Debit Card.",
+      "merchant": "Kiddoz",
+      "termsLink": "https://www.nsb.lk/enjoy-up-to-60-off-kiddoz-www-kiddoz-lk-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-up-to-60-off-kiddoz-www-kiddoz-lk-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 60,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-5d58fd1cf334",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "10% off at Nirmani Dress Point with NSB Debit Card",
+      "category": "fashion",
+      "description": "Enjoy 10% discount on purchases at Nirmani Dress Point with NSB Debit Card",
+      "merchant": "Nirmani Dress Point",
+      "termsLink": "https://www.nsb.lk/enjoy-10-off-nirmani-dress-point-with-nsb-debit-card-2/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-nirmani-dress-point-with-nsb-debit-card-2/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 10,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-987744763973",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Enjoy 10% off @ Galis Lingerie with NSB Debit Card",
+      "category": "fashion",
+      "description": "10% discount on purchases at Galis Lingerie with NSB Debit Card",
+      "merchant": "Galis Lingerie",
+      "termsLink": "https://www.nsb.lk/enjoy-10-off-galis-lingerie-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-galis-lingerie-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 10,
+      "cardTypes": [
+        "debit"
+      ],
+      "offerType": "discount",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-fa43e3f9dd45",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "20% off at Fitness First LK",
+      "category": "health",
+      "description": "Enjoy 20% discount on Fitness First LK purchases with NSB Mastercard.",
+      "merchant": "Fitness First LK",
+      "termsLink": "https://www.nsb.lk/enjoy-20-off-fitness-first-lk-by-nsb-mastercard/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-20-off-fitness-first-lk-by-nsb-mastercard/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 20,
+      "cardNetworks": [
+        "mastercard"
+      ],
+      "offerType": "discount",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-d17a01033ae6",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Enjoy 10% off @ Spring & Summer Online & In store with NSB Debit Card",
+      "category": "fashion",
+      "description": "Get 10% discount on purchases at Spring & Summer when paying with NSB Debit Card, valid both online and in store.",
+      "merchant": "Spring & Summer",
+      "termsLink": "https://www.nsb.lk/enjoy-10-off-spring-summer-online-in-store-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-spring-summer-online-in-store-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 10,
+      "cardTypes": [
+        "debit"
+      ],
+      "offerType": "discount",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-f85b12f75a1e",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "10% off at CIB Fashion with NSB Debit Card",
+      "category": "fashion",
+      "description": "10% discount on purchases at CIB Fashion when paying with NSB Debit Card",
+      "merchant": "CIB Fashion",
+      "termsLink": "https://www.nsb.lk/enjoy-10-off-cib-fashion-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-cib-fashion-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 10,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-dfdc43a41bba",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "10% off at Prasad Fashion Stores",
+      "category": "fashion",
+      "description": "Enjoy 10% discount at Prasad Fashion Stores with NSB Debit Card",
+      "merchant": "Prasad Fashion Stores",
+      "termsLink": "https://www.nsb.lk/enjoy-10-off-prasad-fashion-stores-with-nsb-debit-card/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-10-off-prasad-fashion-stores-with-nsb-debit-card/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 10,
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-ee6b90803df3",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Enjoy 15% off @ Zig Zag with NSB Debit Card (Online & In Store)",
+      "category": "fashion",
+      "description": "15% discount at Zig Zag when shopping online or in store with NSB Debit Card",
+      "merchant": "Zig Zag",
+      "termsLink": "https://www.nsb.lk/enjoy-15-off-zig-zag-with-nsb-debit-card-online-in-store/",
+      "sourceUrl": "https://www.nsb.lk/enjoy-15-off-zig-zag-with-nsb-debit-card-online-in-store/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 15,
+      "cardTypes": [
+        "debit"
+      ],
+      "offerType": "discount",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-2b04fc148342",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Celebrate the Glimmer of Love at Tiesh with NSB Master Debit Cards",
+      "category": "fashion",
+      "description": "Special offer on jewellery purchases at Tiesh with NSB Master Debit Cards",
+      "merchant": "Tiesh",
+      "termsLink": "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/",
+      "sourceUrl": "https://www.nsb.lk/celebrate-the-glimmer-of-love-at-tiesh-with-nsb-master-debit-cards-3/",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "cardNetworks": [
+        "mastercard"
+      ],
+      "cardTypes": [
+        "debit"
+      ],
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-1b6c8f04b650",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "iPhone 13 Series Promotion",
+      "category": "electronics",
+      "description": "Interest-free installment plan available on iPhone 13 Series purchases with NSB Mastercard",
+      "merchant": "Apple",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2023/01/iPhone-13-Series_Offer-New-01-1.jpg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2023/01/iPhone-13-Series_Offer-New-01-1.jpg",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "installment",
+      "cardNetworks": [
+        "mastercard"
+      ],
+      "imageUrl": "/offer-images/832caf52e251.webp",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-80a39c2695fb",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "20% Cashback for Shree Savings Account Holders",
+      "category": "other",
+      "description": "20% cashback on card purchases for Shree Savings Account holders.",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 20,
+      "discountLabel": "20% Cashback",
+      "cardTypes": [
+        "credit",
+        "debit"
+      ],
+      "cardTiers": [
+        "classic",
+        "gold",
+        "platinum"
+      ],
+      "eligibilityNote": "For Shree Savings Account holders",
+      "imageUrl": "/offer-images/6cc9913249c3.webp",
+      "offerType": "cashback",
+      "firstSeenAt": "2026-08-17T02:59:43.961Z"
+    },
+    {
+      "id": "nsb-91da3fc668b5",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Up to 20% Cashback at Supermarkets",
+      "category": "supermarket",
+      "description": "20% cashback on supermarket purchases.",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2025/03/18a9f7bd-d279-4911-b3e4-1d0ef62cd617-1.jpeg",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "discountPct": 20,
+      "discountLabel": "20% Cashback",
+      "cardTypes": [
+        "credit",
+        "debit"
+      ],
+      "imageUrl": "/offer-images/6cc9913249c3.webp",
+      "offerType": "cashback",
+      "firstSeenAt": "2026-10-11T10:49:47.044Z"
+    },
+    {
+      "id": "nsb-fe51df173719",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Exclusive Discount at Kiddoz on NSB Debit Card",
+      "category": "leisure",
+      "description": "Get an exclusive discount when you pay using NSB Debit Card at Kiddoz. Up to 60% off on site or up to 10% off on card, every Thursday of the month.",
+      "merchant": "Kiddoz",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 60,
+      "validDays": [
+        "thu"
+      ],
+      "cardNetworks": [
+        "visa",
+        "mastercard"
+      ],
+      "cardTypes": [
+        "debit"
+      ],
+      "cardTiers": [
+        "classic"
+      ],
+      "imageUrl": "/offer-images/e83b52cacd4a.webp",
+      "firstSeenAt": "2026-10-11T10:49:47.044Z"
+    },
+    {
+      "id": "nsb-5ec81595a609",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Card Discount at Kiddoz on NSB Debit Card",
+      "category": "leisure",
+      "description": "Get an exclusive discount when you pay using NSB Debit Card at Kiddoz. Up to 10% off on card, every Thursday of the month.",
+      "merchant": "Kiddoz",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-009.jpg",
+      "lastReviewedAt": "2026-10-11T10:49:47.044Z",
+      "status": "active",
+      "offerType": "discount",
+      "discountPct": 10,
+      "validDays": [
+        "thu"
+      ],
+      "cardNetworks": [
+        "visa",
+        "mastercard"
+      ],
+      "cardTypes": [
+        "debit"
+      ],
+      "cardTiers": [
+        "classic"
+      ],
+      "imageUrl": "/offer-images/e83b52cacd4a.webp",
+      "firstSeenAt": "2026-10-11T10:49:47.044Z"
+    },
+    {
+      "id": "nsb-1876efdc4fe6",
+      "bankId": "nsb",
+      "cardId": "nsb-mastercard-debit-cards",
+      "title": "Amaara Sigiriya Hotel Stay Offer",
+      "category": "hotels",
+      "description": "Special offer for hotel stays at Amaara Sigiriya",
+      "merchant": "Amaara Sigiriya",
+      "termsLink": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-2.jpg",
+      "sourceUrl": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-2.jpg",
+      "lastReviewedAt": "2026-10-05T08:28:36.287Z",
+      "status": "active",
+      "imageUrl": "/offer-images/da6b4cc3d878.webp",
+      "offerType": "other",
+      "firstSeenAt": "2026-09-21T07:41:38.845Z"
     }
   ]
 }
