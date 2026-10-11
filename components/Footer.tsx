@@ -18,6 +18,10 @@ export function Footer() {
             Data sourced from official bank websites · Verify all offers directly with your bank ·{" "}
             <Link href="/about" className="font-medium text-(--emerald-300) hover:underline">
               How this works
+            </Link>{" "}
+            ·{" "}
+            <Link href="/faq" className="font-medium text-(--emerald-300) hover:underline">
+              FAQ
             </Link>
           </p>
           <p className="text-xs text-white/55">

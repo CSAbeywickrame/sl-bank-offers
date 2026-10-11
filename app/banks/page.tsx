@@ -8,13 +8,13 @@ import { getActiveOffers } from "@/lib/offers/repository";
 import { siteName, siteUrl } from "@/lib/site-config";
 
 export const metadata: Metadata = {
-  title: "Sri Lankan Banks with Credit Card Offers",
+  title: "Sri Lankan Banks with Card Offers",
   description:
-    "Browse credit card offers by bank. Compare active promotions from all major Sri Lankan banks including Commercial Bank, Sampath, BOC, NTB, Seylan, and more.",
+    "Browse credit and debit card offers by bank. Compare active promotions from all major Sri Lankan banks including Commercial Bank, Sampath, BOC, NTB, Seylan, and more.",
   openGraph: {
-    title: "Sri Lankan Banks with Credit Card Offers",
+    title: "Sri Lankan Banks with Card Offers",
     description:
-      "Browse credit card offers by bank. Compare active promotions from all major Sri Lankan banks.",
+      "Browse credit and debit card offers by bank. Compare active promotions from all major Sri Lankan banks.",
     url: `${siteUrl}/banks`,
   },
   alternates: { canonical: `${siteUrl}/banks` },
@@ -108,17 +108,17 @@ export default async function BanksPage() {
                   className="hero-dot-pulse"
                   style={{ width: "6px", height: "6px", borderRadius: "var(--radius-pill)", background: "currentColor", display: "inline-block", flexShrink: 0 }}
                 />
-                Sri Lankan credit card offers
+                Sri Lankan card offers
               </p>
               <h1
                 className="mt-4 font-bold"
                 style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
                 Banks with{" "}
-                <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
+                <span style={{ color: "var(--hero-highlight)" }}>Card Offers</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
-                Browse active credit card promotions by bank. Select a bank to see all its current offers.
+                Browse active card promotions by bank. Select a bank to see all its current offers.
               </p>
             </div>
             <StatTile value={banks.length} label="banks tracked" className="min-w-[180px]" />

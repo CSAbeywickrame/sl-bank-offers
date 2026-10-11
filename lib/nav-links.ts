@@ -3,6 +3,7 @@ export const navLinks = [
   { href: "/banks", label: "Browse Banks" },
   { href: "/merchants", label: "Merchants" },
   { href: "/categories", label: "View Categories" },
+  { href: "/faq", label: "FAQ" },
 ] as const;
 
 export function isActivePath(href: string, pathname: string | null): boolean {

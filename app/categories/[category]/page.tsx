@@ -14,6 +14,7 @@ import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { sortOffers } from "@/lib/offers/sort";
+import { buildCategoryCopy } from "@/lib/seo-copy";
 import { siteUrl } from "@/lib/site-config";
 
 interface CategoryPageProps {
@@ -26,8 +27,9 @@ export async function generateMetadata({ params }: CategoryPageProps): Promise<M
   if (!isOfferCategory(categoryParam)) return {};
 
   const label = getCategoryLabel(categoryParam);
-  const title = `${label} Credit Card Offers in Sri Lanka`;
-  const description = `Find the best ${label.toLowerCase()} credit card offers across Sri Lankan banks. Compare deals and save more.`;
+  const categoryOffers = (await getActiveOffers()).filter((offer) => offer.category === categoryParam);
+  const bankCount = new Set(categoryOffers.map((offer) => offer.bankId)).size;
+  const { title, description } = buildCategoryCopy(label, categoryOffers.length, bankCount);
 
   return {
     title,

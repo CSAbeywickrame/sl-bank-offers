@@ -11,6 +11,7 @@ import {
   getMerchantOffers,
   getMerchantSummaries
 } from "@/lib/offers/merchants";
+import { buildMerchantCopy } from "@/lib/seo-copy";
 import { siteUrl } from "@/lib/site-config";
 
 interface MerchantPageProps {
@@ -42,8 +43,12 @@ export async function generateMetadata({ params }: MerchantPageProps): Promise<M
   const merchant = await getMerchantBySlug(slug);
   if (!merchant) return {};
 
-  const title = `${merchant.name} Card Offers`;
-  const description = `${summarise(merchant.offerCount, merchant.bankCount, merchant.bestDiscountPct)}. Compare ${merchant.name} discounts across ${merchant.banks.join(", ")}.`;
+  const { title, description } = buildMerchantCopy(
+    merchant.name,
+    merchant.offerCount,
+    merchant.bankCount,
+    summarise(merchant.offerCount, merchant.bankCount, merchant.bestDiscountPct),
+  );
 
   return {
     title,

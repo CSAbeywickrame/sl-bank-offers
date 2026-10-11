@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: OfferDetailPageProps): Promis
 
   const validityNote = offer.validUntil ? ` Valid until ${formatDate(offer.validUntil)}.` : "";
   const title = offer.title;
-  const description = `${offer.description} — ${offer.bankName} credit card offer.${validityNote}`;
+  const description = `${offer.description} — ${offer.bankName} card offer.${validityNote}`;
 
   return {
     title,

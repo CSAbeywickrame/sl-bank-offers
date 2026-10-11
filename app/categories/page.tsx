@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "All Offer Categories",
     description:
-      "Browse every credit card offer category tracked by SL Card Offers.",
+      "Browse every card offer category tracked by SL Card Offers.",
     url: `${siteUrl}/categories`,
   },
   alternates: { canonical: `${siteUrl}/categories` },
