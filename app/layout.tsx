@@ -4,8 +4,7 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { WebAnalytics } from "@/components/WebAnalytics";
-import { getBanks } from "@/lib/offers/banks";
-import { buildSiteDescription } from "@/lib/seo-copy";
+import { getSiteDescription } from "@/lib/site-description";
 import { siteName, siteTitle, siteUrl } from "@/lib/site-config";
 import "./globals.css";
 
@@ -17,9 +16,8 @@ const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",
 });
 
-// Derived per request so the bank count in the description follows the data.
-export function generateMetadata(): Metadata {
-  const siteDescription = buildSiteDescription(getBanks().length);
+export async function generateMetadata(): Promise<Metadata> {
+  const siteDescription = await getSiteDescription();
   return {
     metadataBase: new URL(siteUrl),
     title: {
@@ -87,15 +85,17 @@ const buildWebsiteJsonLd = (siteDescription: string) => ({
   ],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteDescription = await getSiteDescription();
+
   return (
     <html lang="en" className={hankenGrotesk.variable}>
       <body className="flex min-h-screen flex-col">
-        <JsonLd data={buildWebsiteJsonLd(buildSiteDescription(getBanks().length))} />
+        <JsonLd data={buildWebsiteJsonLd(siteDescription)} />
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />

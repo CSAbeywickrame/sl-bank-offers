@@ -8,7 +8,7 @@ export function DesktopNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden items-center gap-1 sm:flex" aria-label="Main navigation">
+    <nav className="hidden items-center gap-1 md:flex" aria-label="Main navigation">
       {navLinks.map(({ href, label }) => {
         const active = isActivePath(href, pathname);
         return (

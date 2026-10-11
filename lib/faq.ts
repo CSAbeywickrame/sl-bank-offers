@@ -1,7 +1,7 @@
 import type { Route } from "next";
 import { categories } from "@/lib/offers/categories";
 import type { Bank, Offer } from "@/lib/offers/types";
-import { pluralise } from "@/lib/seo-copy";
+import { countOffersByBank, pluralise } from "@/lib/seo-copy";
 
 export interface FaqItem {
   question: string;
@@ -12,8 +12,7 @@ export interface FaqItem {
 
 // Names the banks with the most live offers, e.g. "Sampath Bank (210 offers), ...".
 export function topBanksByOfferCount(banks: Bank[], offers: Offer[], limit = 3): string[] {
-  const counts = new Map<string, number>();
-  for (const offer of offers) counts.set(offer.bankId, (counts.get(offer.bankId) ?? 0) + 1);
+  const counts = countOffersByBank(offers);
 
   return banks
     .map((bank) => ({ name: bank.name, count: counts.get(bank.id) ?? 0 }))

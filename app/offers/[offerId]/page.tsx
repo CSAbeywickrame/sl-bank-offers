@@ -10,19 +10,13 @@ import { formatCardEligibility, formatLkr, formatValidDays, getOfferHighlight } 
 import { absoluteImageUrl } from "@/lib/offers/images";
 import { getRelatedOffers, resolveMerchant } from "@/lib/offers/merchants";
 import { getActiveOffers, getOfferById } from "@/lib/offers/repository";
+import { formatDate } from "@/lib/format";
 import { siteUrl } from "@/lib/site-config";
 
 const RELATED_LIMIT = 6;
 
 interface OfferDetailPageProps {
   params: Promise<{ offerId: string }>;
-}
-
-function formatDate(value: string | undefined): string {
-  if (!value) return "Not specified";
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "Not specified";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
 export async function generateMetadata({ params }: OfferDetailPageProps): Promise<Metadata> {

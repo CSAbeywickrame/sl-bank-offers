@@ -5,6 +5,7 @@ import { OfferGrid } from "@/components/OfferGrid";
 import { OfferPagination } from "@/components/OfferPagination";
 import { AdSlot } from "@/components/AdSlot";
 import { StatTile } from "@/components/StatTile";
+import { countBanksWithOffers } from "@/lib/seo-copy";
 import { getMerchantSummaries } from "@/lib/offers/merchants";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
@@ -31,7 +32,10 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const cards = getCards();
   const merchantCount = (await getMerchantSummaries()).length;
 
-  const totalCount = Math.floor(allOffers.length / 100) * 100;
+  // "1400+" reads as a floor; below 100 the exact count is the honest figure (never "0+").
+  const roundedCount = Math.floor(allOffers.length / 100) * 100;
+  const offerCountLabel = roundedCount > 0 ? `${roundedCount}+` : String(allOffers.length);
+  const bankCount = countBanksWithOffers(banks, allOffers);
 
   return (
     <main>
@@ -78,8 +82,8 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                 className="mt-4 font-bold"
                 style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
-                Compare {totalCount}+ Sri Lankan Card Offers{" "}
-                <span style={{ color: "var(--hero-highlight)" }}>from {banks.length} Banks</span>
+                Compare {offerCountLabel} Sri Lankan Card Offers{" "}
+                <span style={{ color: "var(--hero-highlight)" }}>from {bankCount} Banks</span>
               </h1>
               <p
                 className="mt-4 text-base"

@@ -15,8 +15,8 @@ describe("branding assets", () => {
     expect(html).toContain('alt="SL Card Offers"');
   });
 
-  it("publishes app icons for browser and install surfaces", () => {
-    expect(manifest().icons).toEqual(
+  it("publishes app icons for browser and install surfaces", async () => {
+    expect((await manifest()).icons).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           src: "/icon.png",
@@ -31,7 +31,7 @@ describe("branding assets", () => {
       ])
     );
 
-    expect(generateMetadata().icons).toEqual(
+    expect((await generateMetadata()).icons).toEqual(
       expect.objectContaining({
         icon: [expect.objectContaining({ url: "/icon.png", type: "image/png" })],
         apple: [expect.objectContaining({ url: "/apple-icon.png", type: "image/png" })],

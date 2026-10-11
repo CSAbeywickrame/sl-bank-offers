@@ -7,6 +7,10 @@ import {
   buildCategoryCopy,
   buildMerchantCopy,
   buildSiteDescription,
+  countBanksWithOffers,
+  listBanks,
+  summariseMerchant,
+  bankHasDebit,
   latestCheckedAt,
   pluralise,
 } from "@/lib/seo-copy";
@@ -27,6 +31,18 @@ describe("seo copy", () => {
     expect(buildSiteDescription(13)).toContain("from 13 Sri Lankan banks");
   });
 
+  it("counts only banks with a live offer", () => {
+    expect(countBanksWithOffers(banks, offers)).toBe(2);
+    expect(countBanksWithOffers(banks, [{ bankId: "a" }] as Offer[])).toBe(1);
+  });
+
+  it("detects debit from cards or offers", () => {
+    const cards = [{ id: "a-debit", bankId: "a", name: "Alpha Visa Debit" }, { id: "b-1", bankId: "b", name: "Beta Gold" }];
+    expect(bankHasDebit("a", cards, [])).toBe(true);
+    expect(bankHasDebit("b", cards, [])).toBe(false);
+    expect(bankHasDebit("b", cards, [{ bankId: "b", cardTypes: ["debit"] }] as Offer[])).toBe(true);
+  });
+
   it("picks the latest lastCheckedAt", () => {
     expect(latestCheckedAt([{ lastCheckedAt: "2026-01-02" }, {}, { lastCheckedAt: "2026-03-04" }])).toBe("2026-03-04");
     expect(latestCheckedAt([{}])).toBeUndefined();
@@ -35,9 +51,11 @@ describe("seo copy", () => {
   it("builds bank copy and avoids 0 live deals", () => {
     const copy = buildBankCopy("HNB", 1, "2026-03-04T00:00:00Z");
     expect(copy.title).toBe("HNB Card Offers – 1 live deal");
-    expect(copy.description).toMatch(/^1 live HNB credit and debit card offer, last checked /);
+    expect(copy.description).toMatch(/^1 live HNB card offer, last checked /);
     expect(buildBankCopy("HNB", 0).title).toBe("HNB Card Offers");
     expect(buildBankCopy("HNB", 0).description).not.toMatch(/\b0 live/);
+    expect(copy.description).not.toContain("debit");
+    expect(buildBankCopy("HNB", 3, undefined, true).description).toMatch(/^3 live HNB credit and debit card offers/);
   });
 
   it("builds the bank intro line", () => {
@@ -55,8 +73,15 @@ describe("seo copy", () => {
   });
 
   it("builds merchant copy with singular forms", () => {
-    expect(buildMerchantCopy("Keells", 1, 1, "1 live offer").title).toBe("Keells Card Offers – 1 deal from 1 bank");
-    expect(buildMerchantCopy("Keells", 8, 3, "8 live offers").title).toBe("Keells Card Offers – 8 deals from 3 banks");
+    expect(buildMerchantCopy("Keells", 1, ["HNB"]).title).toBe("Keells Card Offers – 1 deal from 1 bank");
+    const copy = buildMerchantCopy("Keells", 8, ["HNB", "Sampath", "NDB"], 20);
+    expect(copy.title).toBe("Keells Card Offers – 8 deals from 3 banks");
+    expect(copy.description).toContain("at Keells from HNB, Sampath and NDB, side by side");
+    expect(copy.description).toContain("The best is 20% off.");
+    expect(copy.description).not.toMatch(/\b8\b/);
+    expect(listBanks(["A", "B", "C", "D", "E", "F", "G"])).toBe("A, B, C, D and 3 more");
+    expect(summariseMerchant(1, 1)).toBe("1 live offer");
+    expect(summariseMerchant(8, 6, 25)).toBe("8 live offers across 6 banks · best is 25% off");
   });
 });
 

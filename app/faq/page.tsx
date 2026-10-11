@@ -16,8 +16,11 @@ export const metadata: Metadata = {
   alternates: { canonical: `${siteUrl}/faq` },
 };
 
+// Re-rendered daily so offer expiries show up in the counts without waiting for a deploy.
+export const revalidate = 86400;
+
 export default async function FaqPage() {
-  // Built from live data at render time so the counts and lists in the answers never go stale.
+  // Counts and lists come from the data, never from hand-written copy.
   const items = buildFaqItems(getBanks(), await getActiveOffers());
 
   const breadcrumbJsonLd = {

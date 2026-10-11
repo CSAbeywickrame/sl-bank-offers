@@ -16,7 +16,7 @@ import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { sortOffers } from "@/lib/offers/sort";
-import { buildBankCopy, buildBankIntro, latestCheckedAt } from "@/lib/seo-copy";
+import { bankHasDebit, buildBankCopy, buildBankIntro, latestCheckedAt } from "@/lib/seo-copy";
 import { siteUrl } from "@/lib/site-config";
 
 interface BankPageProps {
@@ -29,8 +29,10 @@ export async function generateMetadata({ params }: BankPageProps): Promise<Metad
   const bank = getBankById(bankId);
   if (!bank) return {};
 
-  const bankOffers = (await getActiveOffers()).filter((offer) => offer.bankId === bankId);
-  const { title, description } = buildBankCopy(bank.name, bankOffers.length, latestCheckedAt(bankOffers));
+  const activeOffers = await getActiveOffers();
+  const bankOffers = activeOffers.filter((offer) => offer.bankId === bankId);
+  const hasDebit = bankHasDebit(bankId, getCards(), activeOffers);
+  const { title, description } = buildBankCopy(bank.name, bankOffers.length, latestCheckedAt(bankOffers), hasDebit);
 
   return {
     title,
