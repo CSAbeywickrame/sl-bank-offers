@@ -1,11 +1,12 @@
 import type { MetadataRoute } from "next";
-import { siteDescription, siteName } from "@/lib/site-config";
+import { getSiteDescription } from "@/lib/site-description";
+import { siteName } from "@/lib/site-config";
 
-export default function manifest(): MetadataRoute.Manifest {
+export default async function manifest(): Promise<MetadataRoute.Manifest> {
   return {
     name: siteName,
     short_name: "SL Offers",
-    description: siteDescription,
+    description: await getSiteDescription(),
     start_url: "/",
     display: "browser",
     background_color: "#0b1f33",

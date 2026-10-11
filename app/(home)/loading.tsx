@@ -1,4 +1,4 @@
-// Skeleton placeholder shown while the home page data loads
+// Skeleton placeholder shown while the home page data loads (scoped to the home route group so other routes can return real 404s)
 function LoadingCard() {
   return (
     <div className="grid min-h-[22rem] gap-4 rounded-lg border border-(--border-subtle) bg-(--surface-card) p-4 shadow-sm">

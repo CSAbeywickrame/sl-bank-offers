@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { feedMappers } from "@/lib/ingest/feedMappers";
+import { FEED_MAPPER_VERSION, feedMappers } from "@/lib/ingest/feedMappers";
 import { bankRegistry } from "@/lib/sources/bankRegistry";
 
 const reviewDateIso = "2026-07-16";
@@ -178,6 +178,96 @@ describe("feedMappers.sampath", () => {
   });
 });
 
+describe("feedMappers.hnb card types and images", () => {
+  const rows = [
+    { id: 1, title: "10% off at A", thumb: "merchants/a-logo.jpg", merchant: "A", cardType: "credit" },
+    { id: 2, title: "10% off at B", thumb: "merchants/Flawless Diamond Jewellery/Flawless.jpg", merchant: "B", cardType: " Debit " },
+    { id: 3, title: "10% off at C", thumb: "", merchant: "C", cardType: "Credit/Debit" },
+    { id: 4, title: "10% off at D", merchant: "D", cardType: "prepaid" },
+    { id: 5, title: "10% off at E", thumb: "merchants/E%20Logo/e.jpg", merchant: "E", cardType: "debit/credit" },
+    { id: 6, title: "10% off at F", thumb: "https://cdn.example.com/f.png?v=2", merchant: "F", cardType: "credit" }
+  ];
+  const offers = feedMappers.hnb(JSON.stringify({ total: 6, data: rows }), entry, reviewDateIso);
+  const byId = (id: number) => offers.find((o) => o.id === `hnb-${id}`);
+
+  it("maps cardType to card kinds, omitting unknown values", () => {
+    expect(byId(1)?.cardTypes).toEqual(["credit"]);
+    expect(byId(2)?.cardTypes).toEqual(["debit"]);
+    expect(byId(3)?.cardTypes).toEqual(["credit", "debit"]);
+    expect(byId(4)?.cardTypes).toBeUndefined();
+  });
+
+  it("builds the asset url, encoding each path segment", () => {
+    expect(byId(1)?.imageUrl).toBe("https://assets.hnb.lk/atdi/merchants/a-logo.jpg");
+    expect(byId(2)?.imageUrl).toBe("https://assets.hnb.lk/atdi/merchants/Flawless%20Diamond%20Jewellery/Flawless.jpg");
+  });
+
+  it("accepts either order for credit/debit", () => {
+    expect(byId(5)?.cardTypes).toEqual(["debit", "credit"]);
+  });
+
+  it("leaves an already-encoded thumb alone and passes an absolute thumb through", () => {
+    expect(byId(5)?.imageUrl).toBe("https://assets.hnb.lk/atdi/merchants/E%20Logo/e.jpg");
+    expect(byId(6)?.imageUrl).toBe("https://cdn.example.com/f.png?v=2");
+  });
+
+  it("omits imageUrl when thumb is empty or missing", () => {
+    expect(byId(3)?.imageUrl).toBeUndefined();
+    expect(byId(4)?.imageUrl).toBeUndefined();
+  });
+});
+
+describe("feedMappers.sampath headline, networks and images", () => {
+  const eligible = (text: string) => [
+    { title: "Partner", description: "<span>Someone</span>" },
+    { title: "Eligible Card Categories", description: `<span>${text}</span>` }
+  ];
+  const fixture = {
+    data: [
+      { id: 1, company_name: "A", short_discount: "Up to 20% Discount", category: "VISA_Offers", image_url: "https://www.sampath.lk/api/uploads/blob_1", enable: true },
+      { id: 2, company_name: "B", short_discount: "Special Rates", category: "Premium_Offers", enable: true },
+      { id: 3, company_name: "C", short_discount: "Enjoy Rs. 500 off for Sampath Mastercard Credit &amp; Debit cardholders", category: "Mastercard_Offers", enable: true },
+      { id: 4, company_name: "D", short_discount: "12 Months 0% Interest Extended Settlement Plans", category: "hotels", enable: true },
+      { id: 5, company_name: "E", short_discount: "10% Discount", category: "Premium_Offers", image_url: "/relative.png", cards_new: eligible("All Sampath Visa Infinite Metal and Visa Infinite Credit Card"), enable: true },
+      { id: 6, company_name: "F", short_discount: "10% Discount", category: "Mastercard_Offers", cards_new: eligible("All Sampath Visa Infinite Credit Card"), enable: true }
+    ]
+  };
+  const offers = feedMappers.sampath(JSON.stringify(fixture), sampathEntry, reviewDateIso);
+  const byId = (id: number) => offers.find((o) => o.id === `sampath-${id}`);
+
+  it("sets discountPct and no label when the text carries a percentage", () => {
+    expect(byId(1)?.discountPct).toBe(20);
+    expect(byId(1)?.discountLabel).toBeUndefined();
+  });
+
+  it("keeps non-percentage text as a decoded discountLabel", () => {
+    expect(byId(2)?.discountLabel).toBe("Special Rates");
+    expect(byId(2)?.discountPct).toBeUndefined();
+    expect(byId(3)?.discountLabel).toContain("Credit & Debit");
+    expect(byId(4)?.discountPct).toBeUndefined();
+    expect(byId(4)?.discountLabel).toBe("12 Months 0% Interest Extended Settlement Plans");
+  });
+
+  it("derives networks from the tab", () => {
+    expect(byId(1)?.cardNetworks).toEqual(["visa"]);
+    expect(byId(3)?.cardNetworks).toEqual(["mastercard"]);
+    expect(byId(2)?.cardNetworks).toBeUndefined();
+  });
+
+  it("prefers the Eligible Card Categories block over the tab network, using the tab only as a fallback", () => {
+    expect(byId(5)?.cardNetworks).toEqual(["visa"]);
+    expect(byId(5)?.cardTypes).toEqual(["credit"]);
+    expect(byId(5)?.cardTiers).toContain("infinite");
+    expect(byId(6)?.cardNetworks).toEqual(["visa"]);
+  });
+
+  it("passes an absolute image_url through and resolves a relative one against sampath.lk", () => {
+    expect(byId(1)?.imageUrl).toBe("https://www.sampath.lk/api/uploads/blob_1");
+    expect(byId(5)?.imageUrl).toBe("https://www.sampath.lk/relative.png");
+    expect(byId(2)?.imageUrl).toBeUndefined();
+  });
+});
+
 describe("hnb bank registry wiring", () => {
   it("has a single feed source pointing at venus.hnb.lk", () => {
     expect(entry.sources).toHaveLength(1);
@@ -187,5 +277,11 @@ describe("hnb bank registry wiring", () => {
 
   it("is registered in feedMappers", () => {
     expect(Object.keys(feedMappers)).toContain("hnb");
+  });
+});
+
+describe("FEED_MAPPER_VERSION", () => {
+  it("is a positive integer folded into the refresh hash", () => {
+    expect(Number.isInteger(FEED_MAPPER_VERSION) && FEED_MAPPER_VERSION > 0).toBe(true);
   });
 });

@@ -208,6 +208,9 @@ export interface CrawlExtractResult {
   error?: string;
   offers: ScannedOffer[];
   detailHashes: Record<string, string>;
+  // Extraction version each page was last extracted under (see EXTRACTION_VERSION); lets a capped
+  // forced backfill resume where the previous run stopped.
+  detailVersions: Record<string, number>;
   inputTokens: number;
   outputTokens: number;
   discovered: number;
@@ -247,18 +250,15 @@ function normalizeForDedup(url: string): string {
 }
 
 // Group a bank's existing scanned offers by normalized sourceUrl (the reuse source for unchanged pages).
+// Offers with an empty or unparseable sourceUrl are skipped: they can't be tied to a page.
 export function groupOffersBySourceUrl(offers: ScannedOffer[]): Map<string, ScannedOffer[]> {
   const map = new Map<string, ScannedOffer[]>();
   for (const offer of offers) {
-    let key: string;
-    try {
-      key = normalizeForDedup(offer.sourceUrl);
-    } catch {
-      continue;
-    }
-    const arr = map.get(key) ?? [];
-    arr.push(offer);
-    map.set(key, arr);
+    if (!URL.canParse(offer.sourceUrl)) continue;
+    const key = normalizeForDedup(offer.sourceUrl);
+    const arr = map.get(key);
+    if (arr) arr.push(offer);
+    else map.set(key, [offer]);
   }
   return map;
 }
@@ -279,6 +279,17 @@ export function carryForwardUnextractedOffers(
   return carried;
 }
 
+// Backfill controls for refreshCrawlBank. Without `force` the version fields are carried through
+// untouched and reuse is pure hash equality, so a normal run never starts a backfill on its own.
+export interface CrawlForceOptions {
+  // Re-extract pages whose recorded version is below `version`, even when their hash is unchanged.
+  force?: boolean;
+  // Per-page version recorded by earlier runs (missing = 0).
+  prevVersions?: Record<string, number>;
+  // The current EXTRACTION_VERSION, stamped on every page extracted this run.
+  version?: number;
+}
+
 // Crawl a bank's detail pages/assets, extracting only new/changed ones (hash-gated) and reusing the rest.
 export async function refreshCrawlBank(
   entry: BankRegistryEntry,
@@ -286,12 +297,13 @@ export async function refreshCrawlBank(
   prevHashes: Record<string, string>,
   reviewDateIso: string,
   deps: CrawlExtractDeps,
+  { force = false, prevVersions = {}, version = 0 }: CrawlForceOptions = {},
 ): Promise<CrawlExtractResult> {
   const throttleMs = deps.throttleMs ?? 0;
   const maxExtractions = deps.maxExtractions ?? Infinity;
   const assetFailures: { url: string; reason: string }[] = [];
   const base: CrawlExtractResult = {
-    ok: false, offers: [], detailHashes: prevHashes,
+    ok: false, offers: [], detailHashes: prevHashes, detailVersions: prevVersions,
     inputTokens: 0, outputTokens: 0, discovered: 0, extracted: 0, reused: 0, assetFailures, extractFailures: 0,
   };
 
@@ -302,6 +314,7 @@ export async function refreshCrawlBank(
 
   const byUrl = groupOffersBySourceUrl(snapshot);
   const nextHashes: Record<string, string> = {};
+  const nextVersions: Record<string, number> = {};
   const collected: ScannedOffer[] = [];
   let inputTokens = 0;
   let outputTokens = 0;
@@ -314,6 +327,7 @@ export async function refreshCrawlBank(
     collected.push(...prior);
     reused += prior.length;
     if (prevHashes[dedupKey] !== undefined) nextHashes[dedupKey] = prevHashes[dedupKey];
+    if (prevVersions[dedupKey] !== undefined) nextVersions[dedupKey] = prevVersions[dedupKey];
   };
 
   // Fetches/extracts one discovered URL. Broken out of the loop below purely so onProgress can fire
@@ -350,10 +364,14 @@ export async function refreshCrawlBank(
     }
     const hash = fetched.contentHash ?? "";
 
-    if (prevHashes[dedupKey] !== undefined && prevHashes[dedupKey] === hash && prior.length > 0) {
+    // Under force only, a page already extracted at the current version is still reusable, so a
+    // capped backfill makes progress run over run instead of re-doing the same first pages.
+    const needsBackfill = force && (prevVersions[dedupKey] ?? 0) < version;
+    if (!needsBackfill && prevHashes[dedupKey] !== undefined && prevHashes[dedupKey] === hash && prior.length > 0) {
       collected.push(...prior.map((o) => ({ ...o, lastReviewedAt: reviewDateIso })));
       reused += prior.length;
       nextHashes[dedupKey] = hash;
+      if (prevVersions[dedupKey] !== undefined) nextVersions[dedupKey] = prevVersions[dedupKey];
       return;
     }
 
@@ -381,8 +399,16 @@ export async function refreshCrawlBank(
     inputTokens += ex.inputTokens;
     outputTokens += ex.outputTokens;
     extracted += 1;
+    // Re-extracted only because of force (content unchanged) and the model found nothing: a likely bad
+    // extraction, so keep the stored offers and prior version; a later forced run will retry this page.
+    const forcedOnly = needsBackfill && prevHashes[dedupKey] === hash && prior.length > 0;
+    if (forcedOnly && ex.offers.length === 0) {
+      keepPrior(dedupKey, prior);
+      return;
+    }
     for (const offer of ex.offers) collected.push({ ...offer, sourceUrl: url });
     nextHashes[dedupKey] = hash;
+    nextVersions[dedupKey] = version;
   };
 
   for (const [i, discovered] of disc.urls.entries()) {
@@ -394,7 +420,7 @@ export async function refreshCrawlBank(
   for (const offer of collected) dedup.set(offer.id, offer);
 
   return {
-    ok: true, offers: [...dedup.values()], detailHashes: nextHashes,
+    ok: true, offers: [...dedup.values()], detailHashes: nextHashes, detailVersions: nextVersions,
     inputTokens, outputTokens, discovered: disc.urls.length, extracted, reused, assetFailures, extractFailures,
   };
 }

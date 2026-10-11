@@ -1,11 +1,12 @@
 import { EmptyState } from "@/components/EmptyState";
 import { FilterPanel } from "@/components/FilterPanel";
 import { HeroCardStack } from "@/components/HeroCardStack";
-import { JsonLd } from "@/components/JsonLd";
 import { OfferGrid } from "@/components/OfferGrid";
 import { OfferPagination } from "@/components/OfferPagination";
 import { AdSlot } from "@/components/AdSlot";
 import { StatTile } from "@/components/StatTile";
+import { countBanksWithOffers } from "@/lib/seo-copy";
+import { getMerchantSummaries } from "@/lib/offers/merchants";
 import { getBanks } from "@/lib/offers/banks";
 import { getCards } from "@/lib/offers/cards";
 import { filterOffers } from "@/lib/offers/filter";
@@ -18,53 +19,6 @@ interface HomePageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
-const faqJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Which Sri Lankan bank has the best credit card offers?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Commercial Bank, Sampath Bank, and Seylan Bank regularly publish the most credit card offers across dining, fuel, and supermarket categories in Sri Lanka. The best bank depends on your spending habits — use SL Card Offers to filter and compare live deals from all 13 tracked banks side by side.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How do I compare credit card offers in Sri Lanka?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "Visit SL Card Offers at slcardoffers.com to browse 1,000+ active deals from 13 Sri Lankan banks in one place. Filter by bank, card, or category (dining, fuel, travel, supermarket, cashback, and more) to find offers that match your lifestyle. Each listing links directly to the official bank page so you can verify terms before using an offer.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "How often are the credit card offers updated?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "SL Card Offers is updated regularly as banks publish new promotions. Each offer card shows a 'last checked' date so you can see how recently the information was verified. Always confirm final terms at the official bank website before redeeming an offer.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Does SL Card Offers cover all Sri Lankan banks?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "SL Card Offers currently tracks 13 Sri Lankan banks including Commercial Bank, Sampath Bank, BOC, People's Bank, NDB, NTB, Seylan Bank, DFCC, Pan Asia Bank, Union Bank, Cargills Bank, NSB, and HNB. More banks are added as their offer data becomes available.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "What categories of credit card offers are available?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: "SL Card Offers lists deals across nine categories: dining, fuel, supermarket, travel, online shopping, installment plans, cashback, buy-one-get-one (BOGO), and other promotions. Use the category filter on the homepage to narrow your search.",
-      },
-    },
-  ],
-};
-
 export default async function HomePage({ searchParams }: HomePageProps) {
   const params = await searchParams;
   const filters = parseOfferFilters(params);
@@ -76,13 +30,15 @@ export default async function HomePage({ searchParams }: HomePageProps) {
   const paginatedOffers = paginateItems(filteredOffers, pagination);
   const banks = getBanks();
   const cards = getCards();
+  const merchantCount = (await getMerchantSummaries()).length;
 
-  const totalCount = Math.floor(allOffers.length / 100) * 100;;
+  // "1400+" reads as a floor; below 100 the exact count is the honest figure (never "0+").
+  const roundedCount = Math.floor(allOffers.length / 100) * 100;
+  const offerCountLabel = roundedCount > 0 ? `${roundedCount}+` : String(allOffers.length);
+  const bankCount = countBanksWithOffers(banks, allOffers);
 
   return (
     <main>
-      <JsonLd data={faqJsonLd} />
-
       <section
         className="relative overflow-hidden"
         style={{ background: "linear-gradient(120deg, var(--hero-bg) 58%, var(--hero-bg-2))", color: "var(--text-on-inverse)" }}
@@ -120,29 +76,30 @@ export default async function HomePage({ searchParams }: HomePageProps) {
                     flexShrink: 0,
                   }}
                 />
-                Sri Lankan credit card offers
+                Sri Lankan card offers
               </p>
               <h1
                 className="mt-4 font-bold"
                 style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
-                Compare {totalCount}+ Sri Lankan Credit Card Offers{" "}
-                <span style={{ color: "var(--hero-highlight)" }}>from 10+ Banks</span>
+                Compare {offerCountLabel} Sri Lankan Card Offers{" "}
+                <span style={{ color: "var(--hero-highlight)" }}>from {bankCount} Banks</span>
               </h1>
               <p
                 className="mt-4 text-base"
                 style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}
               >
-                Compare active credit card offers across Sri Lankan banks and categories.
+                Compare live credit and debit card offers across Sri Lankan banks and categories.
                 Always verify details at the official bank source before using an offer.
               </p>
-              <div className="mt-7 flex flex-wrap gap-3 max-w-md">
+              <div className="mt-7 flex flex-wrap gap-3 max-w-lg">
                 <StatTile
                   value={filteredOffers.length}
                   label={filteredOffers.length === allOffers.length ? "active offers" : "matching offers"}
                   className="flex-1"
                 />
                 <StatTile value={banks.length} label="banks tracked" className="flex-1" />
+                <StatTile value={merchantCount} label="merchants" className="flex-1" />
               </div>
             </div>
 

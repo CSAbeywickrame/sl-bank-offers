@@ -12,7 +12,7 @@ export function Header() {
           <img
             src="/brand/sl-card-offers-logo.png"
             alt={siteName}
-            className="block h-auto w-[140px] sm:w-[180px]"
+            className="block h-auto w-[140px] md:w-[180px]"
           />
         </Link>
 

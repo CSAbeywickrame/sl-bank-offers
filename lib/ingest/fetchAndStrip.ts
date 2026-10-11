@@ -89,6 +89,26 @@ async function fetchWithTimeout(url: string, opts: RequestInit, sourceHeaders?: 
   }
 }
 
+// Downloads one image's bytes, or undefined on any failure. Unlike fetchAndStrip's image path it
+// ignores Content-Type: Sampath serves its logos as application/octet-stream, and sharp sniffs the
+// real format anyway (a non-image simply fails to decode downstream).
+export async function fetchImageBytes(url: string, timeoutMs = 20000): Promise<Buffer | undefined> {
+  try {
+    const res = await fetchWithTimeout(url, {}, undefined, timeoutMs);
+    // Refuse before buffering when the server already says the body is too big.
+    if (Number(res.headers.get("content-length")) > MAX_IMAGE_BYTES_HARD_CEILING) return undefined;
+    // fetchWithTimeout's timer stops at the headers, so the body read gets its own deadline.
+    let timer: NodeJS.Timeout | undefined;
+    const deadline = new Promise<never>((_, reject) => {
+      timer = setTimeout(() => reject(new Error("image body read timed out")), timeoutMs);
+    });
+    const bytes = Buffer.from(await Promise.race([res.arrayBuffer(), deadline]).finally(() => clearTimeout(timer)));
+    return bytes.length > 0 && bytes.length <= MAX_IMAGE_BYTES_HARD_CEILING ? bytes : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 // Fetches a URL and returns the raw HTML (links intact) for crawling. Throttled for politeness; throws on failure.
 export async function fetchRawHtml(url: string): Promise<string> {
   await sleep(CRAWL_THROTTLE_MS);

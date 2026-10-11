@@ -1,4 +1,5 @@
 import { readFileSync } from "node:fs";
+import { cache } from "react";
 import { join } from "node:path";
 import { offerCategories, type SeedData } from "./types";
 
@@ -46,10 +47,12 @@ function assertSeedData(value: unknown): asserts value is SeedData {
   }
 }
 
-export function loadSeedData(): SeedData {
+// Memoised per request by React's cache(), so layout, metadata and page share one parse; outside
+// a request (scripts, tests) cache() is a pass-through and every call reads the file afresh.
+export const loadSeedData = cache((): SeedData => {
   const seedDataJson = JSON.parse(readFileSync(join(process.cwd(), "data", "seed.json"), "utf8")) as unknown;
 
   assertSeedData(seedDataJson);
 
   return seedDataJson;
-}
+});

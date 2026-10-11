@@ -42,6 +42,11 @@ function isAllowedCrawler(req: NextRequest): boolean {
 
 // Edge middleware: rate-limits aggressive scrapers while allowing legitimate crawlers through
 export function middleware(request: NextRequest): NextResponse {
+  // Local dev and e2e runs all share the "unknown" IP bucket, so a full e2e run would trip 429
+  if (process.env.NODE_ENV === "development") {
+    return NextResponse.next();
+  }
+
   if (isAllowedCrawler(request)) {
     return NextResponse.next();
   }

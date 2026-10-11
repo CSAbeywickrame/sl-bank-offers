@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { JsonLd } from "@/components/JsonLd";
@@ -6,21 +7,16 @@ import { RelatedOffers } from "@/components/RelatedOffers";
 import { buttonClasses } from "@/components/ui/button";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import { formatCardEligibility, formatLkr, formatValidDays, getOfferHighlight } from "@/lib/offers/highlight";
+import { absoluteImageUrl } from "@/lib/offers/images";
 import { getRelatedOffers, resolveMerchant } from "@/lib/offers/merchants";
 import { getActiveOffers, getOfferById } from "@/lib/offers/repository";
+import { formatDate } from "@/lib/format";
 import { siteUrl } from "@/lib/site-config";
 
 const RELATED_LIMIT = 6;
 
 interface OfferDetailPageProps {
   params: Promise<{ offerId: string }>;
-}
-
-function formatDate(value: string | undefined): string {
-  if (!value) return "Not specified";
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "Not specified";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
 }
 
 export async function generateMetadata({ params }: OfferDetailPageProps): Promise<Metadata> {
@@ -30,12 +26,17 @@ export async function generateMetadata({ params }: OfferDetailPageProps): Promis
 
   const validityNote = offer.validUntil ? ` Valid until ${formatDate(offer.validUntil)}.` : "";
   const title = offer.title;
-  const description = `${offer.description} — ${offer.bankName} credit card offer.${validityNote}`;
+  const description = `${offer.description} — ${offer.bankName} card offer.${validityNote}`;
 
   return {
     title,
     description,
-    openGraph: { title, description, url: `${siteUrl}/offers/${offerId}` },
+    openGraph: {
+      title,
+      description,
+      url: `${siteUrl}/offers/${offerId}`,
+      ...(offer.imageUrl && { images: [{ url: absoluteImageUrl(offer.imageUrl) }] }),
+    },
     alternates: { canonical: `${siteUrl}/offers/${offerId}` },
   };
 }
@@ -94,6 +95,7 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
         description: `${highlight.value} ${highlight.label}`,
       },
     }),
+    ...(offer.imageUrl && { image: absoluteImageUrl(offer.imageUrl) }),
     dateModified: offer.lastCheckedAt,
   };
 
@@ -170,6 +172,19 @@ export default async function OfferDetailPage({ params }: OfferDetailPageProps) 
 
       <section className="grid gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(18rem,1fr)]">
         <article className="rounded-xl border border-(--border-subtle) bg-(--surface-card) p-6 shadow-sm">
+          {offer.imageUrl && (
+            // object-contain: the creative often carries printed terms, so never crop it.
+            <div className="relative mb-6 aspect-video max-w-160 overflow-hidden rounded-(--radius-md) bg-(--surface-muted)">
+              <Image
+                src={offer.imageUrl}
+                alt={`${offer.merchant ?? offer.title} offer from ${offer.bankName}`}
+                fill
+                sizes="(min-width: 1024px) 640px, 100vw"
+                preload
+                className="object-contain"
+              />
+            </div>
+          )}
           <h2 className="text-lg font-semibold text-(--text-strong)">Offer details</h2>
           <dl className="mt-5 grid gap-4 text-sm sm:grid-cols-2">
             <Detail label="Bank" value={offer.bankName} />
