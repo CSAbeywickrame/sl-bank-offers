@@ -55,7 +55,7 @@ export async function generateMetadata({ params }: MerchantPageProps): Promise<M
 
 export default async function MerchantPage({ params }: MerchantPageProps) {
   const { slug } = await params;
-  let merchant = await getMerchantBySlug(slug);
+  const merchant = await getMerchantBySlug(slug);
 
   // Alias slugs never reach here: next.config redirects them to the canonical merchant before the
   // route runs.
