@@ -3,7 +3,7 @@ import { readFileSync } from "node:fs";
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import { metadata } from "@/app/layout";
+import { generateMetadata } from "@/app/layout";
 import manifest from "@/app/manifest";
 import { Header } from "@/components/Header";
 
@@ -15,8 +15,8 @@ describe("branding assets", () => {
     expect(html).toContain('alt="SL Card Offers"');
   });
 
-  it("publishes app icons for browser and install surfaces", () => {
-    expect(manifest().icons).toEqual(
+  it("publishes app icons for browser and install surfaces", async () => {
+    expect((await manifest()).icons).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           src: "/icon.png",
@@ -31,7 +31,7 @@ describe("branding assets", () => {
       ])
     );
 
-    expect(metadata.icons).toEqual(
+    expect((await generateMetadata()).icons).toEqual(
       expect.objectContaining({
         icon: [expect.objectContaining({ url: "/icon.png", type: "image/png" })],
         apple: [expect.objectContaining({ url: "/apple-icon.png", type: "image/png" })],

@@ -11,6 +11,8 @@ import {
   getMerchantOffers,
   getMerchantSummaries
 } from "@/lib/offers/merchants";
+import { formatDate } from "@/lib/format";
+import { buildMerchantCopy, summariseMerchant } from "@/lib/seo-copy";
 import { siteUrl } from "@/lib/site-config";
 
 interface MerchantPageProps {
@@ -21,29 +23,17 @@ export async function generateStaticParams() {
   return (await getMerchantSummaries()).map((merchant) => ({ slug: merchant.slug }));
 }
 
-function formatDate(value: string | undefined): string {
-  if (!value) return "—";
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "—";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
-}
-
-// "8 live offers across 6 banks · best is 25% off" — the summary that tells someone whether this
-// page is worth reading before they read it.
-function summarise(offerCount: number, bankCount: number, bestDiscountPct?: number): string {
-  const offers = `${offerCount} live offer${offerCount === 1 ? "" : "s"}`;
-  const banks = bankCount > 1 ? ` across ${bankCount} banks` : "";
-  const best = bestDiscountPct !== undefined ? ` · best is ${bestDiscountPct}% off` : "";
-  return `${offers}${banks}${best}`;
-}
-
 export async function generateMetadata({ params }: MerchantPageProps): Promise<Metadata> {
   const { slug } = await params;
   const merchant = await getMerchantBySlug(slug);
   if (!merchant) return {};
 
-  const title = `${merchant.name} Card Offers`;
-  const description = `${summarise(merchant.offerCount, merchant.bankCount, merchant.bestDiscountPct)}. Compare ${merchant.name} discounts across ${merchant.banks.join(", ")}.`;
+  const { title, description } = buildMerchantCopy(
+    merchant.name,
+    merchant.offerCount,
+    merchant.banks,
+    merchant.bestDiscountPct,
+  );
 
   return {
     title,
@@ -63,7 +53,7 @@ export default async function MerchantPage({ params }: MerchantPageProps) {
 
   const offers = await getMerchantOffers(slug);
   const siblings = await getGroupSiblings(slug);
-  const headline = summarise(merchant.offerCount, merchant.bankCount, merchant.bestDiscountPct);
+  const headline = summariseMerchant(merchant.offerCount, merchant.bankCount, merchant.bestDiscountPct);
 
   const breadcrumbJsonLd = {
     "@context": "https://schema.org",
@@ -164,7 +154,7 @@ export default async function MerchantPage({ params }: MerchantPageProps) {
                         {highlight.value ? `${highlight.value} ${highlight.label}` : highlight.label}
                       </Td>
                       <Td align="right" className="whitespace-nowrap text-(--text-muted)">
-                        {formatDate(offer.validUntil)}
+                        {formatDate(offer.validUntil, "—")}
                       </Td>
                     </tr>
                   );

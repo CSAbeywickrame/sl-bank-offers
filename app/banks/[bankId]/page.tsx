@@ -16,6 +16,7 @@ import { paginateItems, parsePaginationParams } from "@/lib/offers/pagination";
 import { parseOfferFilters, parseSortKey } from "@/lib/offers/query";
 import { getActiveOffers } from "@/lib/offers/repository";
 import { sortOffers } from "@/lib/offers/sort";
+import { bankHasDebit, buildBankCopy, buildBankIntro, latestCheckedAt } from "@/lib/seo-copy";
 import { siteUrl } from "@/lib/site-config";
 
 interface BankPageProps {
@@ -28,8 +29,10 @@ export async function generateMetadata({ params }: BankPageProps): Promise<Metad
   const bank = getBankById(bankId);
   if (!bank) return {};
 
-  const title = `${bank.name} Credit Card Offers`;
-  const description = `Browse active credit card offers from ${bank.name} in Sri Lanka. Find the best deals on dining, fuel, travel, supermarket, and more.`;
+  const activeOffers = await getActiveOffers();
+  const bankOffers = activeOffers.filter((offer) => offer.bankId === bankId);
+  const hasDebit = bankHasDebit(bankId, getCards(), activeOffers);
+  const { title, description } = buildBankCopy(bank.name, bankOffers.length, latestCheckedAt(bankOffers), hasDebit);
 
   return {
     title,
@@ -61,7 +64,7 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
     .map((offer) => offer.discountPct)
     .filter((pct): pct is number => typeof pct === "number");
   const bestDiscountPct = bankDiscounts.length > 0 ? Math.max(...bankDiscounts) : undefined;
-  const lastChecked = bankOffers.map((offer) => offer.lastCheckedAt).filter(Boolean).sort().at(-1);
+  const lastChecked = latestCheckedAt(bankOffers);
   const topCategories = [...bankOffers.reduce((counts, offer) => {
     counts.set(offer.category, (counts.get(offer.category) ?? 0) + 1);
     return counts;
@@ -137,12 +140,11 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
                 style={{ fontSize: "44px", lineHeight: "var(--lh-tight)", letterSpacing: "var(--ls-tight)" }}
               >
                 {bank.shortName}{" "}
-                <span style={{ color: "var(--hero-highlight)" }}>Credit Card Offers</span>
+                <span style={{ color: "var(--hero-highlight)" }}>Card Offers</span>
               </h1>
               <p className="mt-4 text-base" style={{ lineHeight: "var(--lh-relaxed)", color: "var(--text-on-inverse-muted)" }}>
-                {bankOffers.length} live offer{bankOffers.length === 1 ? "" : "s"} from {bank.name}
-                {bestDiscountPct !== undefined && <> · best is {bestDiscountPct}% off</>}
-                {lastChecked && <> · last checked {formatCheckedDate(lastChecked)}</>}.
+                {buildBankIntro(bankOffers.length, topCategories.map(([category]) => category), lastChecked)}
+                {bestDiscountPct !== undefined && <> The best is {bestDiscountPct}% off.</>}
                 {" "}Open the official bank link on any offer to confirm its final terms.
               </p>
               {topCategories.length > 0 && (
@@ -214,13 +216,4 @@ export default async function BankPage({ params, searchParams }: BankPageProps) 
       </section>
     </main>
   );
-}
-
-// Short, unambiguous freshness for the hero line: "23 Aug" reads faster than a full date and does
-// not imply more precision than a weekly refresh has.
-function formatCheckedDate(value: string): string {
-  const date = new Date(value);
-  return Number.isFinite(date.getTime())
-    ? new Intl.DateTimeFormat("en", { day: "numeric", month: "short" }).format(date)
-    : "recently";
 }

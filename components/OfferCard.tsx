@@ -1,19 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { formatDate } from "@/lib/format";
 import { getCategoryLabel } from "@/lib/offers/categories";
 import { isExpiringSoon } from "@/lib/offers/expiry";
 import { formatCardEligibility, formatLkr, formatValidDays, getOfferHighlight } from "@/lib/offers/highlight";
 import type { Offer } from "@/lib/offers/types";
 import { Badge } from "@/components/ui/badge";
 import { buttonClasses } from "@/components/ui/button";
-
-function formatDate(value: string | undefined): string {
-  if (!value) return "Not specified";
-  const date = new Date(value);
-  if (!Number.isFinite(date.getTime())) return "Not specified";
-  return new Intl.DateTimeFormat("en", { dateStyle: "medium" }).format(date);
-}
 
 export function OfferCard({ offer }: { offer: Offer }) {
   const expiringSoon = isExpiringSoon(offer.validUntil);

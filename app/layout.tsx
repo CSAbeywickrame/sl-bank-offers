@@ -4,7 +4,8 @@ import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
 import { JsonLd } from "@/components/JsonLd";
 import { WebAnalytics } from "@/components/WebAnalytics";
-import { siteDescription, siteName, siteUrl } from "@/lib/site-config";
+import { getSiteDescription } from "@/lib/site-description";
+import { siteName, siteTitle, siteUrl } from "@/lib/site-config";
 import "./globals.css";
 
 // Self-hosted at build time by next/font, so there is no render-blocking request to
@@ -15,42 +16,46 @@ const hankenGrotesk = Hanken_Grotesk({
   variable: "--font-hanken-grotesk",
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
-    template: `%s | ${siteName}`,
-  },
-  description: siteDescription,
-  openGraph: {
-    type: "website",
-    locale: "en_LK",
-    siteName,
-    title: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
+export async function generateMetadata(): Promise<Metadata> {
+  const siteDescription = await getSiteDescription();
+  return {
+    metadataBase: new URL(siteUrl),
+    title: {
+      default: siteTitle,
+      template: `%s | ${siteName}`,
+    },
     description: siteDescription,
-    url: siteUrl,
-  },
-  twitter: {
-    card: "summary",
-    title: `Best Sri Lankan Credit Card Offers 2026 - Compare Bank Deals | ${siteName}`,
-    description: siteDescription,
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true },
-  },
-  icons: {
-    icon: [{ url: "/icon.png", type: "image/png" }],
-    apple: [{ url: "/apple-icon.png", type: "image/png" }],
-    shortcut: ["/icon.png"],
-  },
-  alternates: {
-    canonical: siteUrl,
-  },
-};
+    openGraph: {
+      type: "website",
+      locale: "en_LK",
+      siteName,
+      title: siteTitle,
+      description: siteDescription,
+      url: siteUrl,
+    },
+    twitter: {
+      card: "summary",
+      title: siteTitle,
+      description: siteDescription,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true },
+    },
+    icons: {
+      icon: [{ url: "/icon.png", type: "image/png" }],
+      apple: [{ url: "/apple-icon.png", type: "image/png" }],
+      shortcut: ["/icon.png"],
+    },
+    alternates: {
+      canonical: siteUrl,
+    },
+  };
+}
 
-const websiteJsonLd = {
+// Built inside the component so the description tracks the same bank count as the metadata.
+const buildWebsiteJsonLd = (siteDescription: string) => ({
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -78,17 +83,19 @@ const websiteJsonLd = {
       },
     },
   ],
-};
+});
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const siteDescription = await getSiteDescription();
+
   return (
     <html lang="en" className={hankenGrotesk.variable}>
       <body className="flex min-h-screen flex-col">
-        <JsonLd data={websiteJsonLd} />
+        <JsonLd data={buildWebsiteJsonLd(siteDescription)} />
         <Header />
         <div className="flex-1">{children}</div>
         <Footer />
