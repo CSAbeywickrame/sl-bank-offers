@@ -2,11 +2,12 @@ import { existsSync, readFileSync, writeFileSync, renameSync } from "node:fs";
 import { join } from "node:path";
 import Anthropic from "@anthropic-ai/sdk";
 import { bankRegistry, type BankRegistryEntry, type RegistrySource } from "@/lib/sources/bankRegistry";
-import { fetchAndStrip, hashContent, fetchRawHtml, stripHtml, type FetchResult, type ImageMediaType } from "@/lib/ingest/fetchAndStrip";
+import { fetchAndStrip, fetchImageBytes, hashContent, fetchRawHtml, stripHtml, type FetchResult, type ImageMediaType } from "@/lib/ingest/fetchAndStrip";
 import { refreshCrawlBank, discoverCrawlUrls, collectPageAssets, isUndersizedImage, groupOffersBySourceUrl, carryForwardUnextractedOffers, type CrawlExtractResult, type FetchedCrawlContent } from "@/lib/ingest/crawlExtract";
 import { extractOffers } from "@/lib/ingest/extractWithClaude";
 import { dedupeOffers, expireLapsedOffers, importBankOffers, isActiveOffer, reconcileOrphans, removeBank } from "@/lib/ingest/importBank";
-import { feedMappers } from "@/lib/ingest/feedMappers";
+import { feedMappers, FEED_MAPPER_VERSION } from "@/lib/ingest/feedMappers";
+import { resolveFeedImages, type FeedImageCache } from "@/lib/ingest/feedImages";
 import { prepareForVision, saveThumbnail, sweepOrphans, isPortraitImage } from "@/lib/ingest/images";
 import { isAssetCacheHit, recordAssetFailure, pruneAssetCache, type FailedAssetCache } from "@/lib/ingest/assetCache";
 import type { ScannedOffer, ScannedOfferCatalog, SeedData } from "@/lib/offers/types";
@@ -37,6 +38,8 @@ interface RefreshState {
     // Asset content-hashes that failed unrecoverably (undecodable, or rejected by the API after
     // repair) — see lib/ingest/assetCache.ts. Absent once pruned back down to nothing.
     failedAssets?: FailedAssetCache;
+    // Feed banks only: remote logo url -> local thumbnail url, so unchanged logos aren't re-downloaded.
+    feedImages?: FeedImageCache;
   }>;
 }
 
@@ -126,6 +129,9 @@ interface BankReport {
   // How many extraction attempts threw this run. Set by BOTH branches (crawlDiagnostics for crawl
   // banks, nonCrawlDiagnostics for the rest), unlike extracted/reused above.
   extractFailures?: number;
+  // Feed banks only: remote images turned into local thumbnails vs. dropped because they failed.
+  feedImagesResolved?: number;
+  feedImagesFailed?: number;
 }
 
 interface RefreshReport {
@@ -418,7 +424,12 @@ async function main(): Promise<void> {
 
       // Gate 3: unchanged content hash means nothing to do (no tokens).
       const combinedHash = hashContent(
-        [...fetched.map(f => f.result.contentHash ?? ""), ...pageAssets.map(a => a.url).sort()].join("|")
+        [
+          ...fetched.map(f => f.result.contentHash ?? ""),
+          ...pageAssets.map(a => a.url).sort(),
+          // Feed banks re-import once whenever the mapper's output changes, even on identical JSON.
+          ...(feedMappers[entry.bankId] ? [`mapper-v${FEED_MAPPER_VERSION}`] : [])
+        ].join("|")
       );
       if (state.banks[entry.bankId]?.hash === combinedHash) {
         report.banks[entry.bankId] = {
@@ -433,6 +444,8 @@ async function main(): Promise<void> {
       let offers: ScannedOffer[] = [];
       let nonCrawlExtracted = 0; // successful Claude extractions this run, across page-text sources + auto-discovered assets
       let extractFailures = 0; // extractOffers() throws this run, across both loops
+      let feedImageStats: Pick<BankReport, "feedImagesResolved" | "feedImagesFailed"> = {};
+      let feedImageCache: FeedImageCache | undefined;
       const mapper = feedMappers[entry.bankId];
       if (mapper) {
         for (const { result } of fetched) {
@@ -639,7 +652,7 @@ async function main(): Promise<void> {
       // (likely a broken scrape). Keep existing rows, do NOT advance the hash, and fail the run so
       // the operator is alerted. Accept a real drop by re-running with SANITY_OVERRIDE=<bankId>.
       const currentCount = countBankOffers(seed, entry);
-      const dedupedOffers = dedupeOffers(activeOffers);
+      let dedupedOffers = dedupeOffers(activeOffers);
       const newCount = dedupedOffers.length;
       if (!sanityOverride.has(entry.bankId) && currentCount >= SANITY_MIN_BASELINE && newCount <= SANITY_COLLAPSE_FLOOR) {
         report.banks[entry.bankId] = {
@@ -652,12 +665,34 @@ async function main(): Promise<void> {
         continue;
       }
 
+      // Feed images are remote URLs; swap them for local thumbnails (or drop them) only now, for the
+      // offers actually being imported, so rejected runs and expired offers never write thumbnails.
+      if (mapper !== undefined) {
+        const priorImageUrls: Record<string, string> = {};
+        for (const o of catalog.offers) {
+          if (o.bankId === entry.bankId && o.imageUrl) priorImageUrls[o.id] = o.imageUrl;
+        }
+        const images = await resolveFeedImages(dedupedOffers, state.banks[entry.bankId]?.feedImages ?? {}, priorImageUrls, {
+          fetchImage: fetchImageBytes,
+          saveThumbnail: (bytes) => saveThumbnail(bytes, publicImagesDir),
+          thumbnailExists: (localUrl) => existsSync(join(publicImagesDir, localUrl))
+        });
+        dedupedOffers = images.offers;
+        feedImageCache = images.cache;
+        feedImageStats = { feedImagesResolved: images.resolved, feedImagesFailed: images.failed };
+      }
+
       ({ seed, catalog } = importBankOffers(entry, dedupedOffers, reviewDateIso, seed, catalog));
-      state.banks[entry.bankId] = { hash: combinedHash, lastUpdatedAt: reviewDateIso };
+      state.banks[entry.bankId] = {
+        hash: combinedHash,
+        lastUpdatedAt: reviewDateIso,
+        ...(feedImageCache && Object.keys(feedImageCache).length > 0 ? { feedImages: feedImageCache } : {})
+      };
       report.banks[entry.bankId] = {
         status: "updated", sources: sourceUrls, offersWritten: newCount,
         ...(assetFailures.length > 0 ? { assetFailures } : {}),
         ...nonCrawlDiagnostics(extractFailures),
+        ...feedImageStats,
       };
     } catch (error) {
       report.banks[entry.bankId] = {
@@ -675,6 +710,7 @@ async function main(): Promise<void> {
         if (b.reused !== undefined) parts.push(`${b.reused} reused`);
         if (b.assetFailures?.length) parts.push(`${b.assetFailures.length} asset failure(s)`);
         if (b.extractFailures) parts.push(`${b.extractFailures} extract failure(s)`);
+        if (b.feedImagesResolved !== undefined) parts.push(`${b.feedImagesResolved} feed images (${b.feedImagesFailed ?? 0} failed)`);
         console.error(`[refresh] ${entry.bankId}: ${parts.join(" · ")}`);
       }
       // Fold this run's failed-asset-cache activity back into state — pruned of expired entries and

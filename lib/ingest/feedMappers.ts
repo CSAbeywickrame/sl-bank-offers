@@ -2,8 +2,10 @@ import * as cheerio from "cheerio/slim";
 import { categorizeOfferText } from "@/lib/ingest/categorize";
 import { normalizeText } from "@/lib/ingest/textUtils";
 import type { BankRegistryEntry } from "@/lib/sources/bankRegistry";
-import { type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
+import { parseCardEligibility, parseDiscountPct } from "@/lib/ingest/enrich";
+import { type CardKind, type CardNetwork, type OfferCategory, type ScannedOffer } from "@/lib/offers/types";
 import { isOfferCategory } from "@/lib/offers/categories";
+import { isAbsoluteHttpUrl } from "@/lib/offers/images";
 
 /**
  * Deterministic mappers for banks that expose a structured JSON API.
@@ -11,6 +13,10 @@ import { isOfferCategory } from "@/lib/offers/categories";
  * Sources whose bankId has a mapper here are parsed directly (no LLM, no token cost, exact
  * fields). The orchestrator routes such sources through the mapper instead of extractWithClaude.
  */
+// Bump whenever a mapper's output changes: it is folded into the refresh hash so unchanged feed JSON
+// is re-mapped and re-imported once instead of leaving last week's rows in place.
+export const FEED_MAPPER_VERSION = 2;
+
 export type FeedMapper = (rawJsonText: string, entry: BankRegistryEntry, reviewDateIso: string) => ScannedOffer[];
 
 // Strips HTML tags/entities from a field and normalizes whitespace.
@@ -64,8 +70,43 @@ function sampathCategory(rawCategory: unknown, offerText: string): OfferCategory
   return categorizeOfferText(offerText);
 }
 
+// Card network a Sampath tab is dedicated to, e.g. "VISA_Offers" -> visa. Other tabs name none.
+function sampathTabNetwork(rawCategory: unknown): CardNetwork | undefined {
+  const key = typeof rawCategory === "string" ? rawCategory.trim().toLowerCase() : "";
+  if (key === "visa_offers") return "visa";
+  if (key === "mastercard_offers") return "mastercard";
+  return undefined;
+}
+
+// Absolute http(s) URL for a Sampath image_url (relative paths resolve against the site), or undefined.
+function sampathImageUrl(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.trim()) return undefined;
+  try {
+    const url = new URL(value.trim(), "https://www.sampath.lk").href;
+    return isAbsoluteHttpUrl(url) ? url : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
+// Plain text of the "Eligible Card Categories" block in a Sampath row's cards_new, or "".
+function sampathEligibleCardsText(cardsNew: unknown): string {
+  if (!Array.isArray(cardsNew)) return "";
+  const block = (cardsNew as SampathCardBlock[]).find(
+    (card) => typeof card.title === "string" && card.title.trim().toLowerCase() === "eligible card categories"
+  );
+  return stripHtml(block?.description);
+}
+
+interface SampathCardBlock {
+  title?: unknown;
+  description?: unknown;
+}
+
 interface SampathRaw {
   id?: unknown;
+  image_url?: unknown;
+  cards_new?: unknown;
   company_name?: unknown;
   short_discount?: unknown;
   short_description?: unknown;
@@ -99,6 +140,14 @@ function mapSampath(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso
 
     const merchant = normalizeText(typeof row.company_name === "string" ? row.company_name : "");
     const discount = normalizeText(typeof row.short_discount === "string" ? row.short_discount : "");
+    // Entity-decoded copy for display ("Mastercard Credit &amp; Debit"); `discount` stays raw so titles don't change.
+    const discountText = stripHtml(row.short_discount);
+    const discountPct = parseDiscountPct(discountText);
+    const eligibility = parseCardEligibility(sampathEligibleCardsText(row.cards_new));
+    const tabNetwork = sampathTabNetwork(row.category);
+    // The eligible-cards block is the specific statement; the tab is only a fallback when it names none.
+    const cardNetworks: CardNetwork[] = eligibility.cardNetworks ?? (tabNetwork ? [tabNetwork] : []);
+    const imageUrl = sampathImageUrl(row.image_url);
     const description = stripHtml(row.description) || stripHtml(row.short_description) || discount;
     const title = discount && merchant ? `${discount} at ${merchant}` : merchant || discount || description.slice(0, 80);
     if (!title) continue;
@@ -117,6 +166,14 @@ function mapSampath(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso
       location: typeof row.city === "string" && row.city.trim() ? normalizeText(row.city) : undefined,
       validFrom: epochToDate(row.display_on),
       validUntil: epochToDate(row.expire_on),
+      // A parsed percentage drives the big "20%" headline (highlight.ts ranks discountPct first), so
+      // the label is kept only for what a bare number cannot say: "Special Rates", instalment plans.
+      ...(discountPct !== undefined ? { discountPct } : discountText ? { discountLabel: discountText } : {}),
+      ...(cardNetworks.length > 0 ? { cardNetworks } : {}),
+      ...(eligibility.cardTypes ? { cardTypes: eligibility.cardTypes } : {}),
+      ...(eligibility.cardTiers ? { cardTiers: eligibility.cardTiers } : {}),
+      // Remote source URL only; the orchestrator swaps it for a local thumbnail (feedImages.ts).
+      ...(imageUrl ? { imageUrl } : {}),
       termsLink: pageUrl,
       sourceUrl,
       lastReviewedAt: reviewDateIso,
@@ -132,6 +189,7 @@ interface HnbRaw {
   title?: unknown;
   merchant?: unknown;
   cardType?: unknown;
+  thumb?: unknown;
   to?: unknown;
   valid?: unknown;
 }
@@ -144,6 +202,27 @@ function hnbCardId(cardType: unknown, entry: BankRegistryEntry): string {
     if (debitCard) return debitCard.id;
   }
   return entry.defaultCardId;
+}
+
+// HNB's cardType as card kinds: "credit/debit" (either order) qualifies for both; unknown parts are skipped.
+function hnbCardTypes(cardType: unknown): CardKind[] | undefined {
+  if (typeof cardType !== "string") return undefined;
+  const kinds = cardType
+    .split("/")
+    .map((part) => part.trim().toLowerCase())
+    .filter((part): part is "credit" | "debit" => part === "credit" || part === "debit");
+  return kinds.length > 0 ? [...new Set(kinds)] : undefined;
+}
+
+// Absolute asset URL for an HNB `thumb` (URL() encodes spaces, keeps existing %xx, takes absolute thumbs), or undefined.
+function hnbImageUrl(thumb: unknown): string | undefined {
+  if (typeof thumb !== "string" || !thumb.trim()) return undefined;
+  try {
+    const url = new URL(thumb.trim(), "https://assets.hnb.lk/atdi/").href;
+    return isAbsoluteHttpUrl(url) ? url : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 // Maps the HNB venus API card-promos response into ScannedOffers.
@@ -181,6 +260,9 @@ function mapHnb(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso: st
     const validFromMatch = typeof row.valid === "string" ? row.valid.match(/Valid From (\d{4}-\d{2}-\d{2})/) : null;
     const validFrom = validFromMatch ? validFromMatch[1] : undefined;
     const detailUrl = `https://www.hnb.lk/card-promotion/search/${idStr}`;
+    const cardTypes = hnbCardTypes(row.cardType);
+    // Remote source URL only; the orchestrator swaps it for a local thumbnail (feedImages.ts).
+    const imageUrl = hnbImageUrl(row.thumb);
 
     const offer: ScannedOffer = {
       id: `hnb-${idStr}`,
@@ -192,6 +274,8 @@ function mapHnb(rawJsonText: string, entry: BankRegistryEntry, reviewDateIso: st
       merchant,
       validFrom,
       validUntil,
+      ...(cardTypes ? { cardTypes } : {}),
+      ...(imageUrl ? { imageUrl } : {}),
       termsLink: detailUrl,
       sourceUrl: detailUrl,
       lastReviewedAt: reviewDateIso,
