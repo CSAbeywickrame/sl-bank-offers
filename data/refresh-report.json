@@ -1,20 +1,1456 @@
 {
-  "runAt": "2026-10-11T10:49:47.044Z",
+  "runAt": "2026-10-12T08:43:29.486Z",
   "tokensUsed": {
-    "input": 141791,
-    "output": 13452
+    "input": 280804,
+    "output": 15886
   },
   "banks": {
-    "nsb": {
+    "commercial-bank": {
+      "status": "fetch-failed",
+      "sources": [
+        "https://www.combank.lk/rewards-promotions"
+      ],
+      "message": "HTTP 403",
+      "extracted": 0,
+      "reused": 0
+    },
+    "ndb": {
       "status": "updated",
+      "sources": [
+        "https://www.ndbbank.com/cards/card-offers"
+      ],
+      "offersWritten": 104
+    },
+    "boc": {
+      "status": "fetch-failed",
+      "sources": [
+        "https://www.boc.lk/personal-banking/card-offers"
+      ],
+      "message": "HTTP 403",
+      "extracted": 0,
+      "reused": 0
+    },
+    "peoples-bank": {
+      "status": "updated",
+      "sources": [
+        "https://www.peoplesbank.lk/special-offers/"
+      ],
+      "offersWritten": 243,
+      "extracted": 73,
+      "reused": 243,
+      "assetFailures": [
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/01/Lionel-Galagedara.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zNZowVaNP7yiLgqTb\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/01/BM-Premanath.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zVSZ2sw6QFjDkLwgx\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/1.Mr_.K.B.Rajapaksha-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zcWwujh486DW9YtaE\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Ranjith-Kodithuwakku-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zh9kMr6xED7kZMERC\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/01/Mr-Bhadranie.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zoVFuXH4dcZjQSvRF\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Mr.-Manjula-Wellalage-2.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zrTr9suWLXzKSJKpH\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/01/MR-Keerthi.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx4zxfAG7cRLbnJbhv6M\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Mr.-Isuru-Balapatabendi-3.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx511fEMXY5UapVg57U4\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2021/11/Mr.Sudarshana-Ahangama_-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx515nn6mHDGMCg16X8X\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2022/01/Mr-Kumar.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx519zY3FrYR3Ua8jE6Q\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2023/04/Mr.-Sujeewa-Rajapakse-2.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx51CxPawPHCY1tNw6UD\"}"
+        },
+        {
+          "url": "https://www.peoplesbank.lk/roastoth/2024/12/Thailand.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx51LY43y6FvSH5exTmn\"}"
+        }
+      ],
+      "extractFailures": 12
+    },
+    "ntb": {
+      "status": "fetch-failed",
+      "sources": [
+        "https://www.nationstrust.com/promotions"
+      ],
+      "message": "HTTP 403",
+      "extracted": 0,
+      "reused": 0
+    },
+    "pan-asia-bank": {
+      "status": "extract-failed",
+      "sources": [
+        "https://www.pabcbank.com/card-offers/"
+      ],
+      "message": "all 39 extraction attempt(s) failed",
+      "assetFailures": [
+        {
+          "url": "https://www.pabcbank.com/card-offers/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx51zhy3Htpq5m1zkugE\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Blue-Orbit-Ceylon-Curry-Club-The-Steuar-30.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx529MsejuTEZGAT1HRT\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Blue-Orbit-Ceylon-Curry-Club-The-Steuar-20.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52ARMn8Egvtwf4nuAj\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Waters-Edge.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52BVrhXmZ2RE4y5mLE\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Arpico.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52CW8kmXcJYVZ3PnYm\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Cargills.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52DUunkMQSzWzsQroJ\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/GLOMARK.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52ETx3BbZQV7Eh2zVx\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/Keells.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52FcQuQaaf2zdKt92e\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/10/LAUGFS.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52GdvMfDMPYcS87x6e\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/09/MCA-01jpg.jpeg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52Hme5XBnpqEGajnRc\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/09/MCA-02jpg.jpeg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52JoQ3vpqkPpCh7UXa\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Softlogic.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52KgVAFmyF9TxWU7Uh\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Singhagiri.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52Lb4EEMs8RAnxT27Z\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Seetha.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52MZqm6LLtfKjXTvTo\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Dinapala.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52NX8mpcQS87qPaH1o\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Singer.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52PXfHY1LLxcEWmSdb\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Damro.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52QWw3RVsvCgchhYMF\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/07/Abans.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52Rg9ByPAMP8tP3pyT\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Any-thing-Any-where.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52SZxmbMvmR4aDvyNL\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/dpl.jpeg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52TXX7j4e5pyp4QpKE\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Sky-Terrace-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52UYHUs3Mht7PDBBFy\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Senani-Hotel-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52VTbfkQ6FoYu4raFA\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Rain-Tree-by-Oak-Ray-Thissamaharama.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52Waose9aThae3qkeF\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Pelwehera-Village-Dambulla.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52Xda11dVBDbPaGLwb\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Wild-mYala-Thissamaharama.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52YepxnYYgbvhYpJPc\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Tea-Bush-Ramboda.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52ZdsmPUtjZfyg559J\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Summer-Hill-Breeze-Nuwara-Eliya.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52acQRxYmZhjFuQcn4\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Serene-Garden-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52bdRiVW9rqvfzqKq1\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Regency-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52cciRmtR3PeYpq9xE\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-La-Ella-Breeze-Ella.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52dcUgP5ZU2xcZSLbv\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Heritage-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52eejfBssNXJAQUYXy\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Ella-Gap-Ella.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52fe2KqRrEukxGUqcQ\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-Elephant-Lake-Habarana.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52gfYcy3Zc4A44UoNN\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-City-Hotel-Kandy.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52hd5qtaPwNgbD67MN\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Oak-Ray-City-Hotel-Colombo.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52idMcpdcCQDMXrrwV\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Misty-Hills-Nuwara-Eliya.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52jaQWeXHNze2b6nWs\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/Fresco-Water-Villa-Sigiriya.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52kavs26w3oAprfH7J\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/06/insurance-premium-payments-2.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52mcTCxpDUNv5vSLJY\"}"
+        },
+        {
+          "url": "http://www.pabcbank.com/wp-content/uploads/2026/04/lyceum-campus.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx52nXGPd6Fo3W3feGKt\"}"
+        }
+      ],
+      "extractFailures": 39
+    },
+    "union-bank": {
+      "status": "extract-failed",
+      "sources": [
+        "https://www.unionb.com/credit-cards-offers/",
+        "https://www.unionb.com/credit-cards-offers/page/2/"
+      ],
+      "message": "all 15 extraction attempt(s) failed",
+      "assetFailures": [
+        {
+          "url": "https://www.unionb.com/credit-cards-offers/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54DUDiQmmtRQYLfGhS\"}"
+        },
+        {
+          "url": "https://www.unionb.com/credit-cards-offers/page/2/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54E4hHLLtMDLG2pBk7\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2024/08/Solar.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54FBfNKwvSQ3Sffm5K\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2024/11/Unlock-e1732519097554.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54FuZoCk4CMx9JGXwA\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2023/08/12-EDM-Final-1-e1700828804800.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54H8jvyf7ABnNmXC2X\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2023/11/Samsonite-e1699867481868.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54JR8iUguYj1jUJsPz\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2023/09/LUV-SL-e1694580389295.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54K8JYzfR28xLPctNj\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/themes/wizors-investments-dup/assets/img/credit-cards-stack-n.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54L66HfaMksskap933\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2023/10/findmyfare.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54LtiDXmqo68Dyv7xU\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2025/09/Baskin-Robbins.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54N1SHipcxg5CSGHWu\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2026/06/SOCIAL-MEDIA-meta-1-e1780374118438.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54P3wMChDB9zE5vLFB\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2026/06/SOCIAL-MEDIA-meta-1-1-e1780374827476.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54Pid9nj59jd2hbzhb\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2026/06/SOCIAL-MEDIA-meta-4-e1780377398365.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54QMaNaoyJM6hyzP4s\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2026/07/Crystal-Jade.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54R1kt5Yiuag7V3YtP\"}"
+        },
+        {
+          "url": "https://www.unionb.com/wp-content/uploads/2026/08/Social-Media-Meta-2-e1787915379936.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54RjAxbY1Y7CWj1MyW\"}"
+        }
+      ],
+      "extractFailures": 15
+    },
+    "cargills-bank": {
+      "status": "extract-failed",
+      "sources": [
+        "https://www.cargillsbank.com/products/cargills-bank-cards-promotions/",
+        "https://www.cargillsbank.com/products/mastercard-promotions/"
+      ],
+      "message": "all 56 extraction attempt(s) failed",
+      "assetFailures": [
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Fresh-Feast-offer-Terms-and-Conditions-2.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54fmXVL2xjB9QpNJby\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/KFC-Terms-Conditions-3.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54hn4xaGV7fEZ6NCSr\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Best-Western-offer-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54joNG5eg1wggzemuh\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Aminra-Jewellers-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54nED1fx14vWxY5rG5\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Ashadi-Jewellers-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54ozdKJLC7cp4SwxBg\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Ceylon-Theatres-Terms-and-Conditions-4.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54qomVNwVXZcMYh8DU\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Daraz-Electronic-Offer-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54sj6oLhqZQo8LWGGy\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/TC-Daraz-Rush-Hour.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54uaUmYEfH13qiYs6b\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/TC-Daraz-2.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54wS6f1iUeyfngUZch\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/FOB-DEGREE-Terms-and-Conditions-1.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx54yHyLWEMWoTTbdaJW\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Crazy-Jets-Terms-and-Conditions-.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55138rToTBQsiTstAy\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/36-months-Solar-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx552grjWqWai2boUJHS\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/IPP-0-Interest-24-months-Terms-and-Conditions-.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx554Q3yaQ6iddoN31xt\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/IPP-0-Interest-12-Months-Terms-and-Conditions-2.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5566FZx2woDVodFjx3\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Terms-and-Conditions-EMI-2023.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5582L4LJvT4Y8nzmuf\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Club-palm-Bay-Marawila-Terms-Conditions-1.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx559hY2FiyM7VnZhxN6\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Wilescapes-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55BTxAi1egnYgteHsF\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Sigiriya-Jungles-Resort-Spa-Terms-Conditions-3.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55DAuBwy9FaqyG3uQB\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Earls-Regent-Hotel-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55EvKdVdxcpf1kf54c\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Terms-Conditions-1.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55GfEyeVnCBUyWtTYx\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Uga-Prava-Offer-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55JRuq3AVBfayvJxv9\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Balance-Transfer-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55LEoKf2zCMCMrxmUa\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Terms-and-conditions-call-and-card-balance.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55Mu1MqgfDxVksJLsD\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/1-FOB-DEGREE-2-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55i2yasUJEQQjfgXKu\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Crazy-Jets-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55jrs3Xw9YbHVhUENr\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Solar-EDM-NEW-5-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55mgVzpw6ofjqCUh9A\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/24-Months-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55oTexsuywdrMW4CqF\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/12-Months-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55qQEF4XDXNBoQqbLC\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/EMI.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55sCPQZz7CYPb7eovz\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Clup-Palm-Bay-Marawila.jpg-new-1-1022x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55vzLUhdoJHewVLU3F\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Sigiriya-Jungles-1-1-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx55z3PsWsDn1PXptJpw\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Earls-Regent-Kandy-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx561oJudgjYV9j74V9v\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Solara-Beach-House-Dikwella-Recovered-1-1-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx563T2PFjQpbb5Kromb\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2018/04/Uga-Resorts-1-1-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx566ZZXuBYVfswzb1AA\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Park-Street-Suites-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56C8AMqsii1prTXb8M\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mahaweli-Reach-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56DtqF3z2zYK97tgkg\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mahaweli-Reach-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56FezrZY1iLXrpZeET\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Cinnamon-Air-Victoria-Golf-Resort-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56HQAzAu9cZD99YPfZ\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Petti-Petti-Mirissa-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56K96mcefTJ3pbCSE6\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Radh-Hotel-Esala-Perahera-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56LuFmGLJj5ySGHT7P\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Radh-Hotel-Kandy-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56NfvV5mWTRyBtCe5i\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Elephant-Rech-Yala-Terms-and-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56SFEYoE8mgCU4fzft\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Reveal-collection-Ubuntu-Beach-Villa-Mirissa-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56U28jEnzCEXy5vCjv\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/AYR-Castle-1922-Padukka-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56WbvUfr2DG2iJVEFG\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/The-Lavender-House-Pussellawa-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56YKM7UWJwYuaGYW9s\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Reveal-collection-TTS-Hospitality-Terms-Conditions.pdf",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56a6GVpdyBWYYb4JSK\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Park-Street-Suites-Offer-1024x1024.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56g1DFMTjvb5U8mQH2\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Mahaweli-Hotel-15-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56jLsoEL2moxHBeUQV\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Mahaweli-Reach-Offer-Promo-Flyer-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56nfoLthTm5MhWgQaH\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Cinnamon-Air-x-Victoria-Golf-Esala-Offer-Promo-Flyer-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56qqoyWTddu3MsSKUL\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Petti-Petti-Mirissa-Offer-Promo-Flyer-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56u9k1UmiEnoHxjwYE\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Radh-Esala-Offer-Recovered.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx56xacQW3KpEP2TB6q8\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Radh-Kandy-Offer-Promo-Flyer-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx571uHUgaWaVEPxjGnv\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-Offer-Elephant-Reach-Yala-Promo-Flyer-1024x1024.png",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx577BHrVxQ8Az72FDD1\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Mastercard-TTS-Hospitality-Promo-Flyer-Post-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx57JQE83NgXmAjzGfCA\"}"
+        },
+        {
+          "url": "https://www.cargillsbank.com/wp-content/uploads/2017/11/Golf.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx57MK67f1hP4X1iBSMz\"}"
+        }
+      ],
+      "extractFailures": 56
+    },
+    "sampath": {
+      "status": "updated",
+      "sources": [
+        "https://www.sampath.lk/api/card-promotions"
+      ],
+      "offersWritten": 127,
+      "feedImagesResolved": 127,
+      "feedImagesFailed": 0
+    },
+    "dfcc": {
+      "status": "extract-failed",
+      "sources": [
+        "https://www.dfcc.lk/cards/card-offers",
+        "https://www.dfcc.lk/cards/credit-card-offers",
+        "https://www.dfcc.lk/cards/cards/mastercard-offers",
+        "https://www.dfcc.lk/cards/cards/visa-offers"
+      ],
+      "message": "all 4 extraction attempt(s) failed",
+      "assetFailures": [
+        {
+          "url": "https://www.dfcc.lk/cards/card-offers",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx58UWiQVE44yWaPsujG\"}"
+        },
+        {
+          "url": "https://www.dfcc.lk/cards/credit-card-offers",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx58VG7PNvHDECPedETE\"}"
+        },
+        {
+          "url": "https://www.dfcc.lk/cards/cards/mastercard-offers",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx58VqqYQzMSUt482BzM\"}"
+        },
+        {
+          "url": "https://www.dfcc.lk/cards/cards/visa-offers",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx58WPpwtH69m7P5aJ5c\"}"
+        }
+      ],
+      "extractFailures": 4
+    },
+    "seylan": {
+      "status": "extract-failed",
+      "sources": [
+        "https://www.seylan.lk/promotions/cards?type[]=credit_card"
+      ],
+      "message": "all 170 extraction attempt(s) failed",
+      "extracted": 0,
+      "reused": 713,
+      "assetFailures": [
+        {
+          "url": "https://www.seylan.lk/galis-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VFM2p6cvxNnqkxVcY\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/prasad-textiles/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VLdXhFpnQAjRD9VXu\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/prasad-fashion-square/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VRBNPuhvp9snF84WY\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/softlogic-brands-special-promo-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VVkTaJiYM1NecNAyg\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/cool-planet-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Vah8LLEAn9HJeaDAR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/amante-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VgFVcoMcwtonFPD2T\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sunimals-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VkuHYQEd7pqgbYinu\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/Seylan%20card/promotions/style/mimosa/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Vqqx5oTRcXwBRzQ5r\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sriyani-dresspoint-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5VvMZdWApptN1rPLwu\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/thilakma-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5W1MgjhDGBNY3jU8VR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/dilly-carlo_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5W5o5e1j4wneVD688u\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/marco-polo-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WAKwXvSyekRneYn9o\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/brands-warehouse-2/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WEicNLFxGEqVxQsp7\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/nadiyas/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WKCyotNvqY7D77RaZ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/samanmal/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WPtWWvZJTyoeZDy8J\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/handloom-gallery-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WUQNmiWyTEcq85T1y\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tfo-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WYr2R1MU6Xhn495Y2\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/kiddies/the-kids-warehouse/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WdVabiWgJbyhhYZMa\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sting-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WhwDQwhXUJpFShYdn\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/cib-wijaya-group-of-companies-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WnXYEpgWev6Pn3Mwh\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/zigzag/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WsB6WcHcpq3rkbV8k\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/emerald_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5WwbFGyvXRpBsZHLad\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tropic-of-linen-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5X2C4kTqyxvhSt39DR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/seylan%20cards/promotions/style/spring-summer/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5X6o8qCL482b4ApKoj\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/crocodile/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XBGGvQfRUJyfQj6tm\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/shoes-accessories/helanka/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XFeCJ8ZKLjjSCUUua\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/midnight-divas-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XLBYuvNmcsR4h1cui\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/molly-boulevard-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XQfvoKoyeS3U58zSY\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/saree-mandir-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XV8ZMyCRACjk6K6DA\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kadapatha-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XZdB81HgDwcBuVcqx\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotion/cards/online%20deals/nils/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XeE1cPDpvtfhDivKL\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/style/house-of-fashions/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Xm7EjQkzPd8A1f9rP\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/kiddies/velona-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XqbMzkd149XrV889Q\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/gflock-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XvBT1cqgdosmhkWDX\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/chinese-dragon-cafe-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5XzoWWozKcCYUfMAwX\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/shikisen-japanese-restaurant-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Y5PafaxujGu5gYgv1\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/street-burger-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Y9uwvpYnrjto1JbGU\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/ekho-hotels-resorts-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5YEHsdhd1bH94oLus9\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/estheti-centre-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5YJpDkLgWQqwKsJMmR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/seylancard/promotions/local%20travel/amaya-resorts-spas_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5YPM5pxxteHrve37Dt\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/urban-kids-studio-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Yc53YhXVjXZxKhBaP\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/drskin-lab-pvt-limited-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5YgUDujao5Qwkhjrpz\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/the-core-20-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Yky6GzQ4tMqsG8HHR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/cardholder-dines-free-offer-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Z7GiNtdi8cwCeUUdp\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jade-restaurants-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ZFXJjPi6ctQ1kCTtv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/card-member-dines-free-premier-cards-offer-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ZPvqWx1rUKqrcBypR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/atlas-my-shop-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ZYPZnnyooJx2VmFED\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/evolution-by-high-octane-mireka-tower-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ZkhVZmf6bpHQVgyHF\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jungle-gym-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5Zqn6M8hq3qx3sRPNv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/nisaco-lifestyle-store-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5a6R9fMFYZnJyP3AeL\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jayasoma-electricals-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5aB4x54Bke7vcwJcq9\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/revolucion-leisure-hub-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5aRtSE9cWzTNBNrTnv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jetwing-dining-offers-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5aaRPKLT5VZSXo1f7P\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/local-travel/cinnamon-grand/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5armQ7HSMtuDPVadt2\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/lifestyle/celcius/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5b1QoKgch2fp8MmJsj\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/pearl-bay-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bHiLS74PiASnUJapv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sri-lankan-airlines-2_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bSD46QTAouVZ2EFi8\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/clerk-2-ceo-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bWsr7ZLcH6rfAChZU\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/theta-lounge-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bbJkQgzokLZL2VNz1\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/foot-rub-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bjnjYrjEFg3G2rkH2\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/wellnessfix-footrub-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bpFcECMVbNvZyvNKN\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/amaara-hotels-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5bxcf1h9nRbG6mt9xo\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/double-xl-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5cB4GTfVJ5yYwubMVu\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/power-world-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5cT8etGMeKAcepHEfu\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tyrezone-by-toyota-lanka-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5cfNMgZGD41gZeUEps\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/victoria-golf-resort-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5coj9cza5fSadQMfug\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/myfeeslk-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ct5aL1yiPSRcgJFvR\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/british-council-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5d3LCZaH3vnGHgD7aW\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/semage-co-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5drYaaeU7mJJofovUg\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/burleys-restaurant-2/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5e7DdXkTyLWPFPQDSr\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tiyana-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eCBncKzLTgU6CZNoV\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/new-ragee-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eGqatJ51MAFLsEbGV\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/the-central-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eMPvgH7uRraKi2gZZ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/nirmani-dresspoint-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eRyFJTVZw6fq5n9AY\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sarathchandra-textiles-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eXjGV5rV2RPARmwSq\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/molly-fashion-circle-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5edmuU24EzLgHzuGJw\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/ama-shopping-centre-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5eiDZ1DD35RGFQ6RjV\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/asb-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5enbUq1FtnVoXi1HWF\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/nolimit-debit-offer-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5esdMj4BdjrAtMgSwN\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/saffans-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5exAww4JHWhPkF1YPv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kandygs-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5f3QECHFiwkKz75z75\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/gifted-by-nolimit-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5f822bwfJxYRDb4m7E\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/nolimit-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fCfpkCNqXB3Moi7Dv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/choice-park-group-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fHBhLx28AG6wTkLAv\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/naturals-unisex-salon-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fMygLcw6X2XEHpaRB\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/branded-clothing-boss-sekchers-underarmour-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fSUJNM9higGDSkqhG\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/rich-look-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fX5rbQWwfG7FyC5zP\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/giggles-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fbdCuGqq14hmKhvec\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/opal-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fgD2ynNP6murz8Gw7\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/hemantha-textiles-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fkj9onh2Ak6fkQPQk\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/junior-warehouse-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fqB2tgrPDNWkwYrm5\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/lurreli-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fucCC4sg8xnf4LTUg\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/hameedia-envoyadidassignature-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5fzJid2nhyEQaAhWTz\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/kiddies/blooms-butterflies_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5g4rJpPqRc8EHdp9WZ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotion/cards/style/rv-fashion/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5g9S8tgoQrMykzeQEY\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/nesh-kids-store-nesh-technologies-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gE8RPzPEUvGYXMCMs\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/address-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gJe2UxBcn6msibUqH\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/domingos-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gPA9PekXZ2mZYfhnJ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/mangala-tex-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gTiVH9VRreBv54FTH\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/joey-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gY9dVMWCJRGQymx8R\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/d-blaq-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gcpRWwSzwym1zaMZM\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jia-moda-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ghMGfbax7eN8qGvbU\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/disel-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gmouxnpCWUFS4SxAJ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/adikted-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5grFZZGiU4onJnswGE\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tofo-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5gzpWJ9X3X6gFqiAAV\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/street-82-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5h5H8WNcLJ7EuFvLMx\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/yarn-darn-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5h9eKgZRwLJzELwGLP\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/tudolk-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hE5yD73a5DGRyub6d\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/montrianna-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hJhHJGdhshtN7Kb88\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/style-hair-beauty-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hP6x5TCX3fZZAbL89\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/toy-mart-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hTb4osD7pccJRmGVa\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kids-club-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hY8uySbb3KHhSacTF\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/bayleee-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hchWDTRjbF7M1ctpd\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/zie-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hhTkfn3sfCD8Rj8ZD\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kingsman-perennial-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hmtQnKWktc7rgMwWb\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/mosh-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hrRVypzYYr4QPuzaB\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/zara-redhi-store-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5hvybVLfnmCwe6NnjA\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/dilshan-drapers-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5i1RVKQu7zVPcaSuLr\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/allstars-sport-lounge-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5i5y6QHs42rzGEkugp\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/be-desi-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5iEKddBSkwnxRVa5GM\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/raja-rani-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5iJnmD49JtyYywX9bt\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/sultan-by-be-desi-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5iPHt85igBWbY2b6MB\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/be-dapper-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5iTwBpUu6y5WPD499U\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/finez-furniture-interior-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ictSyG7VHbc5RjLAc\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/watsans-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ihmdXx8ArFnfRxbWd\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/the-concept-store-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5irT1sYMonKn4yFXMk\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/valentino-italy-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5j6Nv2ysskeM2a67qc\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/makeen-bookshop-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5jAxW4euACginAiemm\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/lanka-paint-outlet-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5jFboQTTuypTebL3yf\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/rocell-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5jPzaTe7pBBNhzP9fa\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/centrepoint-homes-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5jUcPiAh3Ki35u93uL\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/englander-flagship-store-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5jytHQ6QNkpS73TLbW\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/mkm-luxe-suisse-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5k4KvdahgQbSHGZL2C\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/the-core-fitness-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5kcVBmJg1phmMQJYuS\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/lifetime-fitness-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5kyx2frX7BXFYt7fXj\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/uncommon-homes-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5m4ZbPQpSkQuud6cGk\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/raja-jewellers-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5m92U8d1TN9qCG7eep\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/enuli-fashion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5mDdYm83sBizLj2m11\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/supplement-vaultlk-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5mSCahGHYQjVPC1UMp\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/ucl-university-college-lanka-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5meXk4owFpjJqYJsq2\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/ceylon-furniture-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5mjAoDfQCKGJnoFVU4\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/dankotuwa-porcelain-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5msYaRmfAk21zDLJDD\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/hunter-company-plc-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5mx6Bu5Mx1MPnqCevz\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/wellness/fitness-first/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5n6gcksJHofAURKFrA\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/wellness/osmo-fitness/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5nB91CoWFEPAzdsuh3\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/comfort/arpico-supercentre-2/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5nPFWj1frbY87nSg8n\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/lifestyle/seetha-holdings/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5nbXCQp9ioD9pDfyBj\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/lifestyle/singer-furniture_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5nfxMA1sasgaZhnu2p\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/online-deals/takaslk/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5npYY6WshH8pxYawzQ\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/online-deals/cosmeticslk/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5nttyiuq1iRqEfasVP\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/lanka-tiles-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5oLBVSVPEsJAkzd76R\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/balinese-ayu-spas-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5oh56fbopSkbscuyvE\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/plan-my-wedding-pvt-ltd-planmyweddinglk-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5oyWKgUTfKvVhMgLCf\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/cinnamon-hotels-resorts-1_/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5p44AXJQ66F16rNibM\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/christell-clinic-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5pEaS2gDywVo6LAxpa\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/junktion-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5pTP7tFm9R9zAKFEvt\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/fhiit-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5qzG1ruiMWtHuaoJ4i\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/jat-holdings-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5r4iQM56dYv11Ndcou\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/promotions/cards/online-deals/buy-abans/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5rCx1UnJWb8uyB3fpK\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/singapore-center-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5rHS8NkfPA2w574eSE\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/global-vinyl-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5rMuGU8WtRQYAbWemk\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/fitsair-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5rWEKm4c84XXoF1B4E\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/multilac-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5raiT57jpCdrdLS1HT\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/macktiles-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5rf8bZbGNavkHgWDa4\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/colombo-furniture-house-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5t544D9V9nku38ZTrA\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kavichchiya-furniture-interior-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5tDPMK6eZDsdVApPkA\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/kalana-furniture-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5tHtDq8tqfYmCrb3WL\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/vinco-furniture-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5tW8g8Y7LsYUp3ER6u\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/suyamas-international-pvt-ltd-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5tai1GqwYhbJ6hZ9Zz\"}"
+        },
+        {
+          "url": "https://www.seylan.lk/ceylonese-rugby-football-club-1/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx5ts3mLftzgPzs9fXZ2\"}"
+        }
+      ],
+      "extractFailures": 170
+    },
+    "nsb": {
+      "status": "extract-failed",
       "sources": [
         "https://www.nsb.lk/category/card-offers/",
         "https://www.nsb.lk/category/card-offers/page/2/",
         "https://www.nsb.lk/category/card-offers/page/3/"
       ],
-      "offersWritten": 18,
-      "extracted": 48,
-      "reused": 1
+      "message": "all 32 extraction attempt(s) failed",
+      "extracted": 0,
+      "reused": 18,
+      "assetFailures": [
+        {
+          "url": "https://www.nsb.lk/spend-and-win-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61YUzjobRiNbWezXSU\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-a-20-off-at-kelly-felder-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61ZY1TzHJoY1LZUVrH\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-up-to-50-off-at-christell-wellness-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61aBSc4pn7AornL7Se\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-a-10-off-at-taru-villas-levita-taru-villas-kandy-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61amv2EXXf3kmBHTxr\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-a-10-off-at-hayleys-hotels-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61bNPYsE7bDPPHWuCo\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-a-10-off-at-wishque-with-your-nsb-mastercard-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61c1aXoS6XdonamGnP\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-a-10-off-at-lassana-flora-with-your-nsb-master-card-debit-card/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61cb4juUnjukib2M1A\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/nsb-debit-card-cash-back/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61dJDWfHExT5UaHegz\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/enjoy-30-off-amara-hotels-with-nsb-debit-card-3/",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61dtSZ2E5d1h99cQPJ\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/themes/nsb/img/banner-nsb-media-center.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx61gLmrDjCQ1H8ipCgE\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/03/IMG-20250315-WA00121.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx62716iUfsAvvQeUtUw\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-010.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx62QL9ZoGw67T3sTBCQ\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-005.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx62aa3gS9BwxtLCtUt1\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-013.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx62x1dy4BF86zemeNwm\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-011.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx638AaRijbdXuj5V6Cc\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-012.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx63JHnHAB97jufBQL2F\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-003.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx63UQzY1pLFf35TCutZ\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-004.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx63ecuiU38RXRiAoCrA\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-002.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx63pr4F3NSE345aLFBw\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-001.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx6411z252fxvSUNmNU9\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgq_-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx64KeAPRZwUh82dLwNN\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgaas-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx64X7VbUJAviofmBrCi\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx64iSsQS9YndTwwTBNu\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpga_-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx64vF31DSiUaQZsDjk4\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-12-16-08-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx657ed4w3JSb88fpQDU\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-57-59.jpgdqwd-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx65K2VYgnQ1g4Gf4fpn\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2025/12/PHOTO-2025-12-09-10-58-00.jpgswq-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx65WaGnapzWsJTTTxLY\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-008.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx65ssSCyVkks6dGUMqw\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/12/Card-007.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx6643s35W86BJD9yK88\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2024/02/Final-1080-Tiesh-Post-01-1024x1024.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx66EH1pxJjNVRgfqNjz\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sigiriya-1024x529.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx66QZu9Ty86Rehz5TEJ\"}"
+        },
+        {
+          "url": "https://www.nsb.lk/wp-content/uploads/2023/12/Amaara-Sky-Kandy-1024x529.jpg",
+          "reason": "400 {\"type\":\"error\",\"error\":{\"type\":\"invalid_request_error\",\"message\":\"Your credit balance is too low to access the Anthropic API. Please go to Plans & Billing to upgrade or purchase credits.\"},\"request_id\":\"req_011Cfx66akZsAmcfMTN2JCyT\"}"
+        }
+      ],
+      "extractFailures": 32
+    },
+    "hnb": {
+      "status": "updated",
+      "sources": [
+        "https://venus.hnb.lk/api/get_all_web_card_promos?page=1&limit=2000"
+      ],
+      "offersWritten": 870,
+      "feedImagesResolved": 753,
+      "feedImagesFailed": 17
     }
   }
 }
